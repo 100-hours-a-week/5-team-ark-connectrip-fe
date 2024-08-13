@@ -2,11 +2,17 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false) // 로그인 상태를 나타내는 상태 값
   const [dropdownOpen, setDropdownOpen] = useState(false) // 드롭다운 메뉴 상태
   const dropdownRef = useRef(null)
+  const router = useRouter()
+
+  const handleClick = () => {
+    router.push('/company')
+  }
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen)
@@ -30,7 +36,7 @@ export default function Header() {
 
   return (
     <header className='bg-white shadow-xl p-4 flex justify-between items-center'>
-      <div className='flex items-center'>
+      <div className='flex items-center cursor-pointer' onClick={handleClick}>
         <Image src='/logo.png' alt='Logo' width={30} height={30} />
         <h1 className='ml-2 text-2xl font-semibold'>ConnecTrip</h1>
       </div>
