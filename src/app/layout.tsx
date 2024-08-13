@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import Header from './components/Header'
 
 // 메타데이터 설정
 export const metadata: Metadata = {
@@ -60,7 +61,13 @@ export default function RootLayout({
           crossOrigin='anonymous'
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <Header />
+        <main className='flex justify-center items-center p-[20px] bg-gray-100'>
+          {children}
+        </main>
+        <footer className='bg-cyan-400 p-2 '>Footer</footer>
+      </body>
     </html>
   )
 }
