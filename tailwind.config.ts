@@ -23,33 +23,34 @@ const config: Config = {
         m: '16px', // 중형 텍스트
         l: '18px', // 대형 텍스트
         xl: '24px', // 초대형 텍스트
+        logo: '40px', // 로고 텍스트
       },
-      spacing: {
-        '1': '4px', // 간격 (4px)
-        '2': '8px', // 간격 (8px)
-        '3': '12px', // 간격 (12px)
-        '4': '16px', // 간격 (16px)
-        '5': '20px', // 간격 (20px)
-        '6': '24px', // 간격 (24px)
+      fontWeight: {
+        thin: '100', // 가는 글씨
+        light: '300', // 얇은 글씨
+        normal: '400', // 기본 글씨
+        medium: '500', // 중간 굵기
+        semibold: '600', // 반두꺼운 글씨
+        bold: '700', // 두꺼운 글씨
+        extrabold: '800', // 아주 두꺼운 글씨
+        black: '900', // 가장 두꺼운 글씨
       },
-      borderRadius: {
-        none: '0', // 테두리 반경 없음
-        sm: '4px', // 작은 테두리 반경
-        default: '8px', // 기본 테두리 반경
-        lg: '16px', // 큰 테두리 반경
-        full: '9999px', // 완전한 원형 반경
+      lineHeight: {
+        tight: '1.25', // 촘촘한 줄 간격
+        snug: '1.375', // 다소 촘촘한 줄 간격
+        normal: '1.5', // 기본 줄 간격
+        relaxed: '1.625', // 느슨한 줄 간격
+        loose: '2', // 넉넉한 줄 간격
       },
-      boxShadow: {
-        sm: '0 1px 2px rgba(0, 0, 0, 0.05)', // 작은 그림자
-        default: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)', // 기본 그림자
-        md: '0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06)', // 중간 그림자
-        lg: '0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05)', // 큰 그림자
-        xl: '0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04)', // 아주 큰 그림자
+      padding: {
+        '20px': '20px', // 전체 패딩
       },
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      width: {
+        'w-300': '300px', // width 300px
+        'w-350': '350px', // width 350px
+      },
+      height: {
+        'h-50': '50px', // height 50px
       },
     },
   },
