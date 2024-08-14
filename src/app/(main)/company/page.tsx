@@ -3,31 +3,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import SearchIcon from '../../components/Icon/SearchIcon'
 import PostCard from '../../components/PostCard'
-
-const mockData = [
-  {
-    id: 1,
-    member_id: 123,
-    title: 'Trip to Jeju Island',
-    start_date: '2024-08-15',
-    end_date: '2024-08-20',
-    accompany_area: 'Jeju Island',
-    content:
-      'Looking for someone to join me on a trip to Jeju Island. Planning to explore the beaches and try local food.',
-    created_at: '2024-07-01T10:00:00',
-  },
-  {
-    id: 2,
-    member_id: 456,
-    title: 'Hiking in Seoraksan',
-    start_date: '2024-09-10',
-    end_date: '2024-09-12',
-    accompany_area: 'Seoraksan',
-    content:
-      'Looking for an experienced hiker to join me on a hike in Seoraksan.',
-    created_at: '2024-07-05T09:00:00',
-  },
-]
+import { mockData } from '../../data/mockData'
 
 export default function Home() {
   const [query, setQuery] = useState('')
@@ -45,7 +21,7 @@ export default function Home() {
   }
 
   return (
-    <div className='w-full p-4  '>
+    <div className='w-full p-6  '>
       <div className='flex items-center justify-between mb-4'>
         <h1 className='text-lg font-bold text-black'>동행 게시판</h1>
       </div>
@@ -73,15 +49,18 @@ export default function Home() {
       </div>
 
       {/* 페이지 콘텐츠 */}
-      <div className='container mx-auto p-4'>
+      <div className='container mx-auto mt-4 mb-10'>
         {mockData.map((post) => (
           <PostCard
             key={post.id}
             title={post.title}
             content={post.content}
             startDate={post.start_date}
+            endDate={post.end_date}
             accompanyArea={post.accompany_area}
-            createdAt={new Date(post.created_at).toLocaleString()}
+            createdAt={post.created_at}
+            nickname={post.nickname}
+            profileImagePath={post.profile_image_path}
           />
         ))}
       </div>
