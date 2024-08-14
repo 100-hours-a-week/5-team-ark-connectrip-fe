@@ -20,7 +20,7 @@ export default function ClientContent({
       <Header />
       <main
         style={{ flex: 1 }}
-        className='flex justify-center items-start bg-white'
+        className='flex mt-[70px] justify-center items-start bg-white'
       >
         {children}
       </main>
