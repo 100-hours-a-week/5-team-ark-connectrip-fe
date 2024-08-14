@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import Header from './components/Header'
+import BottomNav from './components/BottomNav'
 
 // 메타데이터 설정
 export const metadata: Metadata = {
@@ -60,7 +62,13 @@ export default function RootLayout({
           crossOrigin='anonymous'
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <Header />
+        <main className='flex justify-center items-center p-[20px] bg-gray-100'>
+          {children}
+        </main>
+        <BottomNav />
+      </body>
     </html>
   )
 }

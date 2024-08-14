@@ -16,6 +16,19 @@
   }
 }
 
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 body {
   font-family:
     'Pretendard',
@@ -37,6 +50,13 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb)); */
+}
+
+main {
+  flex: 1; /* 남은 공간을 차지하도록 설정 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @layer utilities {
