@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 export default function Header() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoggedIn, setIsLoggedIn] = useState(true) // 로그인 상태를 나타내는 상태 값
   const [dropdownOpen, setDropdownOpen] = useState(false) // 드롭다운 메뉴 상태
   const dropdownRef = useRef(null)

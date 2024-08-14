@@ -7,6 +7,7 @@ import { mockData } from '../../data/mockData'
 
 export default function Home() {
   const [query, setQuery] = useState('')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentPage, setCurrentPage] = useState(1)
   const router = useRouter()
 
