@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import FireIcon from './Icon/FireIcon'
@@ -16,63 +15,41 @@ const BottomNav: React.FC = () => {
     router.push(path)
   }
 
+  const tabs = [
+    { name: 'fire', path: '/company', Icon: FireIcon, label: '동행' },
+    { name: 'chat', path: '/group', Icon: ChatIcon, label: '채팅' },
+    {
+      name: 'community',
+      path: '/community',
+      Icon: CommunityIcon,
+      label: '커뮤니티',
+    },
+    {
+      name: 'profile',
+      path: '/profile',
+      Icon: ProfileIcon,
+      label: '내 프로필',
+    },
+  ]
+
   return (
     <div className='fixed bottom-0 w-full bg-white shadow-md flex justify-around items-center p-2'>
-      <div
-        className='flex flex-col items-center cursor-pointer'
-        onClick={() => handleTabClick('fire', '/company')}
-      >
-        <FireIcon
-          color={activeTab === 'fire' ? 'text-main' : 'text-secondary'}
-        />
-        <span
-          className={`text-sm ${activeTab === 'fire' ? 'text-main' : 'text-secondary'}`}
+      {tabs.map((tab) => (
+        <div
+          key={tab.name}
+          className='flex flex-col items-center cursor-pointer'
+          onClick={() => handleTabClick(tab.name, tab.path)}
         >
-          동행
-        </span>
-      </div>
-
-      <div
-        className='flex flex-col items-center cursor-pointer'
-        onClick={() => handleTabClick('chat', '/group')}
-      >
-        <ChatIcon
-          color={activeTab === 'chat' ? 'text-main' : 'text-secondary'}
-        />
-        <span
-          className={`text-sm ${activeTab === 'chat' ? 'text-main' : 'text-secondary'}`}
-        >
-          채팅
-        </span>
-      </div>
-
-      <div
-        className='flex flex-col items-center cursor-pointer'
-        onClick={() => handleTabClick('community', '/community')}
-      >
-        <CommunityIcon
-          color={activeTab === 'community' ? 'text-main' : 'text-secondary'}
-        />
-        <span
-          className={`text-sm ${activeTab === 'community' ? 'text-main' : 'text-secondary'}`}
-        >
-          커뮤니티
-        </span>
-      </div>
-
-      <div
-        className='flex flex-col items-center cursor-pointer'
-        onClick={() => handleTabClick('profile', '/profile')}
-      >
-        <ProfileIcon
-          color={activeTab === 'profile' ? 'text-main' : 'text-secondary'}
-        />
-        <span
-          className={`text-sm ${activeTab === 'profile' ? 'text-main' : 'text-secondary'}`}
-        >
-          내 프로필
-        </span>
-      </div>
+          <tab.Icon
+            color={activeTab === tab.name ? 'text-main' : 'text-secondary'}
+          />
+          <span
+            className={`text-sm ${activeTab === tab.name ? 'text-main' : 'text-secondary'}`}
+          >
+            {tab.label}
+          </span>
+        </div>
+      ))}
     </div>
   )
 }
