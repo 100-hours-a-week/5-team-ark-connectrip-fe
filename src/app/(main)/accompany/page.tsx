@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import SearchIcon from '../../components/Icon/SearchIcon'
 import PostCard from '../../components/PostCard'
 import { mockData } from '../../data/mockData'
+import { PlusCircleFilled } from '@ant-design/icons'
 
 export default function Home() {
   const [query, setQuery] = useState('')
@@ -48,6 +49,12 @@ export default function Home() {
           게시글 등록 +
         </button>
       </div>
+      <button
+        className='fixed right-[10%] bottom-[10%] bg-white rounded-full cursor-pointer'
+        onClick={() => router.push('/accompany/write')}
+      >
+        <PlusCircleFilled style={{ color: 'var(--main)', fontSize: '30px' }} />
+      </button>
 
       {/* 페이지 콘텐츠 */}
       <div className='container mx-auto mt-4 mb-10'>
