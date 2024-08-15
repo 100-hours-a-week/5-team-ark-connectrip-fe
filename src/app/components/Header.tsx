@@ -12,7 +12,7 @@ export default function Header() {
   const router = useRouter()
 
   const handleClick = () => {
-    router.push('/company')
+    router.push('/accompany')
   }
 
   const toggleDropdown = () => {
