@@ -5,6 +5,8 @@ import { StaticImageData } from 'next/image'
 import CalendarIcon from './Icon/CalendarIcon'
 import PinIcon from './Icon/PinIcon'
 import ProfileIcon from './ProfileIcon'
+import { formatShortDate, formatCreatedAt } from '../utils/dateUtils'
+import { truncateText } from '../utils/textUtils'
 
 interface PostCardProps {
   title: string
@@ -14,7 +16,7 @@ interface PostCardProps {
   accompanyArea: string
   createdAt: string
   nickname: string
-  profileImagePath: StaticImageData // 변경된 부분
+  profileImagePath: StaticImageData
 }
 
 export default function PostCard({
@@ -32,45 +34,17 @@ export default function PostCard({
   const [formattedEndDate, setFormattedEndDate] = useState('')
 
   useEffect(() => {
-    // createdAt 날짜 포맷팅
-    const date = new Date(createdAt)
-    let formattedDate = date
-      .toLocaleDateString('ko-KR', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      })
-      .replace(/\./g, '.')
-      .replace(/\s/g, '')
-    // 마지막 문자가 '.'인지 확인하고, 만약 그렇다면 제거
-    if (formattedDate.endsWith('.')) {
-      formattedDate = formattedDate.slice(0, -1)
-    }
-
-    const formattedTime = date.toLocaleTimeString('ko-KR', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    })
-    setFormattedCreatedAt(`${formattedDate} ${formattedTime}`)
-
-    // startDate와 endDate 날짜 포맷팅
-    const formatShortDate = (dateString: string) => {
-      const date = new Date(dateString)
-      return `${date.getMonth() + 1}/${date.getDate()}`
-    }
-
+    setFormattedCreatedAt(formatCreatedAt(createdAt))
     setFormattedStartDate(formatShortDate(startDate))
     setFormattedEndDate(formatShortDate(endDate))
   }, [createdAt, startDate, endDate])
 
   return (
     <div className='bg-white p-4 rounded-lg shadow-md flex flex-col space-y-3 mb-4 cursor-pointer '>
-      <h2 className='text-lg font-semibold'>{title}</h2>
-      <p className='text-sm text-gray-600'>{content}</p>
+      <h2 className='text-lg font-semibold'>{truncateText(title, 20)}</h2>
+      <p className='text-sm text-gray-600'>{truncateText(content, 35)}</p>
       <div className='flex items-center space-x-2'>
         <ProfileIcon src={profileImagePath} size={30} />
-
         <div className='text-sm font-semibold'>{nickname}</div>
       </div>
       <div className='flex justify-start gap-2 text-sm text-gray-500'>
