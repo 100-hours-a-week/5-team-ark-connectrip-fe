@@ -28,8 +28,11 @@ export default function PostCard({
   profileImagePath,
 }: PostCardProps) {
   const [formattedCreatedAt, setFormattedCreatedAt] = useState('')
+  const [formattedStartDate, setFormattedStartDate] = useState('')
+  const [formattedEndDate, setFormattedEndDate] = useState('')
 
   useEffect(() => {
+    // createdAt 날짜 포맷팅
     const date = new Date(createdAt)
     let formattedDate = date
       .toLocaleDateString('ko-KR', {
@@ -50,7 +53,16 @@ export default function PostCard({
       hour12: false,
     })
     setFormattedCreatedAt(`${formattedDate} ${formattedTime}`)
-  }, [createdAt])
+
+    // startDate와 endDate 날짜 포맷팅
+    const formatShortDate = (dateString: string) => {
+      const date = new Date(dateString)
+      return `${date.getMonth() + 1}/${date.getDate()}`
+    }
+
+    setFormattedStartDate(formatShortDate(startDate))
+    setFormattedEndDate(formatShortDate(endDate))
+  }, [createdAt, startDate, endDate])
 
   return (
     <div className='bg-white p-4 rounded-lg shadow-md flex flex-col space-y-3 mb-4 cursor-pointer '>
@@ -72,7 +84,7 @@ export default function PostCard({
         <div className='flex items-center space-x-1'>
           <CalendarIcon />
           <span>
-            {startDate.substring(3)}~{endDate.substring(3)}
+            {formattedStartDate}~{formattedEndDate}
           </span>
         </div>
       </div>

@@ -2,12 +2,12 @@
 import { useParams } from 'next/navigation'
 
 export default function AccompanyDetailPage() {
+  // id == accompany post id
   const { id } = useParams()
 
   return (
-    <div>
+    <div className='mt-[20px]'>
       <h1>Post ID: {id}</h1>
-      {/* 이곳에서 id에 따라 데이터를 가져와서 렌더링할 수 있습니다 */}
     </div>
   )
 }

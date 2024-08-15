@@ -27,7 +27,7 @@ export default function Home() {
   }
 
   return (
-    <div className='w-full p-6  '>
+    <div className='w-full p-6'>
       <div className='flex items-center justify-between mb-4'>
         <h1 className='text-lg font-bold text-black'>동행 게시판</h1>
       </div>
