@@ -1,9 +1,10 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import Image, { StaticImageData } from 'next/image'
+import { StaticImageData } from 'next/image'
 import CalendarIcon from './Icon/CalendarIcon'
 import PinIcon from './Icon/PinIcon'
+import ProfileIcon from './ProfileIcon'
 
 interface PostCardProps {
   title: string
@@ -56,14 +57,8 @@ export default function PostCard({
       <h2 className='text-lg font-semibold'>{title}</h2>
       <p className='text-sm text-gray-600'>{content}</p>
       <div className='flex items-center space-x-2'>
-        <Image
-          // 문자열 경로를 사용
-          src={profileImagePath}
-          alt='Profile'
-          width={30}
-          height={30}
-          className='rounded-full'
-        />
+        <ProfileIcon src={profileImagePath} size={30} />
+
         <div className='text-sm font-semibold'>{nickname}</div>
       </div>
       <div className='flex justify-start gap-2 text-sm text-gray-500'>
