@@ -22,6 +22,10 @@ export default function Home() {
     }
   }
 
+  const handleCardClick = (id: number) => {
+    router.push(`/accompany/${id}`)
+  }
+
   return (
     <div className='w-full p-6  '>
       <div className='flex items-center justify-between mb-4'>
@@ -59,17 +63,18 @@ export default function Home() {
       {/* 페이지 콘텐츠 */}
       <div className='container mx-auto mt-4 mb-10'>
         {mockData.map((post) => (
-          <PostCard
-            key={post.id}
-            title={post.title}
-            content={post.content}
-            startDate={post.start_date}
-            endDate={post.end_date}
-            accompanyArea={post.accompany_area}
-            createdAt={post.created_at}
-            nickname={post.nickname}
-            profileImagePath={post.profile_image_path}
-          />
+          <div key={post.id} onClick={() => handleCardClick(post.id)}>
+            <PostCard
+              title={post.title}
+              content={post.content}
+              startDate={post.start_date}
+              endDate={post.end_date}
+              accompanyArea={post.accompany_area}
+              createdAt={post.created_at}
+              nickname={post.nickname}
+              profileImagePath={post.profile_image_path}
+            />
+          </div>
         ))}
       </div>
     </div>
