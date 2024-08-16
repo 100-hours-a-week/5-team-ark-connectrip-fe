@@ -1,31 +1,52 @@
 'use client'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
+import { useDebouncedCallback } from 'use-debounce'
 import SearchIcon from '../../components/Icon/SearchIcon'
 import PostCard from '../../components/PostCard'
 import { mockData } from '../../data/mockData'
 import { UpCircleFilled } from '@ant-design/icons'
 
 export default function Home() {
-  const [query, setQuery] = useState('')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [currentPage, setCurrentPage] = useState(1)
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
   const router = useRouter()
+  const query = searchParams.get('query') || ''
 
-  const handleSearch = () => {
-    router.push(`/?query=${query}&page=${currentPage}`)
-  }
+  // 실시간으로 입력된 검색어를 상태로 관리
+  const [searchQuery, setSearchQuery] = useState(query)
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleSearch()
+  // 검색어가 변경될 때마다 URL 쿼리를 업데이트
+  const handleSearch = useDebouncedCallback((term) => {
+    const params = new URLSearchParams(searchParams)
+    if (term) {
+      params.set('query', term)
+    } else {
+      params.delete('query')
     }
-  }
+    router.replace(`${pathname}?${params.toString()}`)
+  }, 300) // 300ms의 지연 시간
 
+  // 제목과 내용에 query가 포함된 게시글만 필터링
+  const filteredPosts = mockData.filter(
+    (post) =>
+      post.title.toLowerCase().includes(query.toLowerCase()) ||
+      post.content.toLowerCase().includes(query.toLowerCase())
+  )
+
+  // // Enter 키를 눌렀을 때 검색 기능 실행
+  // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (e.key === 'Enter') {
+  //     handleSearch()
+  //   }
+  // }
+
+  // 게시글 클릭 시 상세 페이지로 이동
   const handleCardClick = (id: number) => {
     router.push(`/accompany/${id}`)
   }
 
+  // 페이지 상단으로 스크롤 이동
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -37,14 +58,15 @@ export default function Home() {
       </div>
 
       <div className='flex items-center mb-2 gap-2 h-[40px]'>
-        <div className='flex items-center w-full h-[40px] border-2 border-main p-2 rounded-full flex-grow 	box-sizing: border-box;'>
+        <div className='flex items-center w-full h-[40px] border-2 border-main p-2 rounded-full flex-grow box-sizing: border-box;'>
           <SearchIcon />
           <input
             type='text'
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            // Enter 키를 감지하기 위한 이벤트 핸들러 추가
-            onKeyDown={handleKeyDown}
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value)
+              handleSearch(e.target.value)
+            }}
             placeholder='게시글 검색'
             className='w-full pl-2 border-none outline-none text-sm '
           />
