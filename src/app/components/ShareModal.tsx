@@ -9,12 +9,14 @@ interface ShareModalProps {
   isOpen: boolean
   onClose: () => void
   customUrl?: string // 백엔드에서 전달된 커스텀 URL
+  customUrlQrPath: string
 }
 
 const ShareModal: React.FC<ShareModalProps> = ({
   isOpen,
   onClose,
   customUrl,
+  customUrlQrPath,
 }) => {
   const { contextHolder, showSuccess, showError } = useCustomMessage()
   const pathname = usePathname() // 현재 페이지의 경로를 가져옴
@@ -61,7 +63,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
             }}
           >
             {/* QR 코드 이미지 자리 */}
-            <p>QR Code</p>
+            <img src={customUrlQrPath} alt='QR Code' /> : <p>QR Code</p>
           </div>
         </div>
 

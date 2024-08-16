@@ -13,6 +13,8 @@ export const mockData = [
     updated_at: '2024-07-01T12:00:00',
     deleted_at: null,
     profile_image_path: imagePath,
+    custom_url: 'https://custom.example.com/path1',
+    custom_url_qr_path: '/images/qr1.png',
   },
   {
     id: 2,
@@ -27,6 +29,8 @@ export const mockData = [
     updated_at: '2024-07-02T13:00:00',
     deleted_at: null,
     profile_image_path: imagePath,
+    custom_url: 'https://custom.example.com/path1',
+    custom_url_qr_path: '/images/qr1.png',
   },
   {
     id: 3,
@@ -41,6 +45,8 @@ export const mockData = [
     updated_at: '2024-07-03T11:00:00',
     deleted_at: null,
     profile_image_path: imagePath,
+    custom_url: 'https://custom.example.com/path1',
+    custom_url_qr_path: '/images/qr1.png',
   },
   {
     id: 4,
@@ -55,6 +61,8 @@ export const mockData = [
     updated_at: '2024-07-04T16:00:00',
     deleted_at: null,
     profile_image_path: imagePath,
+    custom_url: 'https://custom.example.com/path1',
+    custom_url_qr_path: '/images/qr1.png',
   },
   {
     id: 5,
@@ -69,5 +77,7 @@ export const mockData = [
     updated_at: '2024-07-05T10:00:00',
     deleted_at: null,
     profile_image_path: imagePath,
+    custom_url: 'https://custom.example.com/path1',
+    custom_url_qr_path: '/images/qr1.png',
   },
 ]

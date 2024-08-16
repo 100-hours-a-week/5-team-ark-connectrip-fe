@@ -13,7 +13,6 @@ import { useCustomMessage } from '@/app/utils/alertUtils'
 import { showDeleteModal } from '@/app/utils/modalUtils'
 import { mockData } from '@/app/data/mockDataPost'
 import { mockComments } from '@/app/data/mockDataComments'
-import ShareModal from '@/app/components/ShareModal'
 import useShareModal from '@/app/hooks/useShareModal'
 
 export default function AccompanyDetailPage() {
@@ -62,7 +61,12 @@ export default function AccompanyDetailPage() {
   return (
     <>
       {contextHolder}
-      <ShareModalComponent /> {/* 모달 컴포넌트 렌더링 */}
+      {/* 공유 모달에 custom_url과 custom_url_qr_path를 프롭스로 전달 */}
+      <ShareModalComponent
+        customUrl={post.custom_url}
+        customUrlQrPath={post.custom_url_qr_path}
+      />
+
       <div className='w-full p-5 flex flex-col justify-start items-start mb-[80px]'>
         <div className='flex items-center justify-between w-full mb-4'>
           <h1 className='text-lg font-bold text-main mb-1'>동행 게시판</h1>
