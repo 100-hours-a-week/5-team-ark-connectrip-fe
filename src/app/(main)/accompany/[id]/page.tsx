@@ -2,6 +2,7 @@
 
 import { useParams } from 'next/navigation'
 import { mockData } from '@/app/data/mockDataPost'
+import { mockComments } from '@/app/data/mockDataComments'
 import ProfileIcon from '@/app/components/ProfileIcon'
 import { formatShortDate, formatCreatedAt } from '@/app/utils/dateUtils'
 import CalendarIcon from '@/app/components/Icon/CalendarIcon'
@@ -18,6 +19,8 @@ export default function AccompanyDetailPage() {
   const postId = parseInt(id as string, 10)
   // mock 데이터에서 해당 id와 일치하는 게시글을 찾음
   const post = mockData.find((item) => item.id === postId)
+  // 해당 게시글의 댓글 필터링
+  const comments = mockComments.filter((comment) => comment.postId === postId)
   // 커스텀 메시지 훅을 사용하여 메시지 표시 관리
   const { contextHolder, showSuccess } = useCustomMessage()
   // 동행 상태를 관리하는 상태 값 (예: pending, accepted, reject)
@@ -92,30 +95,30 @@ export default function AccompanyDetailPage() {
         {/* 댓글 영역 */}
         <div className='mt-8 w-full'>
           <h2 className='text-lg font-bold mb-4'>댓글</h2>
-          <div className='flex items-start mb-4 flex-1'>
-            <ProfileIcon src={post.profile_image_path} size={40} />
-            <div className='ml-3 w-full '>
-              <p className='font-semibold'>{post.nickname}</p>
-              <div className='flex justify-between items-center mt-2'>
-                <p className='text-sm text-gray-500'>2024.07.24 14:01:29</p>
-                <div className='flex gap-2'>
-                  {/* 수정 버튼 */}
-                  <button className='text-sm text-main'>수정</button>
-                  {/* 삭제 버튼 클릭 시 모달 표시 */}
-                  <button
-                    className='text-sm text-main'
-                    onClick={handleDeleteClick}
-                  >
-                    삭제
-                  </button>
+          {/* 댓글 리스트 */}
+          {comments.map((comment) => (
+            <div key={comment.id} className='flex items-start mb-4 flex-1'>
+              <ProfileIcon src={comment.profile_image_path} size={40} />
+              <div className='ml-3 w-full'>
+                <p className='font-semibold'>{comment.nickname}</p>
+                <div className='flex justify-between items-center mt-2'>
+                  <p className='text-sm text-gray-500'>
+                    {formatCreatedAt(comment.created_at)}
+                  </p>
+                  <div className='flex gap-2'>
+                    <button className='text-sm text-main'>수정</button>
+                    <button
+                      className='text-sm text-main'
+                      onClick={handleDeleteClick}
+                    >
+                      삭제
+                    </button>
+                  </div>
                 </div>
+                <p className='text-gray-700 mt-2'>{comment.content}</p>
               </div>
-              {/* 댓글 내용 */}
-              <p className='text-gray-700 mt-2'>
-                댓글입니다.댓글입니다.댓글입니다.
-              </p>
             </div>
-          </div>
+          ))}
         </div>
       </div>
 
