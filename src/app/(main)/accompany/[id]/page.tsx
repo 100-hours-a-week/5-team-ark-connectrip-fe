@@ -32,10 +32,10 @@ export default function AccompanyDetailPage() {
   }
 
   // 댓글 삭제 버튼 클릭 시 호출되는 핸들러
-  const handleDeleteClick = () => {
+  const handleDeleteClick = (text: string) => {
     showDeleteModal(
-      '댓글 삭제',
-      '정말 삭제하시겠습니까? 삭제된 댓글은 복구할 수 없습니다.',
+      `${text} 삭제`,
+      `정말 삭제하시겠습니까? 삭제된 ${text}은 복구할 수 없습니다.`,
       () => showSuccess('댓글이 삭제되었습니다.')
     )
   }
@@ -51,13 +51,22 @@ export default function AccompanyDetailPage() {
         <h2 className='text-lg font-semibold mb-3'>{post.title}</h2>
 
         {/* 프로필 섹션 */}
-        <div className='flex items-center mb-1'>
-          <ProfileIcon src={post.profile_image_path} size={30} />
-          <div className='ml-3'>
+        <div className='flex items-center mb-1 w-full'>
+          <ProfileIcon src={post.profile_image_path} size={40} />
+          <div className='ml-3 flex-1'>
             <p className='font-semibold'>{post.nickname}</p>
             <p className='text-sm text-gray-500'>
               {formatCreatedAt(post.created_at)}
             </p>
+          </div>
+          <div className='flex gap-2'>
+            <button className='text-sm text-main'>수정</button>
+            <button
+              className='text-sm text-main'
+              onClick={() => handleDeleteClick('게시글')}
+            >
+              삭제
+            </button>
           </div>
         </div>
 
@@ -71,7 +80,7 @@ export default function AccompanyDetailPage() {
             />
             <InfoRow
               icon={<CalendarIcon />}
-              text={`동행 날짜 : ${formatShortDate(post.start_date)} ~ ${formatShortDate(post.end_date)}`}
+              text={`동행 날짜 : ${formatShortDate(post.start_date)}~${formatShortDate(post.end_date)}`}
               customStyle={true}
             />
           </div>
@@ -95,21 +104,24 @@ export default function AccompanyDetailPage() {
         {/* 댓글 영역 */}
         <div className='mt-8 w-full'>
           <h2 className='text-lg font-bold mb-4'>댓글</h2>
+
           {/* 댓글 리스트 */}
           {comments.map((comment) => (
             <div key={comment.id} className='flex items-start mb-4 flex-1'>
-              <ProfileIcon src={comment.profile_image_path} size={40} />
+              <ProfileIcon src={comment.profile_image_path} size={35} />
               <div className='ml-3 w-full'>
                 <p className='font-semibold'>{comment.nickname}</p>
-                <div className='flex justify-between items-center mt-2'>
+                <div className='flex justify-between items-center '>
                   <p className='text-sm text-gray-500'>
                     {formatCreatedAt(comment.created_at)}
                   </p>
+
+                  {/* 댓글 수정 삭제 버튼 */}
                   <div className='flex gap-2'>
                     <button className='text-sm text-main'>수정</button>
                     <button
                       className='text-sm text-main'
-                      onClick={handleDeleteClick}
+                      onClick={() => handleDeleteClick('댓글')}
                     >
                       삭제
                     </button>
