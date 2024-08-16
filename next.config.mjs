@@ -1,3 +1,6 @@
+// Import the necessary plugin
+import withAntdLess from 'next-plugin-antd-less'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async rewrites() {
@@ -8,6 +11,16 @@ const nextConfig = {
       },
     ]
   },
+  lessVarsFilePath: './styles/variables.less', // Path to your LESS variables file (optional)
+  reactStrictMode: true, // Strict mode for React
+  swcMinify: true, // Enables SWC for minification
+
+  // Custom Webpack configuration
+  webpack(config) {
+    // Any custom webpack configuration here
+    return config
+  },
 }
 
-export default nextConfig
+// Use withAntdLess to wrap the configuration
+export default withAntdLess(nextConfig)

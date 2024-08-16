@@ -5,7 +5,8 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 export default function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false) // 로그인 상태를 나타내는 상태 값
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isLoggedIn, setIsLoggedIn] = useState(true) // 로그인 상태를 나타내는 상태 값
   const [dropdownOpen, setDropdownOpen] = useState(false) // 드롭다운 메뉴 상태
   const dropdownRef = useRef(null)
   const router = useRouter()
@@ -21,7 +22,7 @@ export default function Header() {
   const handleClickOutside = (event: MouseEvent) => {
     if (
       dropdownRef.current &&
-      (dropdownRef.current as HTMLElement).contains(event.target as Node)
+      !(dropdownRef.current as HTMLElement).contains(event.target as Node)
     ) {
       setDropdownOpen(false)
     }
@@ -35,7 +36,7 @@ export default function Header() {
   }, [])
 
   return (
-    <header className='bg-white shadow-xl p-4 flex justify-between items-center'>
+    <header className='fixed top-0 w-full bg-white shadow-lg p-4 flex justify-between items-center border-b border-gray-100'>
       <div className='flex items-center cursor-pointer' onClick={handleClick}>
         <Image src='/logo.png' alt='Logo' width={30} height={30} />
         <h1 className='ml-2 text-2xl font-semibold'>ConnecTrip</h1>
@@ -44,11 +45,11 @@ export default function Header() {
         {isLoggedIn ? (
           <div className='flex items-center'>
             <Image
-              src='/profile.jpg'
+              src='/mockimage.jpg'
               alt='Profile'
               width={40}
               height={40}
-              className='rounded-full cursor-pointer bg-black'
+              className='rounded-full cursor-pointer'
               onClick={toggleDropdown}
             />
             {dropdownOpen && (
@@ -72,7 +73,6 @@ export default function Header() {
           </div>
         ) : (
           <></>
-          // <button className='text-gray-700 text-m'>로그인ssssss</button>
         )}
       </div>
     </header>
