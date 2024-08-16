@@ -11,10 +11,12 @@ import InfoRow from '@/app/components/InfoRow'
 import { useCustomMessage } from '@/app/utils/alertUtils'
 import { showDeleteModal } from '@/app/utils/modalUtils' // 삭제 모달 유틸 임포트
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function AccompanyDetailPage() {
   // URL 파라미터에서 id를 가져옴
   const { id } = useParams()
+  const router = useRouter()
   // id를 정수로 변환하여 postId에 저장
   const postId = parseInt(id as string, 10)
   // mock 데이터에서 해당 id와 일치하는 게시글을 찾음
@@ -31,12 +33,21 @@ export default function AccompanyDetailPage() {
     return <div>게시글을 찾을 수 없습니다.</div>
   }
 
-  // 댓글 삭제 버튼 클릭 시 호출되는 핸들러
+  // 댓글, 게시글 삭제 버튼 클릭 시 호출되는 핸들러
   const handleDeleteClick = (text: string) => {
     showDeleteModal(
       `${text} 삭제`,
       `정말 삭제하시겠습니까? 삭제된 ${text}은 복구할 수 없습니다.`,
-      () => showSuccess('댓글이 삭제되었습니다.')
+      () => {
+        showSuccess('댓글이 삭제되었습니다.')
+        if (text === '게시글') {
+          // 게시글 삭제 후 /accompany 페이지로 이동
+          router.push('/accompany')
+        } else if (text === '댓글') {
+          // 댓글 삭제 후 페이지 새로고침
+          window.location.reload()
+        }
+      }
     )
   }
 
