@@ -67,3 +67,13 @@ main {
     text-wrap: balance;
   } */
 }
+
+/* 스크롤바 숨기기 */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE와 Edge */
+  scrollbar-width: none; /* Firefox */
+}

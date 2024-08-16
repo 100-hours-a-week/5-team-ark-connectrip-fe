@@ -71,18 +71,24 @@ export default function AccompanyDetailPage() {
         </div>
 
         {/* 동행 지역 및 날짜 정보 */}
-        <div className='flex justify-between items-center mb-4'>
-          <div className='flex mt-2 items-center text-sm text-gray-500 space-x-3'>
-            <InfoRow
-              icon={<PinIcon />}
-              text={`동행 지역 : ${post.accompany_area}`}
-              customStyle={true}
-            />
-            <InfoRow
-              icon={<CalendarIcon />}
-              text={`동행 날짜 : ${formatShortDate(post.start_date)}~${formatShortDate(post.end_date)}`}
-              customStyle={true}
-            />
+        <div className='w-full overflow-x-auto no-scrollbar mb-4 mt-2'>
+          <div className='flex items-center space-x-3'>
+            {/* flex-shrink-0 : 텍스트가 줄어들지 않고, 공간이 충분하지 않을 때 가로로 스크롤이 발생 */}
+            <div className='flex-shrink-0'>
+              <InfoRow
+                icon={<PinIcon />}
+                // 스크롤이 발생하도록 동행 지역을 10번 반복하여 표시
+                text={`동행 지역 : ${post.accompany_area.repeat(10)}`}
+                customStyle={true}
+              />
+            </div>
+            <div className='flex-shrink-0'>
+              <InfoRow
+                icon={<CalendarIcon />}
+                text={`동행 날짜 : ${formatShortDate(post.start_date)} ~ ${formatShortDate(post.end_date)}`}
+                customStyle={true}
+              />
+            </div>
           </div>
         </div>
 
