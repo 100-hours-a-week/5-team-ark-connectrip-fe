@@ -7,11 +7,13 @@ import { formatShortDate, formatCreatedAt } from '@/app/utils/dateUtils'
 import CalendarIcon from '@/app/components/Icon/CalendarIcon'
 import PinIcon from '@/app/components/Icon/PinIcon'
 import InfoRow from '@/app/components/InfoRow' // 새로 만든 컴포넌트 임포트
+import { useCustomMessage } from '@/app/utils/alertUtils'
 
 export default function AccompanyDetailPage() {
   const { id } = useParams()
   const postId = parseInt(id as string, 10) // URL에서 가져온 id를 숫자로 변환
   const post = mockData.find((item) => item.id === postId) // 해당 id에 맞는 게시글을 찾음
+  const { contextHolder, showSuccess, showError } = useCustomMessage()
 
   if (!post) {
     return <div>게시글을 찾을 수 없습니다.</div> // id에 맞는 게시글이 없을 때 처리
@@ -19,6 +21,7 @@ export default function AccompanyDetailPage() {
 
   return (
     <>
+      {contextHolder}
       <div className='w-full p-5 flex flex-col justify-start items-start  mb-[80px] '>
         <h1 className='text-lg font-bold text-main mb-1'>동행 게시판</h1>
         <h2 className='text-ㅣㅎ font-semibold mb-3'>{post.title}</h2>
@@ -49,7 +52,10 @@ export default function AccompanyDetailPage() {
           {post.content}
         </div>
 
-        <button className='w-full bg-main text-white py-2 px-3 rounded-full text-sm'>
+        <button
+          className='w-full bg-main text-white py-2 px-3 rounded-full text-sm'
+          onClick={() => showSuccess('동행 참여 신청이 완료되었습니다.')}
+        >
           동행 참여
         </button>
 
@@ -78,9 +84,12 @@ export default function AccompanyDetailPage() {
           <input
             type='text'
             placeholder='댓글을 입력하세요.'
-            className='flex-1 h-[35px] p-2 px-4 border border-gray-300 rounded-full'
+            className='flex-1 h-[35px] p-2 px-4 border border-gray-300 rounded-full focus:border-main focus:border-2  outline-none'
           />
-          <button className='ml-3 h-[35px] bg-main text-white py-0 px-5 rounded-full'>
+          <button
+            className='ml-3 h-[35px] bg-main text-white py-0 px-5 rounded-full'
+            onClick={() => showSuccess('댓글이 등록되었습니다.')}
+          >
             등록
           </button>
         </div>
