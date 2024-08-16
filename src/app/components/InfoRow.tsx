@@ -7,11 +7,20 @@ import React from 'react'
 interface InfoRowProps {
   icon: React.ReactNode
   text: string
+  customStyle?: boolean // 이 prop을 통해 커스텀 스타일을 적용할지 여부를 결정
 }
 
-const InfoRow: React.FC<InfoRowProps> = ({ icon, text }) => {
+const InfoRow: React.FC<InfoRowProps> = ({
+  icon,
+  text,
+  customStyle = false,
+}) => {
   return (
-    <div className='flex items-center space-x-1'>
+    <div
+      className={`flex items-center space-x-1 ${
+        customStyle ? 'border border-[#e9a950] rounded-full px-3 py-1' : ''
+      }`}
+    >
       {icon}
       <span>{text}</span>
     </div>
