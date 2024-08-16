@@ -27,13 +27,6 @@ export default function Home() {
     router.replace(`${pathname}?${params.toString()}`)
   }, 300) // 300ms의 지연 시간
 
-  // 제목과 내용에 query가 포함된 게시글만 필터링
-  const filteredPosts = mockData.filter(
-    (post) =>
-      post.title.toLowerCase().includes(query.toLowerCase()) ||
-      post.content.toLowerCase().includes(query.toLowerCase())
-  )
-
   // 게시글 클릭 시 상세 페이지로 이동
   const handleCardClick = (id: number) => {
     router.push(`/accompany/${id}`)

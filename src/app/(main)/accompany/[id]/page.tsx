@@ -22,7 +22,7 @@ export default function AccompanyDetailPage() {
   // 해당 게시글의 댓글 필터링
   const comments = mockComments.filter((comment) => comment.postId === postId)
   // 커스텀 메시지 훅을 사용하여 메시지 표시 관리
-  const { contextHolder, showSuccess } = useCustomMessage()
+  const { contextHolder, showSuccess, showWarning } = useCustomMessage()
   // 동행 상태를 관리하는 상태 값 (예: pending, accepted, reject)
   const [status, setStatus] = useState('')
 
@@ -38,6 +38,21 @@ export default function AccompanyDetailPage() {
       `정말 삭제하시겠습니까? 삭제된 ${text}은 복구할 수 없습니다.`,
       () => showSuccess('댓글이 삭제되었습니다.')
     )
+  }
+
+  // 상태에 따른 버튼 텍스트 및 핸들러 설정
+  let buttonText = '동행 신청'
+  let buttonHandler = () => {
+    setStatus('pending')
+    showSuccess('동행 신청이 완료되었습니다.')
+  }
+
+  if (status === 'pending') {
+    buttonText = '동행 승인 대기'
+    buttonHandler = () => showWarning('현재 동행 승인 대기 중입니다.')
+  } else if (status === 'accepted') {
+    buttonText = '동행 그룹방 입장하기'
+    buttonHandler = () => showSuccess('동행 그룹방으로 입장합니다.')
   }
 
   return (
@@ -101,9 +116,9 @@ export default function AccompanyDetailPage() {
         {status !== 'reject' && (
           <button
             className='w-full bg-main text-white py-2 px-3 rounded-full text-sm'
-            onClick={() => showSuccess('동행 신청이 완료되었습니다.')}
+            onClick={buttonHandler}
           >
-            동행 신청
+            {buttonText}
           </button>
         )}
 
