@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import SearchIcon from '../../components/Icon/SearchIcon'
 import PostCard from '../../components/PostCard'
 import { mockData } from '../../data/mockData'
-import { PlusCircleFilled } from '@ant-design/icons'
+import { UpCircleFilled } from '@ant-design/icons'
 
 export default function Home() {
   const [query, setQuery] = useState('')
@@ -24,6 +24,10 @@ export default function Home() {
 
   const handleCardClick = (id: number) => {
     router.push(`/accompany/${id}`)
+  }
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
@@ -55,9 +59,9 @@ export default function Home() {
       </div>
       <button
         className='fixed right-[10%] bottom-[10%] bg-white rounded-full cursor-pointer'
-        onClick={() => router.push('/accompany/write')}
+        onClick={scrollToTop}
       >
-        <PlusCircleFilled style={{ color: 'var(--main)', fontSize: '30px' }} />
+        <UpCircleFilled style={{ color: 'var(--main)', fontSize: '30px' }} />
       </button>
 
       {/* 페이지 콘텐츠 */}
