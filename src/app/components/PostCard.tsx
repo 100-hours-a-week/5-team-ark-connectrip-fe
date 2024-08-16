@@ -5,6 +5,7 @@ import { StaticImageData } from 'next/image'
 import CalendarIcon from './Icon/CalendarIcon'
 import PinIcon from './Icon/PinIcon'
 import ProfileIcon from './ProfileIcon'
+import InfoRow from './InfoRow' // 새로 만든 컴포넌트 임포트
 import { formatShortDate, formatCreatedAt } from '../utils/dateUtils'
 import { truncateText } from '../utils/textUtils'
 
@@ -48,19 +49,11 @@ export default function PostCard({
         <div className='text-sm font-semibold'>{nickname}</div>
       </div>
       <div className='flex justify-start gap-2 text-sm text-gray-500'>
-        <div className='flex items-center space-x-1'>
-          <span>{formattedCreatedAt}</span>
-        </div>
-        <div className='flex items-center space-x-1'>
-          <PinIcon />
-          <span>{accompanyArea}</span>
-        </div>
-        <div className='flex items-center space-x-1'>
-          <CalendarIcon />
-          <span>
-            {formattedStartDate}~{formattedEndDate}
-          </span>
-        </div>
+        <InfoRow
+          icon={<CalendarIcon />}
+          text={`${formattedStartDate}~${formattedEndDate}`}
+        />
+        <InfoRow icon={<PinIcon />} text={accompanyArea} />
       </div>
     </div>
   )
