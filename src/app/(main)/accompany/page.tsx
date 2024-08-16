@@ -11,16 +11,18 @@ export default function Home() {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
-  const query = searchParams.get('query') || ''
+  // URL에서 디코딩된 query 값을 가져옴
+  const query = decodeURIComponent(searchParams.get('query') || '')
 
   // 실시간으로 입력된 검색어를 상태로 관리
   const [searchQuery, setSearchQuery] = useState(query)
 
   // 검색어가 변경될 때마다 URL 쿼리를 업데이트
   const handleSearch = useDebouncedCallback((term) => {
+    const encodedTerm = encodeURIComponent(term)
     const params = new URLSearchParams(searchParams)
-    if (term) {
-      params.set('query', term)
+    if (encodedTerm) {
+      params.set('query', encodedTerm)
     } else {
       params.delete('query')
     }
