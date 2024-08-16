@@ -48,7 +48,9 @@ export default function PostCard({
         <ProfileIcon src={profileImagePath} size={30} />
         <div className='text-sm font-semibold'>{nickname}</div>
       </div>
+
       <div className='flex justify-start gap-2 text-sm text-gray-500'>
+        <p className='text-sm text-gray-500'>{formatCreatedAt(createdAt)}</p>
         <InfoRow
           icon={<CalendarIcon />}
           text={`${formattedStartDate}~${formattedEndDate}`}
