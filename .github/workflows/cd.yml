@@ -27,6 +27,13 @@ jobs:
       - name: Zip files
         run: zip -r myapp.zip . -x "*.git*" "node_modules/*" "tests/*"
 
+      - name: Get current time
+        uses: josStorer/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYYMMDD_HH-mm-ss
+          utcOffset: '+09:00'
+
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
         with:
@@ -35,5 +42,5 @@ jobs:
           region: ${{ secrets.AWS_REGION }}
           application_name: ${{ secrets.AWS_EB_APPLICATION_NAME }}
           environment_name: ${{ secrets.AWS_EB_ENVIRONMENT_NAME }}
-          version_label: ark-connectrip-${{steps.current-time.outputs.formattedTime}}
+          version_label: ark-connectrip-${{steps.current-time.outputs.formattedTime}}-fe
           deployment_package: myapp.zip
