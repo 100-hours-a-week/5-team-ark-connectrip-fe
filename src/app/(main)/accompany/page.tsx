@@ -34,13 +34,6 @@ export default function Home() {
       post.content.toLowerCase().includes(query.toLowerCase())
   )
 
-  // // Enter 키를 눌렀을 때 검색 기능 실행
-  // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  //   if (e.key === 'Enter') {
-  //     handleSearch()
-  //   }
-  // }
-
   // 게시글 클릭 시 상세 페이지로 이동
   const handleCardClick = (id: number) => {
     router.push(`/accompany/${id}`)
