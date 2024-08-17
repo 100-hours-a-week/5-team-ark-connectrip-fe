@@ -18,7 +18,7 @@ export default function Home() {
 
   return (
     <div className='h-full flex justify-center items-center '>
-      <div className='flex flex-col justify-center items-center bg-white p-[30px] w-full max-w-[400px] h-[350px] rounded-xl shadow-2xl'>
+      <div className='flex flex-col justify-center items-center bg-white p-[30px] mt-[-50px] w-full max-w-[400px] h-[350px] rounded-xl shadow-2xl'>
         <div className='text-center mb-2 box-border p-[30px]'>
           <h1 className='text-l font-semibold mt-4 mb-2'>👋 커넥트립</h1>
           <p className='text-base text-black mb-4'>
