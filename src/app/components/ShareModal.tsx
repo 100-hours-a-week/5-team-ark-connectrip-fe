@@ -45,7 +45,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
         onOk={onClose}
         onCancel={onClose}
         footer={[
-          <Button key='cancel' onClick={onClose}>
+          <Button key='submit' type='primary' onClick={onClose}>
             닫기
           </Button>,
         ]}
