@@ -50,22 +50,15 @@ const ShareModal: React.FC<ShareModalProps> = ({
           </Button>,
         ]}
       >
-        <div style={{ textAlign: 'center', marginBottom: 20 }}>
-          <div
-            style={{
-              width: 200,
-              height: 200,
-              backgroundColor: '#f0f0f0',
-              margin: '0 auto',
-            }}
-          >
+        <div className='text-center mb-5'>
+          <div className='w-52 h-52 bg-gray-200 mx-auto flex items-center justify-center'>
             {/* QR 코드 이미지 자리 */}
-            <img src={customUrlQrPath} alt='QR Code' /> : <p>QR Code</p>
+            <img src={customUrlQrPath} alt='QR Code' />
           </div>
         </div>
 
         {/* 현재 페이지의 URL */}
-        <div style={{ marginBottom: 10 }}>
+        <div className='mb-3'>
           <Input
             addonBefore='URL'
             value={defaultUrl}
@@ -73,7 +66,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
             suffix={
               <CopyOutlined
                 onClick={() => handleCopy(defaultUrl)}
-                style={{ cursor: 'pointer' }}
+                className='cursor-pointer'
               />
             }
           />
@@ -81,7 +74,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
 
         {/* 커스텀 URL이 있는 경우에만 렌더링 */}
         {customUrl && (
-          <div style={{ marginBottom: 10 }}>
+          <div className='mb-3'>
             <Input
               addonBefore='커스텀 URL'
               value={customUrl}
@@ -89,7 +82,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
               suffix={
                 <CopyOutlined
                   onClick={() => handleCopy(customUrl)}
-                  style={{ cursor: 'pointer' }}
+                  className='cursor-pointer'
                 />
               }
             />

@@ -62,7 +62,6 @@ export default function Home() {
         <button
           onClick={() => router.push('/accompany/create')}
           className='bg-main text-white px-3 py-2 rounded-full flex-shrink-0 text-s h-[40px]'
-          style={{ height: '100%' }}
         >
           게시글 등록 +
         </button>
