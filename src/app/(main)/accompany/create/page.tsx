@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import { Input, DatePicker, Select, Button, Form } from 'antd'
 import { accompanyAreas } from '@/app/data/accompanyAreas'
 import { formatFormData } from '@/app/utils/formUtils'
@@ -9,7 +9,6 @@ const { TextArea } = Input
 
 export default function CreateAccompanyPage() {
   const [form] = Form.useForm()
-  const [helperText, setHelperText] = useState<string | null>(null)
 
   const handleFinish = (values: {
     title: string
@@ -57,7 +56,6 @@ export default function CreateAccompanyPage() {
               }))}
             />
           </Form.Item>
-          {helperText && <p>{helperText}</p>}
           <Form.Item name='startDate' label='시작 날짜'>
             <DatePicker style={{ width: '100%' }} format='YYYY-MM-DD' />
           </Form.Item>
