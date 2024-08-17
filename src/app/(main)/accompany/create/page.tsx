@@ -4,11 +4,15 @@ import React from 'react'
 import { Input, DatePicker, Select, Button, Form } from 'antd'
 import { accompanyAreas } from '@/app/data/accompanyAreas'
 import { formatFormData } from '@/app/utils/formUtils'
+import { useRouter } from 'next/navigation'
+import { useCustomMessage } from '@/app/utils/alertUtils' // 메시지 유틸리티 가져오기
 
 const { TextArea } = Input
 
 export default function CreateAccompanyPage() {
   const [form] = Form.useForm()
+  const router = useRouter()
+  const { contextHolder, showSuccess, showError } = useCustomMessage() // 커스텀 메시지 훅 사용
 
   const handleFinish = (values: {
     title: string
@@ -18,14 +22,27 @@ export default function CreateAccompanyPage() {
     content: string
     custom_url: string | null
   }) => {
-    const formData = formatFormData(values) // 유틸리티 함수 사용하여 데이터 처리
+    try {
+      const formData = formatFormData(values) // 유틸리티 함수 사용하여 데이터 처리
 
-    // 콘솔에 데이터 출력
-    console.log(JSON.stringify(formData, null, 2))
+      // 여기서 실제 API 요청을 보낼 예정
+      // 예: await api.submitForm(formData);
+
+      // 성공 alert 표시
+      showSuccess('게시글 작성이 완료되었습니다.')
+      // alert 보여주기 위해 1초 뒤에 페이지 이동
+      setTimeout(() => {
+        router.push('/accompany')
+      }, 1000) // 1초(1000ms) 후에 페이지 이동
+    } catch (error) {
+      showError('게시글 작성에 실패했습니다.')
+      console.error('Error:', error)
+    }
   }
 
   return (
     <div className='w-full p-6 mb-4'>
+      {contextHolder} {/* alert 표시를 위한 컨텍스트 */}
       <h1 className='text-lg font-bold text-black'>동행 게시판 작성</h1>
       <div className='flex flex-col gap-8 w-full'>
         <Form form={form} onFinish={handleFinish} layout='vertical'>
