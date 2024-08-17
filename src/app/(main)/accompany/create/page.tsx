@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import { Input, DatePicker, Select, Button, Form } from 'antd'
 import { accompanyAreas } from '@/app/data/accompanyAreas'
+import { formatFormData } from '@/app/utils/formUtils'
 
 const { TextArea } = Input
 
@@ -18,38 +19,7 @@ export default function CreateAccompanyPage() {
     content: string
     custom_url: string | null
   }) => {
-    let { title, accompany_area, startDate, endDate, content, custom_url } =
-      values
-
-    // 날짜 처리 로직
-    if (!startDate && !endDate) {
-      // 둘 다 입력되지 않은 경우 null로 설정
-      startDate = null
-      endDate = null
-    } else if (!startDate && endDate) {
-      // 시작 날짜가 없고 종료 날짜만 있는 경우, 종료 날짜와 동일하게 설정
-      startDate = endDate
-    } else if (startDate && !endDate) {
-      // 종료 날짜가 없고 시작 날짜만 있는 경우, 시작 날짜와 동일하게 설정
-      endDate = startDate
-    }
-
-    // 커스텀 url 처리 로직
-    if (custom_url) {
-      custom_url = `https://ex.com/${custom_url}` // 커스텀 url 앞에 https:// 붙이기
-    } else {
-      custom_url = null // 커스텀 url이 입력되지 않은 경우 null로 설정
-    }
-
-    // 폼 데이터 구성
-    const formData = {
-      title,
-      accompany_area,
-      content,
-      start_date: startDate,
-      end_date: endDate,
-      custom_url,
-    }
+    const formData = formatFormData(values) // 유틸리티 함수 사용하여 데이터 처리
 
     // 콘솔에 데이터 출력
     console.log(JSON.stringify(formData, null, 2))
