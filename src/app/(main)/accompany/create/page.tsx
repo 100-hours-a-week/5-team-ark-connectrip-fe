@@ -6,6 +6,7 @@ import { accompanyAreas } from '@/app/data/accompanyAreas'
 import { formatFormData } from '@/app/utils/formUtils'
 import { useRouter } from 'next/navigation'
 import { useCustomMessage } from '@/app/utils/alertUtils' // 메시지 유틸리티 가져오기
+import dayjs from 'dayjs'
 
 const { TextArea } = Input
 
@@ -17,13 +18,14 @@ export default function CreateAccompanyPage() {
   const handleFinish = (values: {
     title: string
     accompany_area: string
-    startDate: Date | null
-    endDate: Date | null
+    startDate: dayjs.Dayjs | null
+    endDate: dayjs.Dayjs | null
     content: string
     custom_url: string | null
   }) => {
     try {
       const formData = formatFormData(values) // 유틸리티 함수 사용하여 데이터 처리
+      console.log('formData:', formData)
 
       // 여기서 실제 API 요청을 보낼 예정
       // 예: await api.submitForm(formData);
@@ -43,7 +45,7 @@ export default function CreateAccompanyPage() {
   return (
     <div className='w-full p-6 mb-4'>
       {contextHolder} {/* alert 표시를 위한 컨텍스트 */}
-      <h1 className='text-lg font-bold text-black'>동행 게시판 작성</h1>
+      <h1 className='text-lg font-bold text-black'>동행 게시글 작성</h1>
       <div className='flex flex-col gap-8 w-full'>
         <Form form={form} onFinish={handleFinish} layout='vertical'>
           <Form.Item
@@ -116,7 +118,7 @@ export default function CreateAccompanyPage() {
           <Form.Item>
             <div className='flex justify-end gap-4'>
               <Button type='default' onClick={() => form.resetFields()}>
-                취소
+                게시글 초기화
               </Button>
               <Button type='primary' htmlType='submit'>
                 작성
