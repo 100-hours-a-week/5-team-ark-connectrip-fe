@@ -27,7 +27,16 @@ export function formatCustomUrl(customUrl?: string | null): string | null {
 }
 
 // 폼 데이터 처리 함수
-export function formatFormData(values: any) {
+interface FormValues {
+  title: string
+  accompany_area: string
+  startDate: dayjs.Dayjs | null
+  endDate: dayjs.Dayjs | null
+  content: string
+  custom_url?: string | null
+}
+
+export function formatFormData(values: FormValues) {
   const { title, accompany_area, startDate, endDate, content, custom_url } =
     values
 
@@ -36,7 +45,7 @@ export function formatFormData(values: any) {
     endDate
   )
 
-  const formattedData = {
+  return {
     title,
     accompany_area,
     content,
@@ -44,6 +53,4 @@ export function formatFormData(values: any) {
     end_date: formattedEndDate,
     custom_url: formatCustomUrl(custom_url),
   }
-
-  return formattedData
 }
