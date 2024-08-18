@@ -21,9 +21,10 @@ export function formatDates(
   return { formattedStartDate, formattedEndDate }
 }
 
-// 커스텀 URL 처리 함수
+// 커스텀 URL 처리 함수 (환경 변수 사용)
 export function formatCustomUrl(customUrl?: string | null): string | null {
-  return customUrl ? `https://ex.com/${customUrl}` : null
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  return customUrl ? `${baseUrl}/${customUrl}` : null
 }
 
 // 폼 데이터 처리 함수
