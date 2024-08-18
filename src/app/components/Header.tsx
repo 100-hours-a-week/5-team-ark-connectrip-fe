@@ -36,7 +36,7 @@ export default function Header() {
   }, [])
 
   return (
-    <header className='fixed top-0 w-full bg-white shadow-lg p-4 flex justify-between items-center border-b border-gray-100'>
+    <header className='fixed top-0 w-full bg-white shadow-lg p-4 flex justify-between items-center border-b border-gray-100 z-10'>
       <div className='flex items-center cursor-pointer' onClick={handleClick}>
         <Image src='/logo.png' alt='Logo' width={30} height={30} />
         <h1 className='ml-2 text-2xl font-semibold'>ConnecTrip</h1>

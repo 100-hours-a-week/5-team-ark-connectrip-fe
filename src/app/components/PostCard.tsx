@@ -30,12 +30,10 @@ export default function PostCard({
   nickname,
   profileImagePath,
 }: PostCardProps) {
-  const [formattedCreatedAt, setFormattedCreatedAt] = useState('')
   const [formattedStartDate, setFormattedStartDate] = useState('')
   const [formattedEndDate, setFormattedEndDate] = useState('')
 
   useEffect(() => {
-    setFormattedCreatedAt(formatCreatedAt(createdAt))
     setFormattedStartDate(formatShortDate(startDate))
     setFormattedEndDate(formatShortDate(endDate))
   }, [createdAt, startDate, endDate])
