@@ -3,7 +3,7 @@ import './globals.css'
 import 'antd/dist/reset.css'
 import { AntdRegistry } from '@ant-design/nextjs-registry'
 import { ConfigProvider, ThemeConfig } from 'antd'
-import ClientContent from './components/ClientContent' // 클라이언트 전용 컴포넌트 가져오기
+import ClientContent from './components/common/ClientContent' // 클라이언트 전용 컴포넌트 가져오기
 
 // 메타데이터 설정
 export const metadata: Metadata = {

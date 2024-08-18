@@ -51,8 +51,8 @@ export default function Header() {
         />
       ) : (
         <button
-          className='bg-main text-white px-3 py-2 rounded-full'
-          onClick={() => router.push('/login')}
+          className='text-black px-3 py-2 rounded-full'
+          onClick={() => router.push('/')}
         >
           로그인
         </button>

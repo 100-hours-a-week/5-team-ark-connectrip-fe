@@ -1,10 +1,10 @@
 'use client'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import FireIcon from './Icon/FireIcon'
-import CommunityIcon from './Icon/CommunityIcon'
-import ProfileIcon from './Icon/ProfileIcon'
-import ChatIcon from './Icon/ChatIcon'
+import FireIcon from '../Icon/FireIcon'
+import CommunityIcon from '../Icon/CommunityIcon'
+import ProfileIcon from '../Icon/ProfileIcon'
+import ChatIcon from '../Icon/ChatIcon'
 
 const BottomNav: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('fire')

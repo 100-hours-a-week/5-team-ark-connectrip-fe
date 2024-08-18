@@ -3,11 +3,11 @@ import React, { useState, useEffect } from 'react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { useDebouncedCallback } from 'use-debounce'
 import SearchIcon from '@/app/components/Icon/SearchIcon'
-import PostCard from '@/app/components/PostCard'
+import PostCard from '@/app/components/accompany/PostCard'
 import { mockData } from '@/app/data/mockData'
 import { UpCircleFilled } from '@ant-design/icons'
-import SuspenseWrapper from '@/app/components/SuspenseWrapper'
-import LoadingSpinner from '@/app/components/LoadingSpinner'
+import SuspenseWrapper from '@/app/components/common/SuspenseWrapper'
+import LoadingSpinner from '@/app/components/common/LoadingSpinner'
 
 export default function Home() {
   // Next.js의 라우터 및 경로 관련 훅들
@@ -26,7 +26,7 @@ export default function Home() {
     // 2초의 지연 시간 설정
     const timer = setTimeout(() => {
       setLoading(false)
-    }, 2000)
+    }, 500)
 
     // 컴포넌트가 언마운트될 때 타이머를 정리
     return () => clearTimeout(timer)
