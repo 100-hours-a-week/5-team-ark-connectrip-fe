@@ -4,16 +4,17 @@
 import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { ShareAltOutlined } from '@ant-design/icons'
-import ProfileIcon from '@/app/components/ProfileIcon'
+import ProfileIcon from '@/app/components/common/ProfileIcon'
 import { formatShortDate, formatCreatedAt } from '@/app/utils/dateUtils'
 import CalendarIcon from '@/app/components/Icon/CalendarIcon'
 import PinIcon from '@/app/components/Icon/PinIcon'
-import InfoRow from '@/app/components/InfoRow'
+import InfoRow from '@/app/components/accompany/InfoRow'
 import { useCustomMessage } from '@/app/utils/alertUtils'
 import { showDeleteModal } from '@/app/utils/modalUtils'
 import { mockData } from '@/app/data/mockDataPost'
 import { mockComments } from '@/app/data/mockDataComments'
 import useShareModal from '@/app/hooks/useShareModal'
+import { useHandleDeleteClick } from '@/app/hooks/useHandleDeleteClick'
 
 export default function AccompanyDetailPage() {
   const { id } = useParams()
@@ -29,33 +30,17 @@ export default function AccompanyDetailPage() {
     return <div>게시글을 찾을 수 없습니다.</div>
   }
 
-  const handleDeleteClick = (text: string) => {
-    showDeleteModal(
-      `${text} 삭제`,
-      `정말 삭제하시겠습니까? 삭제된 ${text}은 복구할 수 없습니다.`,
-      () => {
-        showSuccess('댓글이 삭제되었습니다.')
-        if (text === '게시글') {
-          router.push('/accompany')
-        } else if (text === '댓글') {
-          window.location.reload()
-        }
-      }
-    )
-  }
+  const handleCardDeleteClick = useHandleDeleteClick()
 
-  let buttonText = '동행 신청'
-  let buttonHandler = () => {
-    setStatus('pending')
-    showSuccess('동행 신청이 완료되었습니다.')
-  }
-
-  if (status === 'pending') {
-    buttonText = '동행 승인 대기'
-    buttonHandler = () => showWarning('현재 동행 승인 대기 중입니다.')
-  } else if (status === 'accepted') {
-    buttonText = '동행 그룹방 입장하기'
-    buttonHandler = () => showSuccess('동행 그룹방으로 입장합니다.')
+  const handleButtonClick = () => {
+    if (status === 'pending') {
+      showWarning('현재 동행 승인 대기 중입니다.')
+    } else if (status === 'accepted') {
+      showSuccess('동행 그룹방으로 입장합니다.')
+    } else {
+      setStatus('pending')
+      showSuccess('동행 신청이 완료되었습니다.')
+    }
   }
 
   return (
@@ -94,7 +79,7 @@ export default function AccompanyDetailPage() {
             </button>
             <button
               className='text-sm text-main'
-              onClick={() => handleDeleteClick('게시글')}
+              onClick={() => handleCardDeleteClick('게시글', '/accompany')}
             >
               삭제
             </button>
@@ -128,9 +113,9 @@ export default function AccompanyDetailPage() {
         {status !== 'reject' && (
           <button
             className='w-full bg-main text-white py-2 px-3 rounded-full text-sm'
-            onClick={buttonHandler}
+            onClick={handleButtonClick}
           >
-            {buttonText}
+            {status === 'pending' ? '동행 승인 대기' : '동행 신청'}
           </button>
         )}
 
@@ -151,7 +136,7 @@ export default function AccompanyDetailPage() {
                     <button className='text-sm text-main'>수정</button>
                     <button
                       className='text-sm text-main'
-                      onClick={() => handleDeleteClick('댓글')}
+                      onClick={() => handleCardDeleteClick('댓글', '')}
                     >
                       삭제
                     </button>
