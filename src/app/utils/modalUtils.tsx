@@ -15,6 +15,7 @@ export const showConfirmModal = (
     onCancel,
     okText: '확인',
     cancelText: '취소',
+    style: { top: '50%', transform: 'translateY(-50%)' }, // 모달을 중앙에 위치시키는 스타일
   })
 }
 
@@ -30,6 +31,7 @@ export const showDeleteModal = (
     okText: '삭제',
     okButtonProps: { danger: true }, // 빨간색 삭제 버튼
     cancelText: '취소',
+    style: { top: '50%', transform: 'translateY(-50%)' }, // 모달을 중앙에 위치시키는 스타일
     onOk: onDelete, // 삭제 버튼 클릭 시 동작
     onCancel: () => console.log('삭제 취소됨'), // 취소 버튼 클릭 시 동작 (필요에 따라 수정 가능)
   })
