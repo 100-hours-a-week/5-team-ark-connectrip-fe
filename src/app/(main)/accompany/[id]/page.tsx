@@ -32,12 +32,12 @@ export default function AccompanyDetailPage() {
   }
 
   const handleButtonClick = () => {
-    if (status === 'pending') {
+    if (status === 'PENDING') {
       showWarning('현재 동행 승인 대기 중입니다.')
     } else if (status === 'accepted') {
       showSuccess('동행 그룹방으로 입장합니다.')
     } else {
-      setStatus('pending')
+      setStatus('PENDING')
       showSuccess('동행 신청이 완료되었습니다.')
     }
   }
@@ -114,7 +114,7 @@ export default function AccompanyDetailPage() {
             className='w-full bg-main text-white py-2 px-3 rounded-full text-sm'
             onClick={handleButtonClick}
           >
-            {status === 'pending' ? '동행 승인 대기' : '동행 신청'}
+            {status === 'PENDING' ? '동행 승인 대기' : '동행 신청'}
           </button>
         )}
 
