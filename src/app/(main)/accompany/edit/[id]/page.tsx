@@ -1,19 +1,40 @@
+// /accompany/edit/[id]/page.tsx
+
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Input, DatePicker, Select, Button, Form } from 'antd'
 import { accompanyAreas } from '@/app/data/accompanyAreas'
 import { formatFormData } from '@/app/utils/formUtils'
-import { useRouter } from 'next/navigation'
-import { useCustomMessage } from '@/app/utils/alertUtils' // 메시지 유틸리티 가져오기
+import { useRouter, useParams } from 'next/navigation'
+import { useCustomMessage } from '@/app/utils/alertUtils'
 import dayjs from 'dayjs'
+import { mockData } from '@/app/data/mockDataPost' // mockData import
 
 const { TextArea } = Input
 
-export default function CreateAccompanyPage() {
+export default function EditAccompanyPage() {
   const [form] = Form.useForm()
   const router = useRouter()
-  const { contextHolder, showSuccess, showError } = useCustomMessage() // 커스텀 메시지 훅 사용
+  const { id } = useParams() // 동적 라우팅에서 id 가져오기
+  const { contextHolder, showSuccess, showError } = useCustomMessage()
+
+  useEffect(() => {
+    // mockData에서 해당 id에 맞는 데이터 찾기
+    const post = mockData.find((item) => item.id === parseInt(id as string, 10))
+
+    if (post) {
+      // 폼 초기값 설정
+      form.setFieldsValue({
+        title: post.title,
+        accompany_area: post.accompany_area,
+        startDate: dayjs(post.start_date),
+        endDate: dayjs(post.end_date),
+        content: post.content,
+        custom_url: post.custom_url,
+      })
+    }
+  }, [id, form])
 
   const handleFinish = (values: {
     title: string
@@ -24,20 +45,19 @@ export default function CreateAccompanyPage() {
     custom_url: string | null
   }) => {
     try {
-      const formData = formatFormData(values) // 유틸리티 함수 사용하여 데이터 처리
+      const formData = formatFormData(values)
       console.log('formData:', formData)
 
-      // 여기서 실제 API 요청을 보낼 예정
-      // 예: await api.submitForm(formData);
-
+      // 실제 API 요청을 보낼 예정 (예: await api.updateForm(formData, id);)
       // 성공 alert 표시
-      showSuccess('게시글 작성이 완료되었습니다.')
+      showSuccess('게시글 수정이 완료되었습니다.')
+
       // alert 보여주기 위해 1초 뒤에 페이지 이동
       setTimeout(() => {
         router.push('/accompany')
       }, 1000) // 1초(1000ms) 후에 페이지 이동
     } catch (error) {
-      showError('게시글 작성에 실패했습니다.')
+      showError('게시글 수정에 실패했습니다.')
       console.error('Error:', error)
     }
   }
@@ -45,7 +65,7 @@ export default function CreateAccompanyPage() {
   return (
     <div className='w-full p-6 mb-4'>
       {contextHolder} {/* alert 표시를 위한 컨텍스트 */}
-      <h1 className='text-lg font-bold text-black'>동행 게시글 작성</h1>
+      <h1 className='text-lg font-bold text-black'>동행 게시판 수정</h1>
       <div className='flex flex-col gap-8 w-full'>
         <Form form={form} onFinish={handleFinish} layout='vertical'>
           <Form.Item
@@ -121,7 +141,7 @@ export default function CreateAccompanyPage() {
                 게시글 초기화
               </Button>
               <Button type='primary' htmlType='submit'>
-                작성
+                수정
               </Button>
             </div>
           </Form.Item>

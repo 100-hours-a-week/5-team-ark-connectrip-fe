@@ -86,7 +86,12 @@ export default function AccompanyDetailPage() {
             </p>
           </div>
           <div className='flex gap-2'>
-            <button className='text-sm text-main'>수정</button>
+            <button
+              onClick={() => router.push(`/accompany/edit/${id}`)}
+              className='text-sm text-main'
+            >
+              수정
+            </button>
             <button
               className='text-sm text-main'
               onClick={() => handleDeleteClick('게시글')}
