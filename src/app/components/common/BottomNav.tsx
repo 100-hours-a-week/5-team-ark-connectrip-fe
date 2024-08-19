@@ -28,7 +28,7 @@ const BottomNav: React.FC = () => {
 
   const tabs = [
     { name: 'fire', path: '/accompany', Icon: FireIcon, label: '동행' },
-    { name: 'chat', path: '/chat', Icon: ChatIcon, label: '그룹' },
+    { name: 'chat', path: '/chat', Icon: ChatIcon, label: '채팅' },
     {
       name: 'community',
       path: '/community',
