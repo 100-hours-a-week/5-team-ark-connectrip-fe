@@ -1,19 +1,30 @@
 'use client'
-import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import React from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 import FireIcon from '../Icon/FireIcon'
 import CommunityIcon from '../Icon/CommunityIcon'
 import ProfileIcon from '../Icon/ProfileIcon'
 import ChatIcon from '../Icon/ChatIcon'
 
 const BottomNav: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>('fire')
+  const pathname = usePathname()
   const router = useRouter()
 
-  const handleTabClick = (tabName: string, path: string) => {
-    setActiveTab(tabName)
-    router.push(path)
+  const determineActiveTab = () => {
+    if (pathname.startsWith('/accompany')) {
+      return 'fire'
+    } else if (pathname.startsWith('/group')) {
+      return 'chat'
+    } else if (pathname.startsWith('/community')) {
+      return 'community'
+    } else if (pathname.startsWith('/profile')) {
+      return 'profile'
+    } else {
+      return ''
+    }
   }
+
+  const activeTab = determineActiveTab()
 
   const tabs = [
     { name: 'fire', path: '/accompany', Icon: FireIcon, label: '동행' },
@@ -32,19 +43,25 @@ const BottomNav: React.FC = () => {
     },
   ]
 
+  const handleTabClick = (path: string) => {
+    router.push(path)
+  }
+
   return (
     <div className='fixed bottom-0 w-full bg-white shadow-md flex justify-around items-center p-2'>
       {tabs.map((tab) => (
         <div
           key={tab.name}
           className='flex flex-col items-center cursor-pointer'
-          onClick={() => handleTabClick(tab.name, tab.path)}
+          onClick={() => handleTabClick(tab.path)}
         >
           <tab.Icon
             color={activeTab === tab.name ? 'text-main' : 'text-secondary'}
           />
           <span
-            className={`text-sm ${activeTab === tab.name ? 'text-main' : 'text-secondary'}`}
+            className={`text-sm ${
+              activeTab === tab.name ? 'text-main' : 'text-secondary'
+            }`}
           >
             {tab.label}
           </span>
