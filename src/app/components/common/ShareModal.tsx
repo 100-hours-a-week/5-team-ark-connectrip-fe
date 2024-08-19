@@ -1,6 +1,6 @@
 import { Modal, Button } from 'antd'
 import React from 'react'
-import UrlInput from '@/app/components/UrlInput' // UrlInput 컴포넌트 임포트
+import UrlInput from '@/app/components/accompany/UrlInput' // UrlInput 컴포넌트 임포트
 import { useCustomMessage } from '@/app/utils/alertUtils'
 import { usePathname } from 'next/navigation'
 

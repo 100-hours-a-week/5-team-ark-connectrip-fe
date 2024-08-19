@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import ShareModal from '@/app/components/ShareModal'
+import ShareModal from '@/app/components/common/ShareModal'
 
 interface ShareModalComponentProps {
   customUrl?: string | null

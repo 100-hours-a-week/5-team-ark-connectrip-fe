@@ -5,7 +5,7 @@
 import React, { useEffect } from 'react'
 import { Input, DatePicker, Select, Button, Form } from 'antd'
 import { accompanyAreas } from '@/app/data/accompanyAreas'
-import { formatFormData } from '@/app/utils/formUtils'
+// import { formatFormData } from '@/app/utils/formUtils'
 import { useRouter, useParams } from 'next/navigation'
 import { useCustomMessage } from '@/app/utils/alertUtils'
 import dayjs from 'dayjs'
@@ -35,7 +35,7 @@ export default function EditAccompanyPage() {
       })
     }
   }, [id, form])
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleFinish = (values: {
     title: string
     accompany_area: string
@@ -45,8 +45,8 @@ export default function EditAccompanyPage() {
     custom_url: string | null
   }) => {
     try {
-      const formData = formatFormData(values)
-      console.log('formData:', formData)
+      // const formData = formatFormData(values)
+      // console.log('formData:', formData)
 
       // 실제 API 요청을 보낼 예정 (예: await api.updateForm(formData, id);)
       // 성공 alert 표시

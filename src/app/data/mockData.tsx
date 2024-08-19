@@ -11,7 +11,7 @@ export const mockData = [
     accompany_area: '강원',
     content:
       '끝나고 술도 같이 마셔용 20대 남자 끝나고 술도 같이 마셔용 20대 남자끝나고 술도 같이 마셔용 20대 남자끝나고 술도 같이 마셔용 20대 남자끝나고 술도 같이 마셔용 20대 남자',
-    created_at: '2024-07-01T10:00:00',
+    created_at: '2024-08-18T22:00:00',
     profile_image_path: imagePath,
   },
   {
@@ -23,7 +23,7 @@ export const mockData = [
     end_date: '2024-09-06T00:00:00',
     accompany_area: '서울',
     content: '서울의 유명 카페들을 함께 투어하며 좋',
-    created_at: '2024-07-02T11:00:00',
+    created_at: '2024-08-14T11:00:00',
     profile_image_path: imagePath,
   },
   {
@@ -35,7 +35,7 @@ export const mockData = [
     end_date: '2024-07-21T00:00:00',
     accompany_area: '부산',
     content: '부산 바닷가에서 낚시를 함께 즐기실 분',
-    created_at: '2024-07-03T09:00:00',
+    created_at: '2024-08-03T09:00:00',
     profile_image_path: imagePath,
   },
   {
