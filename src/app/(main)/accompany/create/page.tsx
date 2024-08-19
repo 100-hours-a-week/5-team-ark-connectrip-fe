@@ -25,7 +25,7 @@ export default function CreateAccompanyPage() {
   }) => {
     try {
       const formData = formatFormData(values) // 유틸리티 함수 사용하여 데이터 처리
-      console.log('formData:', formData)
+      // console.log('formData:', formData)
 
       // 여기서 실제 API 요청을 보낼 예정
       // 예: await api.submitForm(formData);

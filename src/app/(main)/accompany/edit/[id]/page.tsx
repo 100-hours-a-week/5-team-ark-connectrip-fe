@@ -46,7 +46,7 @@ export default function EditAccompanyPage() {
   }) => {
     try {
       const formData = formatFormData(values)
-      console.log('formData:', formData)
+      // console.log('formData:', formData)
 
       // 실제 API 요청을 보낼 예정 (예: await api.updateForm(formData, id);)
       // 성공 alert 표시

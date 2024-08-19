@@ -12,7 +12,7 @@ export default function Header() {
 
   const handleLogout = () => {
     // 로그아웃 로직
-    console.log('로그아웃')
+    // console.log('로그아웃')
     setIsLoggedIn(false) // 로그아웃 시 로그인 상태 false로 변경
     router.push('/') // 로그아웃 후 로그인 페이지로 이동 (예시)
   }
