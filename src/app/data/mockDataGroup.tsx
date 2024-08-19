@@ -8,8 +8,9 @@ export const mockData = [
     endDate: '2024-08-15T15:00:00Z', // UTC로 변환
     accompanyArea: '강원',
     lastChatMessage: '참여하고 싶은데 어떻게 연락드릴까요?',
-    lastChatMessageTime: '2024-08-18T05:30:00Z', // UTC로 변환
+    lastChatMessageTime: '2024-08-19T07:30:00Z', // UTC로 변환
     createdAt: '2024-08-15T10:00:00Z', // UTC로 변환
+    memberNumber: 3,
   },
   {
     id: 2,
@@ -20,8 +21,9 @@ export const mockData = [
     endDate: '2024-09-05T15:00:00Z', // UTC로 변환
     accompanyArea: '서울',
     lastChatMessage: '카페 투어 일정 공유해주실 수 있을까요?',
-    lastChatMessageTime: '2024-08-12T02:45:00Z', // UTC로 변환
+    lastChatMessageTime: '2024-08-19T02:45:00Z', // UTC로 변환
     createdAt: '2024-08-13T12:30:00Z', // UTC로 변환
+    memberNumber: 5,
   },
   {
     id: 3,
@@ -32,8 +34,9 @@ export const mockData = [
     endDate: '2024-07-20T15:00:00Z', // UTC로 변환
     accompanyArea: '부산',
     lastChatMessage: '낚시 도구는 따로 준비해야 하나요?',
-    lastChatMessageTime: '2024-07-14T00:20:00Z', // UTC로 변환
+    lastChatMessageTime: '2024-08-14T00:20:00Z', // UTC로 변환
     createdAt: '2024-06-28T09:15:00Z', // UTC로 변환
+    memberNumber: 2,
   },
   {
     id: 4,
@@ -46,6 +49,7 @@ export const mockData = [
     lastChatMessage: '산책 코스는 어디로 정해져 있나요?',
     lastChatMessageTime: '2024-07-16T11:15:00Z', // UTC로 변환
     createdAt: '2024-07-02T14:45:00Z', // UTC로 변환
+    memberNumber: 1,
   },
   {
     id: 5,
@@ -58,5 +62,6 @@ export const mockData = [
     lastChatMessage: '트레킹 코스는 미리 알 수 있나요?',
     lastChatMessageTime: '2024-07-18T08:00:00Z', // UTC로 변환
     createdAt: '2024-07-03T08:00:00Z', // UTC로 변환
+    memberNumber: 4,
   },
 ]
