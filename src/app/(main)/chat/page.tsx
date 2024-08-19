@@ -1,10 +1,11 @@
+// chat/page.tsx
 'use client'
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { mockData } from '@/app/data/mockDataGroup'
 import SuspenseWrapper from '@/app/components/common/SuspenseWrapper'
 import LoadingSpinner from '@/app/components/common/LoadingSpinner'
-import GroupCard from '@/app/components/group/GroupCard'
+import GroupCard from '@/app/components/chat/GroupCard'
 
 export default function Home() {
   const router = useRouter()
@@ -24,7 +25,7 @@ export default function Home() {
 
   // 게시글 카드를 클릭했을 때 해당 게시글의 상세 페이지로 이동
   const handleCardClick = (id: number) => {
-    router.push(`/group/${id}`)
+    router.push(`/chat/${id}`)
   }
 
   // 로딩 중일 때 로딩 스피너를 표시

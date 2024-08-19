@@ -13,7 +13,7 @@ const BottomNav: React.FC = () => {
   const determineActiveTab = () => {
     if (pathname.startsWith('/accompany')) {
       return 'fire'
-    } else if (pathname.startsWith('/group')) {
+    } else if (pathname.startsWith('/chat')) {
       return 'chat'
     } else if (pathname.startsWith('/community')) {
       return 'community'
@@ -28,7 +28,7 @@ const BottomNav: React.FC = () => {
 
   const tabs = [
     { name: 'fire', path: '/accompany', Icon: FireIcon, label: '동행' },
-    { name: 'chat', path: '/group', Icon: ChatIcon, label: '그룹' },
+    { name: 'chat', path: '/chat', Icon: ChatIcon, label: '그룹' },
     {
       name: 'community',
       path: '/community',
