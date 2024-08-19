@@ -13,7 +13,6 @@ import DropdownMenu from '../common/DropdownMenu'
 import { useHandleDeleteClick } from '@/app/hooks/useHandleDeleteClick'
 
 interface GroupCardProps {
-  title: string
   content: string
   startDate: string
   endDate: string
@@ -24,7 +23,6 @@ interface GroupCardProps {
 }
 
 export default function GroupCard({
-  title,
   startDate,
   endDate,
   accompanyArea,

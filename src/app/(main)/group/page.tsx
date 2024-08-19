@@ -5,7 +5,6 @@ import { mockData } from '@/app/data/mockDataGroup'
 import SuspenseWrapper from '@/app/components/common/SuspenseWrapper'
 import LoadingSpinner from '@/app/components/common/LoadingSpinner'
 import GroupCard from '@/app/components/group/GroupCard'
-import { showDeleteModal } from '@/app/utils/modalUtils'
 
 export default function Home() {
   const router = useRouter()
@@ -47,7 +46,6 @@ export default function Home() {
           {mockData.map((post) => (
             <div key={post.id} onClick={() => handleCardClick(post.id)}>
               <GroupCard
-                title={post.title}
                 content={post.content}
                 startDate={post.startDate}
                 endDate={post.endDate}

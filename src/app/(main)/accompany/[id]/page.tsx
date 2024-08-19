@@ -10,7 +10,6 @@ import CalendarIcon from '@/app/components/Icon/CalendarIcon'
 import PinIcon from '@/app/components/Icon/PinIcon'
 import InfoRow from '@/app/components/accompany/InfoRow'
 import { useCustomMessage } from '@/app/utils/alertUtils'
-import { showDeleteModal } from '@/app/utils/modalUtils'
 import { mockData } from '@/app/data/mockDataPost'
 import { mockComments } from '@/app/data/mockDataComments'
 import useShareModal from '@/app/hooks/useShareModal'
@@ -26,11 +25,11 @@ export default function AccompanyDetailPage() {
   const [status, setStatus] = useState('')
   const { openModal, ShareModalComponent } = useShareModal() // 공유 모달 관련 훅 사용
 
+  const handleCardDeleteClick = useHandleDeleteClick()
+
   if (!post) {
     return <div>게시글을 찾을 수 없습니다.</div>
   }
-
-  const handleCardDeleteClick = useHandleDeleteClick()
 
   const handleButtonClick = () => {
     if (status === 'pending') {
@@ -53,8 +52,8 @@ export default function AccompanyDetailPage() {
       />
 
       <div className='w-full p-5 flex flex-col justify-start items-start mb-[80px]'>
-        <div className='flex items-center justify-between w-full mb-4'>
-          <h1 className='text-lg font-bold text-main mb-1'>동행 게시판</h1>
+        <div className='flex items-center justify-between w-full mb-2'>
+          <h1 className='text-lg font-bold text-main'>동행 게시판</h1>
           <button onClick={openModal} className='cursor-pointer'>
             <ShareAltOutlined />
           </button>
@@ -92,7 +91,7 @@ export default function AccompanyDetailPage() {
             <div className='flex-shrink-0'>
               <InfoRow
                 icon={<PinIcon />}
-                text={`동행 지역 : ${post.accompany_area.repeat(10)}`}
+                text={`동행 지역 : ${post.accompany_area}`}
                 customStyle={true}
               />
             </div>

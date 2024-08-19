@@ -6,7 +6,7 @@ import CalendarIcon from '../Icon/CalendarIcon'
 import PinIcon from '../Icon/PinIcon'
 import ProfileIcon from '../common/ProfileIcon'
 import InfoRow from './InfoRow' // 새로 만든 컴포넌트 임포트
-import { formatShortDate, formatCreatedAt } from '../../utils/dateUtils'
+import { formatShortDate } from '../../utils/dateUtils'
 import { truncateText } from '../../utils/textUtils'
 import { useTimeStamp } from '../../hooks/useTimeStamp'
 
