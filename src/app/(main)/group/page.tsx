@@ -46,6 +46,7 @@ export default function Home() {
           {mockData.map((post) => (
             <div key={post.id} onClick={() => handleCardClick(post.id)}>
               <GroupCard
+                title={post.title}
                 content={post.content}
                 startDate={post.startDate}
                 endDate={post.endDate}

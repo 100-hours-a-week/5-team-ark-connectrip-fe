@@ -13,6 +13,7 @@ import DropdownMenu from '../common/DropdownMenu'
 import { useHandleDeleteClick } from '@/app/hooks/useHandleDeleteClick'
 
 interface GroupCardProps {
+  title: string
   content: string
   startDate: string
   endDate: string
@@ -23,6 +24,7 @@ interface GroupCardProps {
 }
 
 export default function GroupCard({
+  title,
   startDate,
   endDate,
   accompanyArea,
@@ -52,14 +54,7 @@ export default function GroupCard({
   return (
     <div className='bg-white p-4 rounded-lg shadow-md flex flex-col mb-4 cursor-pointer'>
       <div className='flex justify-between mb-1'>
-        <div className='flex gap-2 items-center'>
-          <InfoRow
-            icon={<CalendarIcon />}
-            text={`${formattedStartDate}~${formattedEndDate}`}
-          />
-          <InfoRow icon={<PinIcon />} text={accompanyArea} />
-          <div className='text-sm text-secondary'>{memberNumber}</div>
-        </div>
+        <h2 className='text-lg font-semibold'>{title}</h2>
         <div
           onClick={(e) => {
             e.stopPropagation() // 이벤트 전파를 막음
@@ -71,8 +66,15 @@ export default function GroupCard({
           />
         </div>
       </div>
-
-      <div className='flex justify-between gap-2 text-sm text-gray-500'>
+      <div className='flex gap-2 items-center'>
+        <InfoRow
+          icon={<CalendarIcon />}
+          text={`${formattedStartDate}~${formattedEndDate}`}
+        />
+        <InfoRow icon={<PinIcon />} text={accompanyArea} />
+        <div className='text-sm text-secondary'>{memberNumber}</div>
+      </div>
+      <div className='flex justify-between gap-2 text-sm text-gray-500 mt-1'>
         <p className='text-sm text-gray-500'>
           {truncateText(lastChatMessage, 40)}
         </p>
