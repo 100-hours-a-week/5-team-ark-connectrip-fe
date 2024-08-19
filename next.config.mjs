@@ -20,9 +20,9 @@ const nextConfig = {
     return config
   },
 
-  experimental: {
-    missingSuspenseWithCSRBailout: false,
-  },
+  // experimental: {
+  //   missingSuspenseWithCSRBailout: false,
+  // },
 }
 
 // Use withAntdLess to wrap the configuration

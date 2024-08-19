@@ -6,7 +6,6 @@ import SearchIcon from '@/app/components/Icon/SearchIcon'
 import PostCard from '@/app/components/accompany/PostCard'
 import { mockData } from '@/app/data/mockData'
 import { UpCircleFilled } from '@ant-design/icons'
-import SuspenseWrapper from '@/app/components/common/SuspenseWrapper'
 import LoadingSpinner from '@/app/components/common/LoadingSpinner'
 
 export default function Home() {
@@ -61,63 +60,60 @@ export default function Home() {
   }
 
   return (
-    // SuspenseWrapper를 사용하여 비동기 처리 시 로딩 스피너를 자동으로 보여줌
-    <SuspenseWrapper>
-      <div className='w-full p-6'>
-        {/* 페이지 헤더 */}
-        <div className='flex items-center justify-between mb-4'>
-          <h1 className='text-lg font-bold text-black'>동행 게시판</h1>
-        </div>
+    <div className='w-full p-6'>
+      {/* 페이지 헤더 */}
+      <div className='flex items-center justify-between mb-4'>
+        <h1 className='text-lg font-bold text-black'>동행 게시판</h1>
+      </div>
 
-        {/* 검색 바와 게시글 등록 버튼 */}
-        <div className='flex items-center mb-2 gap-2 h-[40px]'>
-          <div className='flex items-center w-full h-[40px] border-2 border-main p-2 rounded-full flex-grow'>
-            <SearchIcon />
-            <input
-              type='text'
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value)
-                handleSearch(e.target.value)
-              }}
-              placeholder='게시글 검색'
-              className='w-full pl-2 border-none outline-none text-sm'
+      {/* 검색 바와 게시글 등록 버튼 */}
+      <div className='flex items-center mb-2 gap-2 h-[40px]'>
+        <div className='flex items-center w-full h-[40px] border-2 border-main p-2 rounded-full flex-grow'>
+          <SearchIcon />
+          <input
+            type='text'
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value)
+              handleSearch(e.target.value)
+            }}
+            placeholder='게시글 검색'
+            className='w-full pl-2 border-none outline-none text-sm'
+          />
+        </div>
+        <button
+          onClick={() => router.push('/accompany/create')}
+          className='bg-main text-white px-3 py-2 rounded-full flex-shrink-0 text-s h-[40px]'
+        >
+          게시글 등록 +
+        </button>
+      </div>
+
+      {/* 페이지 상단으로 이동 버튼 */}
+      <button
+        className='fixed right-[10%] bottom-[10%] bg-white rounded-full cursor-pointer'
+        onClick={scrollToTop}
+      >
+        <UpCircleFilled style={{ color: 'var(--main)', fontSize: '30px' }} />
+      </button>
+
+      {/* 게시글 리스트 */}
+      <div className='container mx-auto mt-4 mb-10'>
+        {mockData.map((post) => (
+          <div key={post.id} onClick={() => handleCardClick(post.id)}>
+            <PostCard
+              title={post.title}
+              content={post.content}
+              startDate={post.start_date}
+              endDate={post.end_date}
+              accompanyArea={post.accompany_area}
+              createdAt={post.created_at}
+              nickname={post.nickname}
+              profileImagePath={post.profile_image_path}
             />
           </div>
-          <button
-            onClick={() => router.push('/accompany/create')}
-            className='bg-main text-white px-3 py-2 rounded-full flex-shrink-0 text-s h-[40px]'
-          >
-            게시글 등록 +
-          </button>
-        </div>
-
-        {/* 페이지 상단으로 이동 버튼 */}
-        <button
-          className='fixed right-[10%] bottom-[10%] bg-white rounded-full cursor-pointer'
-          onClick={scrollToTop}
-        >
-          <UpCircleFilled style={{ color: 'var(--main)', fontSize: '30px' }} />
-        </button>
-
-        {/* 게시글 리스트 */}
-        <div className='container mx-auto mt-4 mb-10'>
-          {mockData.map((post) => (
-            <div key={post.id} onClick={() => handleCardClick(post.id)}>
-              <PostCard
-                title={post.title}
-                content={post.content}
-                startDate={post.start_date}
-                endDate={post.end_date}
-                accompanyArea={post.accompany_area}
-                createdAt={post.created_at}
-                nickname={post.nickname}
-                profileImagePath={post.profile_image_path}
-              />
-            </div>
-          ))}
-        </div>
+        ))}
       </div>
-    </SuspenseWrapper>
+    </div>
   )
 }
