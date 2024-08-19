@@ -39,7 +39,7 @@ export default function Home() {
       <div className='w-full p-6'>
         {/* 페이지 헤더 */}
         <div className='flex items-center justify-between mb-4'>
-          <h1 className='text-lg font-bold text-black'>내 동행 목록</h1>
+          <h1 className='text-lg font-bold text-black'>내 채팅 목록</h1>
         </div>
 
         {/* 게시글 리스트 */}
@@ -51,8 +51,10 @@ export default function Home() {
                 content={post.content}
                 startDate={post.startDate}
                 endDate={post.endDate}
-                createdAt={post.createdAt}
                 accompanyArea={post.accompanyArea}
+                lastChatMessage={post.lastChatMessage}
+                lastChatMessageTime={post.lastChatMessageTime}
+                memberNumber={post.memberNumber}
               />
             </div>
           ))}
