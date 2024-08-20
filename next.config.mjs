@@ -13,6 +13,9 @@ const nextConfig = {
   },
   reactStrictMode: false, // Strict mode for React
   swcMinify: true, // Enables SWC for minification
+  images: {
+    domains: ['k.kakaocdn.net'], // 허용할 외부 도메인을 추가
+  },
 
   // Custom Webpack configuration
   webpack(config) {

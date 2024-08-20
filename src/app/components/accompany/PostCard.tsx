@@ -5,7 +5,7 @@ import { StaticImageData } from 'next/image'
 import CalendarIcon from '../Icon/CalendarIcon'
 import PinIcon from '../Icon/PinIcon'
 import ProfileIcon from '../common/ProfileIcon'
-import InfoRow from './InfoRow' // 새로 만든 컴포넌트 임포트
+import InfoRow from './InfoRow'
 import { formatShortDate } from '../../utils/dateUtils'
 import { truncateText } from '../../utils/textUtils'
 import { useTimeStamp } from '../../hooks/useTimeStamp'
@@ -18,7 +18,7 @@ interface PostCardProps {
   accompanyArea: string
   createdAt: string
   nickname: string
-  profileImagePath: StaticImageData
+  profileImagePath: StaticImageData | string | null
 }
 
 export default function PostCard({
@@ -45,7 +45,12 @@ export default function PostCard({
   return (
     <div className='bg-white p-4 rounded-lg shadow-md flex flex-col  mb-4 cursor-pointer '>
       <div className='flex items-center space-x-2 mb-1'>
-        <ProfileIcon src={profileImagePath} size={30} />
+        <ProfileIcon
+          src={profileImagePath || ''}
+          size={30}
+          nickname={nickname}
+        />
+
         <div className='text-sm font-semibold'>{nickname}</div>
       </div>
       <h2 className='text-lg font-semibold'>{truncateText(title, 20)}</h2>
