@@ -11,7 +11,7 @@ const nextConfig = {
       },
     ]
   },
-  reactStrictMode: true, // Strict mode for React
+  reactStrictMode: false, // Strict mode for React
   swcMinify: true, // Enables SWC for minification
 
   // Custom Webpack configuration
