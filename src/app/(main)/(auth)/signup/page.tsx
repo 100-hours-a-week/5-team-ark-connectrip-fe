@@ -1,17 +1,24 @@
 'use client'
 
-import React, { useState } from 'react'
-import { Input, Radio, Button, Form } from 'antd'
+import React, { useState, useEffect } from 'react'
+import { Input, Radio, Button, Form, Checkbox } from 'antd'
 import { useRouter } from 'next/navigation'
-import { useCustomMessage } from '@/app/utils/alertUtils' // 메시지 유틸리티 가져오기
+import { useCustomMessage } from '@/app/utils/alertUtils'
 
 interface SignupFormValues {
   nickname: string
   birthDate: string
   gender: 'male' | 'female'
+  privacyPolicy: boolean // 개인정보 처리방침 동의 여부
+  termsOfService: boolean // 이용약관 동의 여부
 }
 
-export default function SignupPage() {
+const termsOptions = [
+  { label: '개인정보 처리방침 동의 (필수)', value: 'privacyPolicy' },
+  { label: '이용약관 동의 (필수)', value: 'termsOfService' },
+]
+
+const SignupPage: React.FC = () => {
   const [form] = Form.useForm()
   const router = useRouter()
   const { contextHolder, showSuccess, showError } = useCustomMessage() // 커스텀 메시지 훅 사용
@@ -19,6 +26,18 @@ export default function SignupPage() {
     'valid' | 'invalid' | null
   >(null)
   const [birthDate, setBirthDate] = useState<string>('') // 생년월일 상태
+  const [agreeAllChecked, setAgreeAllChecked] = useState<boolean>(false) // "모두 동의" 체크박스 상태
+  const [checkedList, setCheckedList] = useState<string[]>([]) // 개별 체크박스 상태
+  const [isMounted, setIsMounted] = useState(false)
+
+  // 클라이언트 측에서만 렌더링되도록 설정
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  if (!isMounted) {
+    return null // 서버 측에서 렌더링을 방지하기 위해 아무것도 렌더링하지 않음
+  }
 
   // 닉네임 유효성 확인 (3~20자, 한글/영문/띄어쓰기 허용)
   const checkNickname = (nickname: string) => {
@@ -52,11 +71,46 @@ export default function SignupPage() {
     }
   }
 
+  // "모두 동의" 체크박스 변경 시 처리
+  const handleAgreeAllChange = (e: any) => {
+    const checked = e.target.checked
+    setAgreeAllChecked(checked) // "모두 동의" 체크박스 상태 업데이트
+    const updatedCheckedList = checked
+      ? termsOptions.map((option) => option.value)
+      : []
+    setCheckedList(updatedCheckedList) // 개별 체크박스 상태 업데이트
+    form.setFieldsValue({
+      privacyPolicy: checked,
+      termsOfService: checked,
+    })
+  }
+
+  // 개별 체크박스 변경 시 처리
+  const handleOptionChange = (value: string) => {
+    const updatedCheckedList = checkedList.includes(value)
+      ? checkedList.filter((item) => item !== value)
+      : [...checkedList, value]
+    setCheckedList(updatedCheckedList)
+    setAgreeAllChecked(updatedCheckedList.length === termsOptions.length) // 모두 선택되었는지 확인
+    form.setFieldsValue({
+      privacyPolicy: updatedCheckedList.includes('privacyPolicy'),
+      termsOfService: updatedCheckedList.includes('termsOfService'),
+    })
+  }
+
+  const handleReset = () => {
+    form.resetFields()
+    setCheckedList([])
+    setAgreeAllChecked(false)
+    setBirthDate('')
+    setNicknameStatus(null)
+  }
+
   return (
     <div className='w-full p-6 mb-4 flex justify-center items-center flex-col'>
       {contextHolder} {/* alert 표시를 위한 컨텍스트 */}
-      <h1 className='text-lg font-bold text-black'>회원가입</h1>
-      <div className='flex flex-col gap-8 w-full'>
+      <h1 className='text-lg font-bold text-black mb-6'>회원가입</h1>
+      <div className='flex flex-col gap-8 w-full max-w-md'>
         <Form
           form={form}
           onFinish={handleFinish}
@@ -65,6 +119,8 @@ export default function SignupPage() {
             nickname: '', // 기본값을 빈 문자열로 설정하여 undefined 방지
             birthDate: '',
             gender: 'male',
+            privacyPolicy: false, // 개인정보 처리방침 기본값
+            termsOfService: false, // 이용약관 기본값
           }}
         >
           <Form.Item
@@ -99,7 +155,6 @@ export default function SignupPage() {
               onChange={() => setNicknameStatus(null)} // 닉네임이 변경될 때 상태 초기화
             />
           </Form.Item>
-
           <Form.Item
             name='birthDate'
             label='생년월일'
@@ -112,7 +167,7 @@ export default function SignupPage() {
             ]}
           >
             <Input
-              placeholder=' 숫자 8자리를 입력해주세요. 예시 : yyyymmdd'
+              placeholder='숫자 8자리를 입력해주세요. 예시 : yyyymmdd'
               maxLength={8}
               value={birthDate}
               style={{ color: '#000' }} // 글자 색상을 검정색으로 설정
@@ -130,7 +185,6 @@ export default function SignupPage() {
               }}
             />
           </Form.Item>
-
           <Form.Item
             name='gender'
             label='성별'
@@ -141,10 +195,32 @@ export default function SignupPage() {
               <Radio value='female'>여성</Radio>
             </Radio.Group>
           </Form.Item>
+          {/* 약관 동의 체크박스 */}
+          <div className='mt-4 mb-2 space-y-2'>
+            <div className='flex items-start gap-2'>
+              <Checkbox
+                onChange={handleAgreeAllChange}
+                checked={agreeAllChecked}
+              >
+                모두 동의합니다.
+              </Checkbox>
+            </div>
+            <div className='w-full h-px bg-gray-300 my-2' />
 
+            {termsOptions.map((option) => (
+              <div key={option.value} className='flex items-start gap-2 ml-3'>
+                <Checkbox
+                  onChange={() => handleOptionChange(option.value)}
+                  checked={checkedList.includes(option.value)}
+                >
+                  {option.label}
+                </Checkbox>
+              </div>
+            ))}
+          </div>
           <Form.Item>
             <div className='flex justify-end gap-4'>
-              <Button type='default' onClick={() => form.resetFields()}>
+              <Button type='default' onClick={handleReset}>
                 초기화
               </Button>
               <Button type='primary' htmlType='submit'>
@@ -157,3 +233,5 @@ export default function SignupPage() {
     </div>
   )
 }
+
+export default SignupPage
