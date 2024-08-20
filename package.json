@@ -11,12 +11,14 @@
   "dependencies": {
     "@ant-design/nextjs-registry": "^1.0.1",
     "antd": "^5.20.1",
+    "cookies-next": "^4.2.1",
     "date-fns": "^3.6.0",
     "next": "14.2.5",
     "next-plugin-antd-less": "^1.8.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "use-debounce": "^10.0.2"
+    "use-debounce": "^10.0.2",
+    "zustand": "^4.5.5"
   },
   "devDependencies": {
     "@types/node": "^20",
