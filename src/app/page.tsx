@@ -1,13 +1,24 @@
 // page.tsx
-
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
+import { useCustomMessage } from '@/app/utils/alertUtils'
 
 export default function Home() {
+  const searchParams = useSearchParams()
+  const { showWarning, contextHolder } = useCustomMessage()
+
+  useEffect(() => {
+    const message = searchParams.get('message')
+    if (message) {
+      showWarning(message) // 경고 메시지 표시
+    }
+  }, [searchParams, showWarning])
+
   const kakaoLoginHandler = async () => {
-    const response = await fetch('/api/kakaoAuth') // 변경된 경로
+    const response = await fetch('/api/kakaoAuth')
     if (response.ok) {
       const kakaoUrl = await response.json()
       window.location.href = kakaoUrl
@@ -18,6 +29,7 @@ export default function Home() {
 
   return (
     <div className='h-full flex justify-center items-center '>
+      {contextHolder}
       <div className='flex flex-col justify-center items-center bg-white p-[30px] mt-[-50px] w-full max-w-[400px] h-[350px] rounded-xl shadow-2xl'>
         <div className='text-center mb-2 box-border p-[30px]'>
           <h1 className='text-l font-semibold mt-4 mb-2'>👋 커넥트립</h1>
