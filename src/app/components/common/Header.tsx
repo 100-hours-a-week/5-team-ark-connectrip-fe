@@ -1,7 +1,7 @@
 // components/Header.tsx
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image'
 import { useRouter, usePathname } from 'next/navigation'
 import DropdownMenu from './DropdownMenu'
@@ -17,9 +17,20 @@ export default function Header() {
   const pathname = usePathname()
 
   useEffect(() => {
-    // 페이지 로드 시 유저 정보 가져오기
-    fetchUser(router)
-  }, [])
+    const fetchUserData = async () => {
+      try {
+        await fetchUser()
+      } catch (error) {
+        if ((error as Error).message === 'FIRST_LOGIN') {
+          router.push('/signup')
+        }
+      }
+    }
+
+    if (!nickname) {
+      fetchUserData()
+    }
+  }, [fetchUser, router, nickname])
 
   const handleLogout = async () => {
     try {

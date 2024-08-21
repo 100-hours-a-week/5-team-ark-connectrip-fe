@@ -1,7 +1,5 @@
 import { create } from 'zustand'
 import { api } from '../utils/api'
-import { useRouter } from 'next/router'
-
 interface AuthState {
   userId: string | null
   nickname: string | null
@@ -12,7 +10,7 @@ interface AuthState {
     profileImage: string
   }) => void
   clearUser: () => void
-  fetchUser: (router: any) => Promise<void>
+  fetchUser: () => Promise<void>
 }
 
 const useAuthStore = create<AuthState>((set, get) => ({
@@ -37,13 +35,14 @@ const useAuthStore = create<AuthState>((set, get) => ({
     }),
 
   // 서버에서 유저 정보를 가져와 설정
-  fetchUser: async (router) => {
+
+  fetchUser: async () => {
     try {
       const response = await api.get('/api/v1/members/me')
       const { message, data } = response
 
       if (message === 'FIRST_LOGIN') {
-        router.push('/signup')
+        throw new Error('FIRST_LOGIN') // 예외를 던져 라우팅을 컴포넌트에서 처리
       } else if (message === 'SUCCESS') {
         const { memberId, nickname, profileImagePath } = data
         get().setUser({
@@ -54,6 +53,7 @@ const useAuthStore = create<AuthState>((set, get) => ({
       }
     } catch (error) {
       console.error('유저 정보를 가져오는 중 오류 발생:', error)
+      throw error // 예외를 던져 컴포넌트에서 라우팅을 처리
     }
   },
 }))

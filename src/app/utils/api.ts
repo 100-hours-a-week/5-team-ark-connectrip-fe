@@ -1,8 +1,8 @@
-// utils/api.ts
 import { getCookie } from 'cookies-next'
 
 interface RequestOptions extends RequestInit {
   headers?: HeadersInit
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   body?: any
 }
 
@@ -17,7 +17,7 @@ const getHeaders = () => {
 }
 
 // 다양한 데이터 타입 처리
-const handleRequestBody = (params: any) => {
+const handleRequestBody = (params: Record<string, unknown> | FormData) => {
   if (params instanceof FormData) {
     return {
       body: params,
@@ -33,7 +33,7 @@ const handleRequestBody = (params: any) => {
   }
 
   return {
-    body: params,
+    body: String(params),
     contentType: 'text/plain',
   }
 }
@@ -61,7 +61,7 @@ const handleResponse = async (response: Response) => {
     const errorMessage =
       response.status === 404
         ? 'Requested resource not found'
-        : data.message || 'Something went wrong'
+        : (data.message as string) || 'Something went wrong'
 
     throw new Error(errorMessage)
   }
@@ -87,7 +87,11 @@ export const api = {
     }
   },
 
-  post: async (endpoint: string, params: any, options: RequestOptions = {}) => {
+  post: async (
+    endpoint: string,
+    params: Record<string, unknown> | FormData,
+    options: RequestOptions = {}
+  ) => {
     try {
       const { body, contentType } = handleRequestBody(params)
       const headers = getHeaders()
@@ -109,7 +113,11 @@ export const api = {
     }
   },
 
-  put: async (endpoint: string, params: any, options: RequestOptions = {}) => {
+  put: async (
+    endpoint: string,
+    params: Record<string, unknown> | FormData,
+    options: RequestOptions = {}
+  ) => {
     try {
       const { body, contentType } = handleRequestBody(params)
       const headers = getHeaders()
@@ -133,7 +141,7 @@ export const api = {
 
   patch: async (
     endpoint: string,
-    params: any,
+    params: Record<string, unknown> | FormData,
     options: RequestOptions = {}
   ) => {
     try {
@@ -176,7 +184,7 @@ export const api = {
 }
 
 // 네트워크 에러 핸들링
-const handleNetworkError = (error: any) => {
+const handleNetworkError = (error: unknown) => {
   console.error('API 요청 중 네트워크 오류:', error)
   throw new Error('Network error occurred. Please try again later.')
 }

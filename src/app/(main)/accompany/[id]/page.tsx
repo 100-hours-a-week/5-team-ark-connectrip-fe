@@ -2,7 +2,7 @@
 'use client'
 
 import { useParams, useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ShareAltOutlined } from '@ant-design/icons'
 import ProfileIcon from '@/app/components/common/ProfileIcon'
 import { formatShortDate, formatCreatedAt } from '@/app/utils/dateUtils'
@@ -10,38 +10,74 @@ import CalendarIcon from '@/app/components/Icon/CalendarIcon'
 import PinIcon from '@/app/components/Icon/PinIcon'
 import InfoRow from '@/app/components/accompany/InfoRow'
 import { useCustomMessage } from '@/app/utils/alertUtils'
-import { mockData } from '@/app/data/mockDataPost'
 import { mockComments } from '@/app/data/mockDataComments'
 import useShareModal from '@/app/hooks/useShareModal'
 import { useHandleDeleteClick } from '@/app/hooks/useHandleDeleteClick'
+import { api } from '@/app/utils/api'
+interface Post {
+  id: number
+  title: string
+  profile_image_path: string
+  nickname: string
+  created_at: string
+  accompanyArea: string
+  startDate: string
+  endDate: string
+  content: string
+  status: 'PENDING' | 'accepted' | 'reject'
+  custom_url: string
+  custom_url_qr_path: string
+}
 
 export default function AccompanyDetailPage() {
   const { id } = useParams()
   const router = useRouter()
   const postId = parseInt(id as string, 10)
-  const post = mockData.find((item) => item.id === postId)
+  const [post, setPost] = useState<Post | null>(null)
   const comments = mockComments.filter((comment) => comment.postId === postId)
+
   const { contextHolder, showSuccess, showWarning } = useCustomMessage()
-  const [status, setStatus] = useState('')
   const { openModal, ShareModalComponent } = useShareModal() // 공유 모달 관련 훅 사용
 
   const handleCardDeleteClick = useHandleDeleteClick()
+
+  useEffect(() => {
+    // API 호출하여 모든 게시글 정보를 가져옴
+    const fetchPostData = async () => {
+      try {
+        // /api/v1/accompany/{accompanyId}로 요청 보냄
+        const data = await api.get(`/api/v1/accompany/posts/${postId}`)
+        setPost(data)
+      } catch (error) {
+        console.error('Failed to fetch post data:', error)
+      }
+    }
+
+    fetchPostData()
+  }, [postId])
 
   if (!post) {
     return <div>게시글을 찾을 수 없습니다.</div>
   }
 
-  const handleButtonClick = () => {
-    if (status === 'PENDING') {
-      showWarning('현재 동행 승인 대기 중입니다.')
-    } else if (status === 'accepted') {
-      showSuccess('동행 그룹방으로 입장합니다.')
-    } else {
-      setStatus('PENDING')
-      showSuccess('동행 신청이 완료되었습니다.')
+  const handleButtonClick = async () => {
+    try {
+      if (post.status === 'PENDING') {
+        showWarning('현재 동행 승인 대기 중입니다.')
+      } else if (post.status === 'accepted') {
+        showSuccess('동행 그룹방으로 입장합니다.')
+      } else {
+        // await api.post(`/api/accompany/${postId}/apply`)
+        setPost((prevPost) =>
+          prevPost ? { ...prevPost, status: 'PENDING' } : null
+        )
+        showSuccess('동행 신청이 완료되었습니다.')
+      }
+    } catch (error) {
+      console.error('Failed to apply for accompany:', error)
+      showWarning('동행 신청에 실패했습니다.')
     }
   }
-
   return (
     <>
       {contextHolder}
@@ -62,7 +98,11 @@ export default function AccompanyDetailPage() {
 
         {/* 프로필 섹션 */}
         <div className='flex items-center mb-1 w-full'>
-          <ProfileIcon src={post.profile_image_path} size={40} />
+          <ProfileIcon
+            src={post.profile_image_path}
+            size={40}
+            nickname={post.nickname}
+          />
           <div className='ml-3 flex-1'>
             <p className='font-semibold'>{post.nickname}</p>
             <p className='text-sm text-gray-500'>
@@ -91,14 +131,14 @@ export default function AccompanyDetailPage() {
             <div className='flex-shrink-0'>
               <InfoRow
                 icon={<PinIcon />}
-                text={`동행 지역 : ${post.accompany_area}`}
+                text={`동행 지역 : ${post.accompanyArea}`}
                 customStyle={true}
               />
             </div>
             <div className='flex-shrink-0'>
               <InfoRow
                 icon={<CalendarIcon />}
-                text={`동행 날짜 : ${formatShortDate(post.start_date)} ~ ${formatShortDate(post.end_date)}`}
+                text={`동행 날짜 : ${formatShortDate(post.startDate)} ~ ${formatShortDate(post.endDate)}`}
                 customStyle={true}
               />
             </div>
@@ -123,7 +163,11 @@ export default function AccompanyDetailPage() {
 
           {comments.map((comment) => (
             <div key={comment.id} className='flex items-start mb-4 flex-1'>
-              <ProfileIcon src={comment.profile_image_path} size={35} />
+              <ProfileIcon
+                src={comment.profile_image_path}
+                size={35}
+                nickname={comment.nickname}
+              />
               <div className='ml-3 w-full'>
                 <p className='font-semibold'>{comment.nickname}</p>
                 <div className='flex justify-between items-center '>

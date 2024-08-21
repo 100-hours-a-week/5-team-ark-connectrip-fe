@@ -8,6 +8,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { api } from '@/app/utils/api'
 import { formatBirthDate } from '@/app/utils/dateUtils'
 import useAuthStore from '@/app/store/useAuthStore'
+import { CheckboxChangeEvent } from 'antd/es/checkbox'
 interface SignupFormValues {
   nickname: string
   birthDate: string
@@ -31,7 +32,6 @@ const SignupPage: React.FC = () => {
     'valid' | 'invalid' | 'duplicated' | null
   >(null)
   const [nicknameHelperText, setNicknameHelperText] = useState<string>('') // 닉네임 헬퍼 텍스트 상태
-  const [isCheckingNickname, setIsCheckingNickname] = useState<boolean>(false) // 닉네임 중복 확인 중 상태
   const [agreeAllChecked, setAgreeAllChecked] = useState<boolean>(false) // "모두 동의" 체크박스 상태
   const [checkedList, setCheckedList] = useState<string[]>([]) // 개별 체크박스 상태
   const { setUser, nickname } = useAuthStore()
@@ -41,13 +41,13 @@ const SignupPage: React.FC = () => {
     if (message) {
       showWarning(message) // 경고 메시지 표시
     }
-  }, [searchParams])
+  }, [searchParams, showWarning])
 
   useEffect(() => {
     if (nickname) {
       router.push('/accompany')
     }
-  }, [nickname])
+  }, [nickname, router])
 
   // 닉네임 유효성 확인 (3~20자, 한글/영문/띄어쓰기 허용)
   const checkNicknameValidity = (nickname: string) => {
@@ -67,7 +67,6 @@ const SignupPage: React.FC = () => {
 
   // 닉네임 중복 확인 API 호출
   const checkNicknameDuplication = async (nickname: string) => {
-    setIsCheckingNickname(true)
     try {
       const response = await api.get(
         `/api/v1/members/check-nickname?nickname=${encodeURIComponent(nickname)}`
@@ -83,8 +82,6 @@ const SignupPage: React.FC = () => {
     } catch (error) {
       showError('닉네임 중복 확인 중 오류가 발생했습니다.')
       console.error('Error:', error)
-    } finally {
-      setIsCheckingNickname(false)
     }
   }
 
@@ -142,13 +139,13 @@ const SignupPage: React.FC = () => {
   }
 
   // "모두 동의" 체크박스 변경 시 처리
-  const handleAgreeAllChange = (e: any) => {
+  const handleAgreeAllChange = (e: CheckboxChangeEvent) => {
     const checked = e.target.checked
-    setAgreeAllChecked(checked) // "모두 동의" 체크박스 상태 업데이트
+    setAgreeAllChecked(checked)
     const updatedCheckedList = checked
       ? termsOptions.map((option) => option.value)
       : []
-    setCheckedList(updatedCheckedList) // 개별 체크박스 상태 업데이트
+    setCheckedList(updatedCheckedList)
     form.setFieldsValue({
       privacyPolicy: checked,
       termsOfService: checked,
