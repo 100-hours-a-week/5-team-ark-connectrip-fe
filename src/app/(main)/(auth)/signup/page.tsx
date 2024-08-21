@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { Input, Radio, Button, Form, Checkbox } from 'antd'
 import { useRouter } from 'next/navigation'
 import { useCustomMessage } from '@/app/utils/alertUtils'
+import { useDebouncedCallback } from 'use-debounce'
 import { api } from '@/app/utils/api'
 
 interface SignupFormValues {
@@ -71,16 +72,19 @@ const SignupPage: React.FC = () => {
   }
 
   // 닉네임 입력 시 실시간으로 유효성 및 중복 검사 수행
-  const handleNicknameChange = async (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const nickname = e.target.value
-    form.setFieldsValue({ nickname })
+  // 디바운스를 적용한 닉네임 변경 핸들러
+  const handleNicknameChange = useDebouncedCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const nickname = e.target.value
+      form.setFieldsValue({ nickname })
 
-    if (checkNicknameValidity(nickname)) {
-      await checkNicknameDuplication(nickname)
-    }
-  }
+      if (checkNicknameValidity(nickname)) {
+        console.log(1)
+        await checkNicknameDuplication(nickname)
+      }
+    },
+    300 // 300ms 디바운스
+  )
 
   const handleFinish = async (values: SignupFormValues) => {
     try {
