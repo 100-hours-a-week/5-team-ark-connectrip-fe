@@ -12,7 +12,7 @@ interface AuthState {
     profileImage: string
   }) => void
   clearUser: () => void
-  fetchUser: () => Promise<void>
+  fetchUser: (router: any) => Promise<void>
 }
 
 const useAuthStore = create<AuthState>((set, get) => ({
@@ -37,17 +37,21 @@ const useAuthStore = create<AuthState>((set, get) => ({
     }),
 
   // 서버에서 유저 정보를 가져와 설정
-  fetchUser: async () => {
-    const router = useRouter()
+  fetchUser: async (router) => {
     try {
       const response = await api.get('/api/v1/members/me')
+      console.log('API response:', response) // 전체 응답 로그 확인
       const { message, data } = response
 
       if (message === 'FIRST_LOGIN') {
         router.push('/signup')
       } else if (message === 'SUCCESS') {
-        const { userId, nickname, profileImage } = data
-        get().setUser({ userId, nickname, profileImage })
+        const { memberId, nickname, profileImagePath } = data
+        get().setUser({
+          userId: memberId.toString(),
+          nickname,
+          profileImage: profileImagePath,
+        })
       }
     } catch (error) {
       console.error('유저 정보를 가져오는 중 오류 발생:', error)
