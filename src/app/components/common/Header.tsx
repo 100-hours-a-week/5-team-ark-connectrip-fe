@@ -3,15 +3,18 @@
 
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import DropdownMenu from './DropdownMenu'
 import useAuthStore from '@/app/store/useAuthStore'
 import ProfileIcon from './ProfileIcon'
 import { api } from '@/app/utils/api'
+import { useCustomMessage } from '@/app/utils/alertUtils'
 
 export default function Header() {
   const router = useRouter()
   const { nickname, profileImage, fetchUser } = useAuthStore()
+  const { showWarning, contextHolder } = useCustomMessage()
+  const pathname = usePathname()
 
   useEffect(() => {
     // 페이지 로드 시 유저 정보 가져오기
@@ -43,6 +46,14 @@ export default function Header() {
     // router.push('/profile/edit')
   }
 
+  const handleLogoClick = () => {
+    if (pathname === '/signup') {
+      showWarning('추가 입력폼을 제출해주세요.')
+    } else {
+      router.push('/accompany')
+    }
+  }
+
   const menuItems = [
     { label: '로그아웃', onClick: handleLogout },
     { label: '내 정보 수정', onClick: handleProfileEdit },
@@ -50,9 +61,10 @@ export default function Header() {
 
   return (
     <header className='fixed top-0 w-full bg-white shadow-lg p-4 flex justify-between items-center border-b border-gray-100 z-10'>
+      {contextHolder}
       <div
         className='flex items-center cursor-pointer'
-        onClick={() => router.push('/accompany')}
+        onClick={handleLogoClick} // 클릭 시 처리
       >
         <Image src='/logo.png' alt='Logo' width={30} height={30} />
         <h1 className='ml-2 text-2xl font-semibold'>ConnecTrip</h1>
