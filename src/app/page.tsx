@@ -2,7 +2,7 @@
 'use client'
 
 import React, { useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import { useCustomMessage } from '@/app/utils/alertUtils'
 

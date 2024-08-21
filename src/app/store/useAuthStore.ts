@@ -40,7 +40,6 @@ const useAuthStore = create<AuthState>((set, get) => ({
   fetchUser: async (router) => {
     try {
       const response = await api.get('/api/v1/members/me')
-      console.log('API response:', response) // 전체 응답 로그 확인
       const { message, data } = response
 
       if (message === 'FIRST_LOGIN') {
