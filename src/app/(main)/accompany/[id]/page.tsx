@@ -5,7 +5,12 @@ import { useParams, useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { ShareAltOutlined } from '@ant-design/icons'
 import ProfileIcon from '@/app/components/common/ProfileIcon'
-import { formatShortDate, formatCreatedAt } from '@/app/utils/dateUtils'
+import {
+  formatShortDate,
+  formatToUtcDate,
+  formatCreatedAt,
+  formatShortDateFromUtc,
+} from '@/app/utils/dateUtils'
 import CalendarIcon from '@/app/components/Icon/CalendarIcon'
 import PinIcon from '@/app/components/Icon/PinIcon'
 import InfoRow from '@/app/components/accompany/InfoRow'
@@ -14,19 +19,20 @@ import { mockComments } from '@/app/data/mockDataComments'
 import useShareModal from '@/app/hooks/useShareModal'
 import { useHandleDeleteClick } from '@/app/hooks/useHandleDeleteClick'
 import { api } from '@/app/utils/api'
+import LoadingSpinner from '@/app/components/common/LoadingSpinner'
 interface Post {
   id: number
   title: string
-  profile_image_path: string
+  profileImagePath: string
   nickname: string
-  created_at: string
+  createdAt: string
   accompanyArea: string
   startDate: string
   endDate: string
   content: string
-  status: 'PENDING' | 'accepted' | 'reject'
-  custom_url: string
-  custom_url_qr_path: string
+  status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'DEFAULT'
+  customUrl: string
+  urlQrPath: string
 }
 
 export default function AccompanyDetailPage() {
@@ -42,12 +48,22 @@ export default function AccompanyDetailPage() {
   const handleCardDeleteClick = useHandleDeleteClick()
 
   useEffect(() => {
+    console.log(1111)
     // API 호출하여 모든 게시글 정보를 가져옴
     const fetchPostData = async () => {
       try {
         // /api/v1/accompany/{accompanyId}로 요청 보냄
         const data = await api.get(`/api/v1/accompany/posts/${postId}`)
-        setPost(data)
+        // 날짜 포맷 적용
+        const formattedData = {
+          ...data,
+          createdAt: formatToUtcDate(data.createdAt),
+          startDate: formatShortDateFromUtc(data.startDate),
+          endDate: formatShortDateFromUtc(data.endDate),
+        }
+
+        setPost(formattedData)
+        console.log('Formatted post data:', formattedData)
       } catch (error) {
         console.error('Failed to fetch post data:', error)
       }
@@ -57,14 +73,14 @@ export default function AccompanyDetailPage() {
   }, [postId])
 
   if (!post) {
-    return <div>게시글을 찾을 수 없습니다.</div>
+    return <LoadingSpinner />
   }
 
   const handleButtonClick = async () => {
     try {
       if (post.status === 'PENDING') {
         showWarning('현재 동행 승인 대기 중입니다.')
-      } else if (post.status === 'accepted') {
+      } else if (post.status === 'ACCEPTED') {
         showSuccess('동행 그룹방으로 입장합니다.')
       } else {
         // await api.post(`/api/accompany/${postId}/apply`)
@@ -83,8 +99,8 @@ export default function AccompanyDetailPage() {
       {contextHolder}
       {/* 공유 모달에 custom_url과 custom_url_qr_path를 프롭스로 전달 */}
       <ShareModalComponent
-        customUrl={post.custom_url}
-        customUrlQrPath={post.custom_url_qr_path}
+        customUrl={post.customUrl}
+        customUrlQrPath={post.urlQrPath}
       />
 
       <div className='w-full p-5 flex flex-col justify-start items-start mb-[80px]'>
@@ -99,15 +115,13 @@ export default function AccompanyDetailPage() {
         {/* 프로필 섹션 */}
         <div className='flex items-center mb-1 w-full'>
           <ProfileIcon
-            src={post.profile_image_path}
+            src={post.profileImagePath}
             size={40}
             nickname={post.nickname}
           />
           <div className='ml-3 flex-1'>
             <p className='font-semibold'>{post.nickname}</p>
-            <p className='text-sm text-gray-500'>
-              {formatCreatedAt(post.created_at)}
-            </p>
+            <p className='text-sm text-gray-500'>{post.createdAt}</p>
           </div>
           <div className='flex gap-2'>
             <button
@@ -138,23 +152,23 @@ export default function AccompanyDetailPage() {
             <div className='flex-shrink-0'>
               <InfoRow
                 icon={<CalendarIcon />}
-                text={`동행 날짜 : ${formatShortDate(post.startDate)} ~ ${formatShortDate(post.endDate)}`}
+                text={`동행 날짜 : ${post.startDate} ~ ${post.endDate}`}
                 customStyle={true}
               />
             </div>
           </div>
         </div>
 
-        <div className='text-gray-700 mb-4 whitespace-pre-wrap text-justify'>
+        <div className='text-gray-700 mb-4 whitespace-pre-wrap text-justify p-1'>
           {post.content}
         </div>
 
-        {status !== 'reject' && (
+        {post.status !== 'REJECTED' && (
           <button
             className='w-full bg-main text-white py-2 px-3 rounded-full text-sm'
             onClick={handleButtonClick}
           >
-            {status === 'PENDING' ? '동행 승인 대기' : '동행 신청'}
+            {post.status === 'PENDING' ? '동행 승인 대기' : '동행 신청'}
           </button>
         )}
 
