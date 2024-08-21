@@ -10,7 +10,7 @@ interface AuthState {
     profileImage: string
   }) => void
   clearUser: () => void
-  fetchUser: () => Promise<void>
+  fetchUser: () => Promise<'SUCCESS' | 'FIRST_LOGIN' | 'ERROR'>
 }
 
 const useAuthStore = create<AuthState>((set, get) => ({
@@ -42,7 +42,7 @@ const useAuthStore = create<AuthState>((set, get) => ({
       const { message, data } = response
 
       if (message === 'FIRST_LOGIN') {
-        throw new Error('FIRST_LOGIN') // 예외를 던져 라우팅을 컴포넌트에서 처리
+        return 'FIRST_LOGIN'
       } else if (message === 'SUCCESS') {
         const { memberId, nickname, profileImagePath } = data
         get().setUser({
@@ -50,10 +50,13 @@ const useAuthStore = create<AuthState>((set, get) => ({
           nickname,
           profileImage: profileImagePath,
         })
+        return 'SUCCESS'
+      } else {
+        return 'ERROR'
       }
     } catch (error) {
       console.error('유저 정보를 가져오는 중 오류 발생:', error)
-      throw error // 예외를 던져 컴포넌트에서 라우팅을 처리
+      return 'ERROR'
     }
   },
 }))

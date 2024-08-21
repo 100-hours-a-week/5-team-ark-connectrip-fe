@@ -18,12 +18,10 @@ export default function Header() {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      try {
-        await fetchUser()
-      } catch (error) {
-        if ((error as Error).message === 'FIRST_LOGIN') {
-          router.push('/signup')
-        }
+      const status = await fetchUser()
+
+      if (status === 'FIRST_LOGIN') {
+        router.push('/signup')
       }
     }
 
