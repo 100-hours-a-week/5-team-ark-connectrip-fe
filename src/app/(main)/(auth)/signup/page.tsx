@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { Input, Radio, Button, Form, Checkbox } from 'antd'
 import { useRouter } from 'next/navigation'
 import { useCustomMessage } from '@/app/utils/alertUtils'
+import { api } from '@/app/utils/api'
 
 interface SignupFormValues {
   nickname: string
@@ -23,40 +24,68 @@ const SignupPage: React.FC = () => {
   const router = useRouter()
   const { contextHolder, showSuccess, showError } = useCustomMessage() // 커스텀 메시지 훅 사용
   const [nicknameStatus, setNicknameStatus] = useState<
-    'valid' | 'invalid' | null
+    'valid' | 'invalid' | 'duplicated' | null
   >(null)
-  const [birthDate, setBirthDate] = useState<string>('') // 생년월일 상태
+  const [nicknameHelperText, setNicknameHelperText] = useState<string>('') // 닉네임 헬퍼 텍스트 상태
+  const [isCheckingNickname, setIsCheckingNickname] = useState<boolean>(false) // 닉네임 중복 확인 중 상태
   const [agreeAllChecked, setAgreeAllChecked] = useState<boolean>(false) // "모두 동의" 체크박스 상태
   const [checkedList, setCheckedList] = useState<string[]>([]) // 개별 체크박스 상태
-  const [isMounted, setIsMounted] = useState(false)
-
-  // 클라이언트 측에서만 렌더링되도록 설정
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  if (!isMounted) {
-    return null // 서버 측에서 렌더링을 방지하기 위해 아무것도 렌더링하지 않음
-  }
 
   // 닉네임 유효성 확인 (3~20자, 한글/영문/띄어쓰기 허용)
-  const checkNickname = (nickname: string) => {
+  const checkNicknameValidity = (nickname: string) => {
     if (
       nickname.length < 3 ||
       nickname.length > 20 ||
       /[^가-힣a-zA-Z\s]/.test(nickname) // 특수 문자 및 숫자 방지
     ) {
       setNicknameStatus('invalid')
+      setNicknameHelperText(
+        '닉네임은 3자 이상, 20자 이하이며, 특수 문자 없이 작성해 주세요.'
+      )
       return false
     }
-    setNicknameStatus('valid')
     return true
+  }
+
+  // 닉네임 중복 확인 API 호출
+  const checkNicknameDuplication = async (nickname: string) => {
+    setIsCheckingNickname(true)
+    try {
+      const response = await api.get(
+        `/api/v1/members/check-nickname?nickname=${encodeURIComponent(nickname)}`
+      )
+      const isDuplicated = response.data.isDuplicatedNickname
+      if (isDuplicated) {
+        setNicknameStatus('duplicated')
+        setNicknameHelperText('이미 존재하는 닉네임입니다.')
+      } else {
+        setNicknameStatus('valid')
+        setNicknameHelperText('')
+      }
+    } catch (error) {
+      showError('닉네임 중복 확인 중 오류가 발생했습니다.')
+      console.error('Error:', error)
+    } finally {
+      setIsCheckingNickname(false)
+    }
+  }
+
+  // 닉네임 입력 시 실시간으로 유효성 및 중복 검사 수행
+  const handleNicknameChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const nickname = e.target.value
+    form.setFieldsValue({ nickname })
+
+    if (checkNicknameValidity(nickname)) {
+      await checkNicknameDuplication(nickname)
+    }
   }
 
   const handleFinish = async (values: SignupFormValues) => {
     try {
-      const isNicknameValid = checkNickname(values.nickname)
-      if (!isNicknameValid) {
+      if (nicknameStatus === 'invalid' || nicknameStatus === 'duplicated') {
+        showError('닉네임을 확인해 주세요.')
         return
       }
 
@@ -102,8 +131,8 @@ const SignupPage: React.FC = () => {
     form.resetFields()
     setCheckedList([])
     setAgreeAllChecked(false)
-    setBirthDate('')
     setNicknameStatus(null)
+    setNicknameHelperText('')
   }
 
   return (
@@ -126,25 +155,16 @@ const SignupPage: React.FC = () => {
           <Form.Item
             name='nickname'
             label='닉네임'
+            validateStatus={
+              nicknameStatus === 'invalid' || nicknameStatus === 'duplicated'
+                ? 'error'
+                : ''
+            }
+            help={nicknameHelperText} // 헬퍼 텍스트로 오류 메시지 표시
             rules={[
               {
                 required: true,
-                validator: (_, value) => {
-                  if (!value) {
-                    return Promise.reject(new Error('닉네임을 작성해 주세요.'))
-                  }
-                  const isValid = checkNickname(value)
-                  if (!isValid) {
-                    if (nicknameStatus === 'invalid') {
-                      return Promise.reject(
-                        new Error(
-                          '닉네임은 3자 이상, 20자 이하이며, 특수 문자 없이 작성해 주세요.'
-                        )
-                      )
-                    }
-                  }
-                  return Promise.resolve()
-                },
+                message: '닉네임을 작성해 주세요.',
               },
             ]}
           >
@@ -152,7 +172,7 @@ const SignupPage: React.FC = () => {
               showCount
               maxLength={20}
               placeholder='닉네임을 작성해 주세요.'
-              onChange={() => setNicknameStatus(null)} // 닉네임이 변경될 때 상태 초기화
+              onChange={handleNicknameChange} // 닉네임이 변경될 때 상태 초기화 및 유효성 검사 수행
             />
           </Form.Item>
           <Form.Item
@@ -169,7 +189,6 @@ const SignupPage: React.FC = () => {
             <Input
               placeholder='숫자 8자리를 입력해주세요. 예시 : yyyymmdd'
               maxLength={8}
-              value={birthDate}
               style={{ color: '#000' }} // 글자 색상을 검정색으로 설정
               onChange={(e) => {
                 const value = e.target.value.replace(/\D/g, '') // 숫자만 입력되도록 처리
@@ -177,9 +196,8 @@ const SignupPage: React.FC = () => {
                   if (value.length === 8) {
                     const formattedDate = `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`
                     form.setFieldsValue({ birthDate: formattedDate })
-                    setBirthDate(formattedDate) // 상태 업데이트
                   } else {
-                    setBirthDate(value) // 입력 중일 때 상태 업데이트
+                    form.setFieldsValue({ birthDate: value }) // 입력 중일 때 상태 업데이트
                   }
                 }
               }}
