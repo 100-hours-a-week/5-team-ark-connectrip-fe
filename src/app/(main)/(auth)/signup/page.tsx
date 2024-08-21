@@ -2,11 +2,10 @@
 
 import React, { useState, useEffect } from 'react'
 import { Input, Radio, Button, Form, Checkbox } from 'antd'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useCustomMessage } from '@/app/utils/alertUtils'
 import { useDebouncedCallback } from 'use-debounce'
 import { api } from '@/app/utils/api'
-
 interface SignupFormValues {
   nickname: string
   birthDate: string
@@ -21,9 +20,11 @@ const termsOptions = [
 ]
 
 const SignupPage: React.FC = () => {
+  const searchParams = useSearchParams()
   const [form] = Form.useForm()
   const router = useRouter()
-  const { contextHolder, showSuccess, showError } = useCustomMessage() // 커스텀 메시지 훅 사용
+  const { contextHolder, showSuccess, showError, showWarning } =
+    useCustomMessage() // 커스텀 메시지 훅 사용
   const [nicknameStatus, setNicknameStatus] = useState<
     'valid' | 'invalid' | 'duplicated' | null
   >(null)
@@ -31,6 +32,13 @@ const SignupPage: React.FC = () => {
   const [isCheckingNickname, setIsCheckingNickname] = useState<boolean>(false) // 닉네임 중복 확인 중 상태
   const [agreeAllChecked, setAgreeAllChecked] = useState<boolean>(false) // "모두 동의" 체크박스 상태
   const [checkedList, setCheckedList] = useState<string[]>([]) // 개별 체크박스 상태
+
+  useEffect(() => {
+    const message = searchParams.get('message')
+    if (message) {
+      showWarning(message) // 경고 메시지 표시
+    }
+  }, [searchParams, showWarning])
 
   // 닉네임 유효성 확인 (3~20자, 한글/영문/띄어쓰기 허용)
   const checkNicknameValidity = (nickname: string) => {
@@ -79,7 +87,6 @@ const SignupPage: React.FC = () => {
       form.setFieldsValue({ nickname })
 
       if (checkNicknameValidity(nickname)) {
-        console.log(1)
         await checkNicknameDuplication(nickname)
       }
     },

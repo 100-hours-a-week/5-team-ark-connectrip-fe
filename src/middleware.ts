@@ -37,5 +37,16 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
+  // 닉네임이 없는 상태에서 보호된 페이지로 접근 시 리다이렉트
+  if (currentPath !== '/signup') {
+    const url = request.nextUrl.clone()
+    url.pathname = '/signup'
+    url.searchParams.set(
+      'message',
+      '추가 입력폼을 작성하지 않으면 회원가입이 완료되지 않습니다.'
+    )
+    return NextResponse.redirect(url)
+  }
+
   return NextResponse.next()
 }
