@@ -74,12 +74,7 @@ export default function Header() {
           />
         </div>
       ) : (
-        <button
-          className='text-black px-3 py-2 rounded-full'
-          onClick={() => router.push('/')}
-        >
-          로그인
-        </button>
+        <></>
       )}
     </header>
   )
