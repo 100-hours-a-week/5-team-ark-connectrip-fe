@@ -6,6 +6,8 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useCustomMessage } from '@/app/utils/alertUtils'
 import { useDebouncedCallback } from 'use-debounce'
 import { api } from '@/app/utils/api'
+import { formatBirthDate } from '@/app/utils/dateUtils'
+import useAuthStore from '@/app/store/useAuthStore'
 interface SignupFormValues {
   nickname: string
   birthDate: string
@@ -32,13 +34,20 @@ const SignupPage: React.FC = () => {
   const [isCheckingNickname, setIsCheckingNickname] = useState<boolean>(false) // 닉네임 중복 확인 중 상태
   const [agreeAllChecked, setAgreeAllChecked] = useState<boolean>(false) // "모두 동의" 체크박스 상태
   const [checkedList, setCheckedList] = useState<string[]>([]) // 개별 체크박스 상태
+  const { setUser, nickname } = useAuthStore()
 
   useEffect(() => {
     const message = searchParams.get('message')
     if (message) {
       showWarning(message) // 경고 메시지 표시
     }
-  }, [searchParams, showWarning])
+  }, [searchParams])
+
+  useEffect(() => {
+    if (nickname) {
+      router.push('/accompany')
+    }
+  }, [nickname])
 
   // 닉네임 유효성 확인 (3~20자, 한글/영문/띄어쓰기 허용)
   const checkNicknameValidity = (nickname: string) => {
@@ -100,11 +109,32 @@ const SignupPage: React.FC = () => {
         return
       }
 
-      // 성공 시, API 요청 후 페이지 이동
-      showSuccess('회원가입이 완료되었습니다.')
-      setTimeout(() => {
-        router.push('/accompany')
-      }, 1000) // 1초 후에 페이지 이동
+      const formattedUTCDate = formatBirthDate(values.birthDate)
+
+      const response = await api.post('/api/v1/members/first', {
+        nickname: values.nickname,
+        birthDate: formattedUTCDate,
+        gender: values.gender === 'male' ? 'M' : 'F',
+      })
+
+      console.log(response)
+
+      if (response.message === 'SUCCESS') {
+        const { memberId, nickname, profileImagePath } = response.data
+        setUser({
+          userId: memberId.toString(),
+          nickname,
+          profileImage: profileImagePath,
+        })
+        showSuccess('회원가입이 완료되었습니다.')
+        setTimeout(() => {
+          router.push('/accompany')
+        }, 1000)
+      } else if (response.message === 'DUPLICATED_NICKNAME') {
+        showError('이미 존재하는 닉네임입니다.')
+      } else {
+        showError('회원가입에 실패했습니다.')
+      }
     } catch (error) {
       showError('회원가입에 실패했습니다.')
       console.error('Error:', error)

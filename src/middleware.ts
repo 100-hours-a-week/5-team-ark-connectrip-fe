@@ -38,7 +38,13 @@ export function middleware(request: NextRequest) {
   }
 
   // 닉네임이 없는 상태에서 보호된 페이지로 접근 시 리다이렉트
-  if (currentPath !== '/signup') {
+  if (
+    isProtectedRoute &&
+    !accessToken &&
+    !refreshToken &&
+    currentPath !== '/signup'
+  ) {
+    console.log(accessToken)
     const url = request.nextUrl.clone()
     url.pathname = '/signup'
     url.searchParams.set(
