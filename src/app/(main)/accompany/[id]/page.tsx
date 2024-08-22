@@ -35,12 +35,24 @@ interface Post {
   urlQrPath: string
 }
 
+interface Comment {
+  id: number
+  memberId: number
+  accompanyPostId: number
+  content: string
+  createdAt: string
+  updatedAt: string
+  deletedAt: string | null
+  memberProfileImage: string
+  memberNickname: string
+}
+
 export default function AccompanyDetailPage() {
   const { id } = useParams()
   const router = useRouter()
   const postId = parseInt(id as string, 10)
   const [post, setPost] = useState<Post | null>(null)
-  const comments = mockComments.filter((comment) => comment.postId === postId)
+  const [comments, setComments] = useState<Comment[]>([])
 
   const { contextHolder, showSuccess, showWarning } = useCustomMessage()
   const { openModal, ShareModalComponent } = useShareModal() // 공유 모달 관련 훅 사용
@@ -48,24 +60,29 @@ export default function AccompanyDetailPage() {
   const handleCardDeleteClick = useHandleDeleteClick()
 
   useEffect(() => {
-    console.log(1111)
-    // API 호출하여 모든 게시글 정보를 가져옴
     const fetchPostData = async () => {
       try {
-        // /api/v1/accompany/{accompanyId}로 요청 보냄
+        // 게시글 데이터를 가져옵니다.
         const data = await api.get(`/api/v1/accompany/posts/${postId}`)
-        // 날짜 포맷 적용
         const formattedData = {
           ...data,
           createdAt: formatToUtcDate(data.createdAt),
           startDate: formatShortDateFromUtc(data.startDate),
           endDate: formatShortDateFromUtc(data.endDate),
         }
-
         setPost(formattedData)
-        console.log('Formatted post data:', formattedData)
+
+        // 댓글 데이터를 가져옵니다.
+        const commentData = await api.get(`/api/v1/comment/${postId}`)
+        console.log('commentData:', commentData)
+        const formattedComments = commentData.map((comment: any) => ({
+          ...comment,
+          createdDate: formatCreatedAt(comment.createdAt),
+        }))
+        setComments(formattedComments)
+        // setLoading(false)
       } catch (error) {
-        console.error('Failed to fetch post data:', error)
+        console.error('Failed to fetch data:', error)
       }
     }
 
@@ -110,7 +127,7 @@ export default function AccompanyDetailPage() {
             <ShareAltOutlined />
           </button>
         </div>
-        <h2 className='text-lg font-semibold mb-3'>{post.title}</h2>
+        <h2 className='text-lg font-semibold mb-3 break-all'>{post.title}</h2>
 
         {/* 프로필 섹션 */}
         <div className='flex items-center mb-1 w-full'>
@@ -178,15 +195,15 @@ export default function AccompanyDetailPage() {
           {comments.map((comment) => (
             <div key={comment.id} className='flex items-start mb-4 flex-1'>
               <ProfileIcon
-                src={comment.profile_image_path}
+                src={comment.memberProfileImage}
                 size={35}
-                nickname={comment.nickname}
+                nickname={comment.memberNickname}
               />
               <div className='ml-3 w-full'>
-                <p className='font-semibold'>{comment.nickname}</p>
+                <p className='font-semibold'>{comment.memberNickname}</p>
                 <div className='flex justify-between items-center '>
                   <p className='text-sm text-gray-500'>
-                    {formatCreatedAt(comment.created_at)}
+                    {formatCreatedAt(comment.createdAt)}
                   </p>
 
                   <div className='flex gap-2'>
