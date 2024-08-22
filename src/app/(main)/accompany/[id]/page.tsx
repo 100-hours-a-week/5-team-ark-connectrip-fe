@@ -52,6 +52,8 @@ export default function AccompanyDetailPage() {
   const [post, setPost] = useState<Post | null>(null)
   const [comments, setComments] = useState<Comment[]>([])
   const [newComment, setNewComment] = useState<string>('')
+  const [isEditing, setIsEditing] = useState<boolean>(false) // 수정 모드 여부
+  const [editCommentId, setEditCommentId] = useState<number | null>(null) // 수정할 댓글 ID
 
   const { contextHolder, showSuccess, showWarning } = useCustomMessage()
   const { openModal, ShareModalComponent } = useShareModal() // 공유 모달 관련 훅 사용
@@ -123,23 +125,49 @@ export default function AccompanyDetailPage() {
     if (!newComment.trim()) return showWarning('댓글을 입력해주세요.')
 
     try {
-      const response = await api.post(`/api/v1/comment`, {
-        postId,
-        content: newComment,
-      })
-      console.log('response:', response)
-      if (response) {
-        showSuccess('댓글이 등록되었습니다.')
-        setNewComment('')
-        // 새로 등록된 댓글만 추가로 가져오기
-        const newCommentData = await fetchComments(postId)
-        setComments(newCommentData)
+      if (isEditing && editCommentId !== null) {
+        // 수정 모드일 때
+        const response = await api.put(`/api/v1/comment/${editCommentId}`, {
+          postId,
+          content: newComment,
+        })
+
+        if (response) {
+          showSuccess('댓글이 수정되었습니다.')
+          setIsEditing(false)
+          setEditCommentId(null)
+        } else {
+          showWarning('댓글 수정에 실패했습니다.')
+        }
       } else {
-        showWarning('댓글 등록에 실패했습니다.')
+        // 일반 댓글 작성 모드
+        const response = await api.post(`/api/v1/comment`, {
+          postId,
+          content: newComment,
+        })
+
+        if (response) {
+          showSuccess('댓글이 등록되었습니다.')
+        } else {
+          showWarning('댓글 등록에 실패했습니다.')
+        }
       }
+
+      setNewComment('')
+      const newCommentData = await fetchComments(postId)
+      setComments(newCommentData)
     } catch (error) {
-      console.error('댓글 등록 중 오류 발생:', error)
-      showWarning('댓글 등록에 실패했습니다.')
+      console.error('댓글 등록/수정 중 오류 발생:', error)
+      showWarning('댓글 처리에 실패했습니다.')
+    }
+  }
+
+  const handleCommentModifyClick = (commentId: number) => {
+    const commentToEdit = comments.find((comment) => comment.id === commentId)
+    if (commentToEdit) {
+      setIsEditing(true)
+      setEditCommentId(commentId)
+      setNewComment(commentToEdit.content)
     }
   }
 
@@ -239,7 +267,12 @@ export default function AccompanyDetailPage() {
                   </p>
 
                   <div className='flex gap-2'>
-                    <button className='text-sm text-main'>수정</button>
+                    <button
+                      className='text-sm text-main'
+                      onClick={() => handleCommentModifyClick(comment.id)}
+                    >
+                      수정
+                    </button>
                     <button
                       className='text-sm text-main'
                       onClick={() => handleCardDeleteClick('댓글', '')}
