@@ -1,12 +1,26 @@
 'use client'
+
 import React, { useState, useEffect } from 'react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { useDebouncedCallback } from 'use-debounce'
 import SearchIcon from '@/app/components/Icon/SearchIcon'
 import PostCard from '@/app/components/accompany/PostCard'
-import { mockData } from '@/app/data/mockData'
 import { UpCircleFilled } from '@ant-design/icons'
 import LoadingSpinner from '@/app/components/common/LoadingSpinner'
+import { api } from '@/app/utils/api'
+
+// 게시글 타입 정의
+interface Post {
+  id: number
+  title: string
+  content: string
+  startDate: string
+  endDate: string
+  accompanyArea: string
+  createdAt: string
+  nickname: string
+  profileImagePath: string | null
+}
 
 export default function Home() {
   // Next.js의 라우터 및 경로 관련 훅들
@@ -19,20 +33,26 @@ export default function Home() {
   // 검색어 및 로딩 상태를 관리하는 상태 변수
   const [searchQuery, setSearchQuery] = useState(query)
   const [loading, setLoading] = useState(true)
+  const [posts, setPosts] = useState<Post[]>([]) // Post 타입의 배열로 상태 정의
 
-  // 컴포넌트가 마운트되었을 때 2초 동안 로딩 스피너를 보여줌
   useEffect(() => {
-    // 2초의 지연 시간 설정
-    const timer = setTimeout(() => {
-      setLoading(false)
-    }, 500)
+    const fetchPosts = async () => {
+      try {
+        const data: Post[] = await api.get('/api/v1/accompany/posts') // 데이터 타입을 명시적으로 정의
+        setPosts(data)
+        console.log(data[0])
+        setLoading(false)
+      } catch (error) {
+        console.error('게시글을 가져오는 중 오류 발생:', error)
+        setLoading(false)
+      }
+    }
 
-    // 컴포넌트가 언마운트될 때 타이머를 정리
-    return () => clearTimeout(timer)
+    fetchPosts()
   }, [])
 
   // 사용자가 검색어를 입력하면 URL 쿼리 파라미터를 업데이트하는 함수
-  const handleSearch = useDebouncedCallback((term) => {
+  const handleSearch = useDebouncedCallback((term: string) => {
     const encodedTerm = encodeURIComponent(term)
     const params = new URLSearchParams(searchParams)
     if (encodedTerm) {
@@ -99,17 +119,17 @@ export default function Home() {
 
       {/* 게시글 리스트 */}
       <div className='container mx-auto mt-4 mb-10'>
-        {mockData.map((post) => (
+        {posts.map((post) => (
           <div key={post.id} onClick={() => handleCardClick(post.id)}>
             <PostCard
               title={post.title}
               content={post.content}
-              startDate={post.start_date}
-              endDate={post.end_date}
-              accompanyArea={post.accompany_area}
-              createdAt={post.created_at}
+              startDate={post.startDate}
+              endDate={post.endDate}
+              accompanyArea={post.accompanyArea}
+              createdAt={post.createdAt}
               nickname={post.nickname}
-              profileImagePath={post.profile_image_path}
+              profileImagePath={post.profileImagePath}
             />
           </div>
         ))}
