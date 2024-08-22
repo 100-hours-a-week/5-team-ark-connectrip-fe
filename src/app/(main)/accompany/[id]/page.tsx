@@ -18,8 +18,10 @@ import useShareModal from '@/app/hooks/useShareModal'
 import { useHandleDeleteClick } from '@/app/hooks/useHandleDeleteClick'
 import { api } from '@/app/utils/api'
 import LoadingSpinner from '@/app/components/common/LoadingSpinner'
+import useAuthStore from '@/app/store/useAuthStore'
 interface Post {
   id: number
+  memberId: number
   title: string
   profileImagePath: string
   nickname: string
@@ -55,6 +57,7 @@ export default function AccompanyDetailPage() {
   const [isEditing, setIsEditing] = useState<boolean>(false) // 수정 모드 여부
   const [editCommentId, setEditCommentId] = useState<number | null>(null) // 수정할 댓글 ID
 
+  const { userId } = useAuthStore()
   const { contextHolder, showSuccess, showWarning } = useCustomMessage()
   const { openModal, ShareModalComponent } = useShareModal() // 공유 모달 관련 훅 사용
 
@@ -200,20 +203,22 @@ export default function AccompanyDetailPage() {
             <p className='font-semibold'>{post.nickname}</p>
             <p className='text-sm text-gray-500'>{post.createdAt}</p>
           </div>
-          <div className='flex gap-2'>
-            <button
-              onClick={() => router.push(`/accompany/edit/${id}`)}
-              className='text-sm text-main'
-            >
-              수정
-            </button>
-            <button
-              className='text-sm text-main'
-              onClick={() => handleCardDeleteClick('게시글', '/accompany')}
-            >
-              삭제
-            </button>
-          </div>
+          {post.memberId.toString() === userId && ( // 게시글 작성자만 수정/삭제 버튼 표시
+            <div className='flex gap-2'>
+              <button
+                onClick={() => router.push(`/accompany/edit/${id}`)}
+                className='text-sm text-main'
+              >
+                수정
+              </button>
+              <button
+                className='text-sm text-main'
+                onClick={() => handleCardDeleteClick('게시글', '/accompany')}
+              >
+                삭제
+              </button>
+            </div>
+          )}
         </div>
 
         {/* 동행 지역 및 날짜 정보 */}
@@ -266,20 +271,22 @@ export default function AccompanyDetailPage() {
                     {formatCreatedAt(comment.createdAt)}
                   </p>
 
-                  <div className='flex gap-2'>
-                    <button
-                      className='text-sm text-main'
-                      onClick={() => handleCommentModifyClick(comment.id)}
-                    >
-                      수정
-                    </button>
-                    <button
-                      className='text-sm text-main'
-                      onClick={() => handleCardDeleteClick('댓글', '')}
-                    >
-                      삭제
-                    </button>
-                  </div>
+                  {comment.memberId.toString() === userId && ( // 댓글 작성자만 수정/삭제 버튼 표시
+                    <div className='flex gap-2'>
+                      <button
+                        className='text-sm text-main'
+                        onClick={() => handleCommentModifyClick(comment.id)}
+                      >
+                        수정
+                      </button>
+                      <button
+                        className='text-sm text-main'
+                        onClick={() => handleCardDeleteClick('댓글', '')}
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <p className='text-gray-700 mt-1'>{comment.content}</p>
               </div>
