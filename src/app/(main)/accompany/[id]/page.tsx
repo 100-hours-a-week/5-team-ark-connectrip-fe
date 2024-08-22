@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react'
 import { ShareAltOutlined } from '@ant-design/icons'
 import ProfileIcon from '@/app/components/common/ProfileIcon'
 import {
-  formatShortDate,
   formatToUtcDate,
   formatCreatedAt,
   formatShortDateFromUtc,
@@ -15,7 +14,6 @@ import CalendarIcon from '@/app/components/Icon/CalendarIcon'
 import PinIcon from '@/app/components/Icon/PinIcon'
 import InfoRow from '@/app/components/accompany/InfoRow'
 import { useCustomMessage } from '@/app/utils/alertUtils'
-import { mockComments } from '@/app/data/mockDataComments'
 import useShareModal from '@/app/hooks/useShareModal'
 import { useHandleDeleteClick } from '@/app/hooks/useHandleDeleteClick'
 import { api } from '@/app/utils/api'
@@ -53,16 +51,30 @@ export default function AccompanyDetailPage() {
   const postId = parseInt(id as string, 10)
   const [post, setPost] = useState<Post | null>(null)
   const [comments, setComments] = useState<Comment[]>([])
+  const [newComment, setNewComment] = useState<string>('')
 
   const { contextHolder, showSuccess, showWarning } = useCustomMessage()
   const { openModal, ShareModalComponent } = useShareModal() // 공유 모달 관련 훅 사용
 
   const handleCardDeleteClick = useHandleDeleteClick()
 
+  const fetchComments = async (postId: number) => {
+    try {
+      const commentData = await api.get(`/api/v1/comment/${postId}`)
+      return commentData.map((comment: any) => ({
+        ...comment,
+        createdDate: formatCreatedAt(comment.createdAt),
+      }))
+    } catch (error) {
+      console.error('Failed to fetch comments:', error)
+      throw new Error('댓글을 불러오는 데 실패했습니다.')
+    }
+  }
+
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        // 게시글 데이터를 가져옵니다.
+        // 게시글 데이터를 fetch
         const data = await api.get(`/api/v1/accompany/posts/${postId}`)
         const formattedData = {
           ...data,
@@ -72,15 +84,9 @@ export default function AccompanyDetailPage() {
         }
         setPost(formattedData)
 
-        // 댓글 데이터를 가져옵니다.
-        const commentData = await api.get(`/api/v1/comment/${postId}`)
-        console.log('commentData:', commentData)
-        const formattedComments = commentData.map((comment: any) => ({
-          ...comment,
-          createdDate: formatCreatedAt(comment.createdAt),
-        }))
-        setComments(formattedComments)
-        // setLoading(false)
+        // 댓글 데이터 fetch
+        const fetchedComments = await fetchComments(postId) // 함수 사용
+        setComments(fetchedComments)
       } catch (error) {
         console.error('Failed to fetch data:', error)
       }
@@ -111,6 +117,32 @@ export default function AccompanyDetailPage() {
       showWarning('동행 신청에 실패했습니다.')
     }
   }
+
+  // 댓글 작성 버튼 클릭 시
+  const handleCommentSubmit = async () => {
+    if (!newComment.trim()) return showWarning('댓글을 입력해주세요.')
+
+    try {
+      const response = await api.post(`/api/v1/comment`, {
+        postId,
+        content: newComment,
+      })
+      console.log('response:', response)
+      if (response) {
+        showSuccess('댓글이 등록되었습니다.')
+        setNewComment('')
+        // 새로 등록된 댓글만 추가로 가져오기
+        const newCommentData = await fetchComments(postId)
+        setComments(newCommentData)
+      } else {
+        showWarning('댓글 등록에 실패했습니다.')
+      }
+    } catch (error) {
+      console.error('댓글 등록 중 오류 발생:', error)
+      showWarning('댓글 등록에 실패했습니다.')
+    }
+  }
+
   return (
     <>
       {contextHolder}
@@ -216,7 +248,7 @@ export default function AccompanyDetailPage() {
                     </button>
                   </div>
                 </div>
-                <p className='text-gray-700 mt-2'>{comment.content}</p>
+                <p className='text-gray-700 mt-1'>{comment.content}</p>
               </div>
             </div>
           ))}
@@ -226,12 +258,14 @@ export default function AccompanyDetailPage() {
         <div className='flex items-center'>
           <input
             type='text'
+            value={newComment}
             placeholder='댓글을 입력하세요.'
+            onChange={(e) => setNewComment(e.target.value)}
             className='flex-1 h-[35px] p-2 px-4 border border-gray-300 rounded-full focus:border-main focus:border-2 outline-none'
           />
           <button
             className='ml-3 h-[35px] bg-main text-white py-0 px-5 rounded-full'
-            onClick={() => showSuccess('댓글이 등록되었습니다.')}
+            onClick={handleCommentSubmit}
           >
             등록
           </button>
