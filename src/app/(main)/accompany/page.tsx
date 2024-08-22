@@ -38,9 +38,17 @@ export default function Home() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const data: Post[] = await api.get('/api/v1/accompany/posts') // 데이터 타입을 명시적으로 정의
-        setPosts(data)
-        console.log(data[0])
+        if (searchQuery) {
+          // 검색어가 있는 경우, 검색 API 호출
+          const data: Post[] = await api.get(
+            `/api/v1/accompany/posts/search?query=${encodeURIComponent(searchQuery)}`
+          )
+          setPosts(data)
+        } else {
+          // 검색어가 없을 때는 전체 게시글을 불러옴
+          const data: Post[] = await api.get('/api/v1/accompany/posts')
+          setPosts(data)
+        }
         setLoading(false)
       } catch (error) {
         console.error('게시글을 가져오는 중 오류 발생:', error)
@@ -49,7 +57,7 @@ export default function Home() {
     }
 
     fetchPosts()
-  }, [])
+  }, [searchQuery])
 
   // 사용자가 검색어를 입력하면 URL 쿼리 파라미터를 업데이트하는 함수
   const handleSearch = useDebouncedCallback((term: string) => {
