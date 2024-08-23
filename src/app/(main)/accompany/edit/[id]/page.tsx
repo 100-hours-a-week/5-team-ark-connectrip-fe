@@ -5,11 +5,11 @@
 import React, { useEffect } from 'react'
 import { Input, DatePicker, Select, Button, Form } from 'antd'
 import { accompanyAreas } from '@/app/data/accompanyAreas'
-// import { formatFormData } from '@/app/utils/formUtils'
 import { useRouter, useParams } from 'next/navigation'
 import { useCustomMessage } from '@/app/utils/alertUtils'
 import dayjs from 'dayjs'
-import { mockData } from '@/app/data/mockDataPost' // mockData import
+import { fetchPost, updatePost } from '@/app/utils/fetchUtils'
+import { formatFormData } from '@/app/utils/formUtils'
 
 const { TextArea } = Input
 
@@ -20,41 +20,50 @@ export default function EditAccompanyPage() {
   const { contextHolder, showSuccess, showError } = useCustomMessage()
 
   useEffect(() => {
-    // mockData에서 해당 id에 맞는 데이터 찾기
-    const post = mockData.find((item) => item.id === parseInt(id as string, 10))
+    const loadPostData = async () => {
+      try {
+        const post = await fetchPost(parseInt(id as string, 10)) // 실제 데이터 가져오기
 
-    if (post) {
-      // 폼 초기값 설정
-      form.setFieldsValue({
-        title: post.title,
-        accompany_area: post.accompany_area,
-        startDate: dayjs(post.start_date),
-        endDate: dayjs(post.end_date),
-        content: post.content,
-        custom_url: post.custom_url,
-      })
+        if (post) {
+          // 폼 초기값 설정
+          form.setFieldsValue({
+            title: post.title,
+            accompanyArea: post.accompanyArea,
+            startDate: post.startDate ? dayjs(post.startDate) : null,
+            endDate: post.endDate ? dayjs(post.endDate) : null,
+            content: post.content,
+            customUrl: post.customUrl,
+          })
+        }
+      } catch (error) {
+        console.error('게시글 정보를 불러오는 중 오류 발생:', error)
+      }
     }
+
+    loadPostData()
   }, [id, form])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleFinish = (values: {
+
+  const handleFinish = async (values: {
     title: string
-    accompany_area: string
+    accompanyArea: string
     startDate: dayjs.Dayjs | null
     endDate: dayjs.Dayjs | null
     content: string
-    custom_url: string | null
+    customUrl: string | null
   }) => {
     try {
-      // const formData = formatFormData(values)
-      // console.log('formData:', formData)
+      const formData = formatFormData(values) // 데이터 포맷팅
+      await updatePost(parseInt(id as string, 10), {
+        ...formData,
+        customUrl: formData.customUrl,
+      })
 
-      // 실제 API 요청을 보낼 예정 (예: await api.updateForm(formData, id);)
       // 성공 alert 표시
       showSuccess('게시글 수정이 완료되었습니다.')
 
       // alert 보여주기 위해 1초 뒤에 페이지 이동
       setTimeout(() => {
-        router.push('/accompany')
+        router.push(`/accompany/${id}`)
       }, 1000) // 1초(1000ms) 후에 페이지 이동
     } catch (error) {
       showError('게시글 수정에 실패했습니다.')
@@ -80,7 +89,7 @@ export default function EditAccompanyPage() {
             />
           </Form.Item>
           <Form.Item
-            name='accompany_area'
+            name='accompanyArea'
             label='동행 지역'
             rules={[{ required: true, message: '동행 지역을 선택해 주세요.' }]}
           >
@@ -129,7 +138,7 @@ export default function EditAccompanyPage() {
               style={{ height: 300, resize: 'none' }}
             />
           </Form.Item>
-          <Form.Item name='custom_url' label='커스텀 URL'>
+          <Form.Item name='customUrl' label='커스텀 URL'>
             <Input
               addonBefore='https://'
               placeholder='커스텀 URL을 입력해 주세요.'

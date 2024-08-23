@@ -22,6 +22,30 @@ export const fetchPost = async (postId: number) => {
   }
 }
 
+// 게시글을 수정하는 유틸리티 함수
+export const updatePost = async (
+  postId: number,
+  payload: {
+    title: string
+    accompanyArea: string
+    content: string
+    startDate: string | null
+    endDate: string | null
+    customUrl: string | null
+  }
+) => {
+  try {
+    const response = await api.patch(
+      `/api/v1/accompany/posts/${postId}`,
+      payload
+    )
+    return response
+  } catch (error) {
+    console.error('게시글 수정 중 오류 발생:', error)
+    throw new Error('게시글 수정에 실패했습니다.')
+  }
+}
+
 // 댓글 데이터를 가져오는 유틸리티 함수
 export const fetchComments = async (postId: number) => {
   try {
