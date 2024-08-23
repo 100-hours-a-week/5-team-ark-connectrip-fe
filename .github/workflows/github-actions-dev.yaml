@@ -34,7 +34,10 @@ jobs:
         password: ${{ secrets.GHCR_TOKEN }}
 
     - name: Build Docker image
-      run: docker build -t ghcr.io/topazkang/fe-dev:latest .
+      run: |
+        docker build \
+        --build-arg NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL }} \
+        -t ghcr.io/topazkang/fe-dev:latest .
 
     - name: Push Docker image to GHCR
       run: docker push ghcr.io/topazkang/fe-dev:latest
