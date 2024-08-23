@@ -50,6 +50,14 @@ export default function Home() {
           <h1 className='text-lg font-bold text-black'>내 채팅 목록</h1>
         </div>
 
+        {!chats.length && (
+          <div className='flex justify-center items-center h-[200px] text-center text-gray-600'>
+            <p>
+              동행 게시판에서 동행을 구해보세요! <br /> 채팅이 시작됩니다.
+            </p>
+          </div>
+        )}
+
         {/* 게시글 리스트 */}
         <section className='container mx-auto mt-4 mb-10'>
           {chats.map((chat) => (

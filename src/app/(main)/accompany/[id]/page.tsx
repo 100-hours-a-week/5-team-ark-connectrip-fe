@@ -268,8 +268,12 @@ export default function AccompanyDetailPage() {
         )}
 
         <div className='mt-8 w-full'>
-          <h2 className='text-lg font-bold mb-4'>댓글</h2>
-
+          <h2 className='text-[18px] font-bold mb-4'>댓글</h2>
+          {!comments.length && (
+            <div className='flex justify-center items-center h-9'>
+              <p className='text-gray-700 text-sm'>첫 댓글을 작성해보세요!</p>
+            </div>
+          )}
           {comments.map((comment) => (
             <div key={comment.id} className='flex items-start mb-4 flex-1'>
               <ProfileIcon
