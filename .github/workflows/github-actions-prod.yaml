@@ -51,7 +51,8 @@ jobs:
           port: 22
           script: |
             echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GIT_USER }} --password-stdin
-            cd deploy/conf
+            echo "${{ secrets.ENV_FILE_PROD }}" > deploy/front/.env
+            cd deploy/front
             docker-compose -f docker-compose.front.yaml down
             docker-compose -f docker-compose.front.yaml pull
             docker-compose -f docker-compose.front.yaml up -d
