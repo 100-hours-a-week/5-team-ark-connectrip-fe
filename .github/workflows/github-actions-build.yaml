@@ -23,4 +23,5 @@ jobs:
 
     - name: Build Next.js app
       run: npm run build
-
+      env:
+        NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL }}
