@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+
 export interface Chat {
   chatRoomId: number
   accompanyPostId: number
@@ -46,4 +48,31 @@ export interface Comment {
   deletedAt: string | null
   memberProfileImage: string
   memberNickname: string
+}
+
+// 게시글 데이터 인터페이스
+export interface PostForm {
+  title: string
+  accompanyArea: string
+  startDate: string | null
+  endDate: string | null
+  content: string
+  customUrl: string | null
+}
+
+// 폼 초기값 인터페이스
+export interface FormValues {
+  title: string
+  accompanyArea: string
+  startDate: dayjs.Dayjs | null
+  endDate: dayjs.Dayjs | null
+  content: string
+  customUrl: string | null
+}
+
+// AccompanyForm 컴포넌트에 전달되는 props 인터페이스
+export interface AccompanyFormProps {
+  initialValues: FormValues
+  onSubmit: (values: FormValues) => void
+  submitText: string
 }
