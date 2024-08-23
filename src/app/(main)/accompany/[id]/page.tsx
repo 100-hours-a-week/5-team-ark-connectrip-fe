@@ -27,8 +27,8 @@ interface Post {
   nickname: string
   createdAt: string
   accompanyArea: string
-  startDate: string
-  endDate: string
+  startDate?: string
+  endDate?: string
   content: string
   status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'DEFAULT'
   customUrl: string
@@ -84,8 +84,10 @@ export default function AccompanyDetailPage() {
         const formattedData = {
           ...data,
           createdAt: formatToUtcDate(data.createdAt),
-          startDate: formatShortDateFromUtc(data.startDate),
-          endDate: formatShortDateFromUtc(data.endDate),
+          startDate: data.startDate
+            ? formatShortDateFromUtc(data.startDate)
+            : null,
+          endDate: data.endDate ? formatShortDateFromUtc(data.endDate) : null,
         }
         setPost(formattedData)
 
@@ -231,13 +233,24 @@ export default function AccompanyDetailPage() {
                 customStyle={true}
               />
             </div>
-            <div className='flex-shrink-0'>
-              <InfoRow
-                icon={<CalendarIcon />}
-                text={`동행 날짜 : ${post.startDate} ~ ${post.endDate}`}
-                customStyle={true}
-              />
-            </div>
+            {!post.startDate && !post.endDate && (
+              <div className='flex-shrink-0'>
+                <InfoRow
+                  icon={<CalendarIcon />}
+                  text={`동행 날짜 : 미정`}
+                  customStyle={true}
+                />
+              </div>
+            )}
+            {post.startDate && post.endDate && (
+              <div className='flex-shrink-0'>
+                <InfoRow
+                  icon={<CalendarIcon />}
+                  text={`동행 날짜 : ${post.startDate} ~ ${post.endDate}`}
+                  customStyle={true}
+                />
+              </div>
+            )}
           </div>
         </div>
 
