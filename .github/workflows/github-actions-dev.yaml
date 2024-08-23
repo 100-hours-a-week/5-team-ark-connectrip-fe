@@ -60,4 +60,4 @@ jobs:
             cd deploy/front
             sudo docker-compose -f docker-compose.front.yaml down
             sudo docker-compose -f docker-compose.front.yaml pull
-            sudo docker-compose -f docker-compose.front.yaml up
+            sudo docker-compose -f docker-compose.front.yaml up -d
