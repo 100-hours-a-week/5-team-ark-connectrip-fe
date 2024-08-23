@@ -3,10 +3,11 @@
 import React from 'react'
 import { Input, DatePicker, Select, Button, Form } from 'antd'
 import { accompanyAreas } from '@/app/data/accompanyAreas'
-// import { formatFormData } from '@/app/utils/formUtils'
+import { formatFormData } from '@/app/utils/formUtils'
 import { useRouter } from 'next/navigation'
 import { useCustomMessage } from '@/app/utils/alertUtils' // 메시지 유틸리티 가져오기
 import dayjs from 'dayjs'
+import { api } from '@/app/utils/api'
 
 const { TextArea } = Input
 
@@ -14,21 +15,20 @@ export default function CreateAccompanyPage() {
   const [form] = Form.useForm()
   const router = useRouter()
   const { contextHolder, showSuccess, showError } = useCustomMessage() // 커스텀 메시지 훅 사용
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleFinish = (values: {
+
+  const handleFinish = async (values: {
     title: string
-    accompany_area: string
+    accompanyArea: string
     startDate: dayjs.Dayjs | null
     endDate: dayjs.Dayjs | null
     content: string
-    custom_url: string | null
+    customUrl: string | null
   }) => {
     try {
-      // const formData = formatFormData(values) // 유틸리티 함수 사용하여 데이터 처리
-      // console.log('formData:', formData)
-
-      // 여기서 실제 API 요청을 보낼 예정
-      // 예: await api.submitForm(formData);
+      const formData = formatFormData(values) // 유틸리티 함수 사용하여 데이터 처리
+      console.log(formData)
+      const response = await api.post(`/api/v1/accompany/posts`, formData) // API 호출
+      console.log('게시글 작성 응답:', response)
 
       // 성공 alert 표시
       showSuccess('게시글 작성이 완료되었습니다.')
@@ -60,7 +60,7 @@ export default function CreateAccompanyPage() {
             />
           </Form.Item>
           <Form.Item
-            name='accompany_area'
+            name='accompanyArea'
             label='동행 지역'
             rules={[{ required: true, message: '동행 지역을 선택해 주세요.' }]}
           >
@@ -109,7 +109,7 @@ export default function CreateAccompanyPage() {
               style={{ height: 300, resize: 'none' }}
             />
           </Form.Item>
-          <Form.Item name='custom_url' label='커스텀 URL'>
+          <Form.Item name='customUrl' label='커스텀 URL'>
             <Input
               addonBefore='https://'
               placeholder='커스텀 URL을 입력해 주세요.'
