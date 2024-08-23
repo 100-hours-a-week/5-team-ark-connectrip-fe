@@ -11,23 +11,13 @@ import { MoreOutlined } from '@ant-design/icons'
 import { useTimeStamp } from '../../hooks/useTimeStamp'
 import DropdownMenu from '../common/DropdownMenu'
 import { useHandleDeleteClick } from '@/app/hooks/useHandleDeleteClick'
-
-interface GroupCardProps {
-  title: string
-  content: string
-  startDate: string
-  endDate: string
-  accompanyArea: string
-  lastChatMessage: string
-  lastChatMessageTime: string
-  memberNumber: number
-}
+import { GroupCardProps } from '@/interfaces'
 
 export default function GroupCard({
-  title,
+  accompanyPostTitle,
+  accompanyArea,
   startDate,
   endDate,
-  accompanyArea,
   lastChatMessage,
   lastChatMessageTime,
   memberNumber,
@@ -54,7 +44,7 @@ export default function GroupCard({
   return (
     <div className='bg-white p-4 rounded-lg shadow-md flex flex-col mb-4 cursor-pointer'>
       <div className='flex justify-between mb-1'>
-        <h2 className='text-lg font-semibold'>{title}</h2>
+        <h2 className='text-lg font-semibold'>{accompanyPostTitle}</h2>
         <div
           onClick={(e) => {
             e.stopPropagation() // 이벤트 전파를 막음
