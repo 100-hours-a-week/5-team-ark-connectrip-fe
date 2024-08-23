@@ -5,47 +5,22 @@ import { useParams, useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { ShareAltOutlined } from '@ant-design/icons'
 import ProfileIcon from '@/app/components/common/ProfileIcon'
-import {
-  formatToUtcDate,
-  formatCreatedAt,
-  formatShortDateFromUtc,
-} from '@/app/utils/dateUtils'
 import CalendarIcon from '@/app/components/Icon/CalendarIcon'
 import PinIcon from '@/app/components/Icon/PinIcon'
 import InfoRow from '@/app/components/accompany/InfoRow'
 import { useCustomMessage } from '@/app/utils/alertUtils'
 import useShareModal from '@/app/hooks/useShareModal'
 import { useHandleDeleteClick } from '@/app/hooks/useHandleDeleteClick'
-import { api } from '@/app/utils/api'
 import LoadingSpinner from '@/app/components/common/LoadingSpinner'
 import useAuthStore from '@/app/store/useAuthStore'
-interface Post {
-  id: number
-  memberId: number
-  title: string
-  profileImagePath: string
-  nickname: string
-  createdAt: string
-  accompanyArea: string
-  startDate?: string
-  endDate?: string
-  content: string
-  status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'DEFAULT'
-  customUrl: string
-  urlQrPath: string
-}
-
-interface Comment {
-  id: number
-  memberId: number
-  accompanyPostId: number
-  content: string
-  createdAt: string
-  updatedAt: string
-  deletedAt: string | null
-  memberProfileImage: string
-  memberNickname: string
-}
+import { Post, Comment } from '@/interfaces'
+import {
+  fetchPost,
+  fetchComments,
+  createComment,
+  updateComment,
+} from '@/app/utils/fetchUtils' // 유틸리티 함수 import
+import { formatCreatedAt } from '@/app/utils/dateUtils'
 
 export default function AccompanyDetailPage() {
   const { id } = useParams()
@@ -63,43 +38,22 @@ export default function AccompanyDetailPage() {
 
   const handleCardDeleteClick = useHandleDeleteClick()
 
-  const fetchComments = async (postId: number) => {
-    try {
-      const commentData = await api.get(`/api/v1/comment/${postId}`)
-      return commentData.map((comment: any) => ({
-        ...comment,
-        createdDate: formatCreatedAt(comment.createdAt),
-      }))
-    } catch (error) {
-      console.error('Failed to fetch comments:', error)
-      throw new Error('댓글을 불러오는 데 실패했습니다.')
-    }
-  }
-
   useEffect(() => {
-    const fetchPostData = async () => {
+    const loadData = async () => {
       try {
-        // 게시글 데이터를 fetch
-        const data = await api.get(`/api/v1/accompany/posts/${postId}`)
-        const formattedData = {
-          ...data,
-          createdAt: formatToUtcDate(data.createdAt),
-          startDate: data.startDate
-            ? formatShortDateFromUtc(data.startDate)
-            : null,
-          endDate: data.endDate ? formatShortDateFromUtc(data.endDate) : null,
-        }
-        setPost(formattedData)
+        // 게시글 데이터 fetch
+        const postData = await fetchPost(postId)
+        setPost(postData)
 
         // 댓글 데이터 fetch
-        const fetchedComments = await fetchComments(postId) // 함수 사용
+        const fetchedComments = await fetchComments(postId)
         setComments(fetchedComments)
       } catch (error) {
         console.error('Failed to fetch data:', error)
       }
     }
 
-    fetchPostData()
+    loadData()
   }, [postId])
 
   if (!post) {
@@ -131,11 +85,7 @@ export default function AccompanyDetailPage() {
 
     try {
       if (isEditing && editCommentId !== null) {
-        // 수정 모드일 때
-        const response = await api.put(`/api/v1/comment/${editCommentId}`, {
-          postId,
-          content: newComment,
-        })
+        const response = await updateComment(editCommentId, postId, newComment) // 유틸리티 함수 사용
 
         if (response) {
           showSuccess('댓글이 수정되었습니다.')
@@ -145,11 +95,7 @@ export default function AccompanyDetailPage() {
           showWarning('댓글 수정에 실패했습니다.')
         }
       } else {
-        // 일반 댓글 작성 모드
-        const response = await api.post(`/api/v1/comment`, {
-          postId,
-          content: newComment,
-        })
+        const response = await createComment(postId, newComment) // 유틸리티 함수 사용
 
         if (response) {
           showSuccess('댓글이 등록되었습니다.')
