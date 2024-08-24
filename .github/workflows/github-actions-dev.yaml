@@ -25,7 +25,11 @@ jobs:
     - name: Build Next.js app
       run: npm run build
       env:
-        NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL }}
+        KAKAO_API_KEY: ${{ secrets.KAKAO_API_KEY_DEV }}
+        KAKAO_REDIRECT_URI: ${{ secrets.KAKAO_REDIRECT_URI_DEV }}
+        NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL_DEV }}
+        NEXT_PUBLIC_SELF_URL: ${{ secrets.NEXT_PUBLIC_SELF_URL_DEV }}
+        NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL_DEV }}
 
     - name: Log in to GitHub Container Registry
       uses: docker/login-action@v3
@@ -56,7 +60,6 @@ jobs:
           key: ${{ secrets.ARK_DEPLOY }}
           port: 22
           script: |
-            echo "${{ secrets.ENV_FILE_DEV }}" > deploy/front/.env
             echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u ${{ secrets.GIT_USER }} --password-stdin
             cd deploy/front
             sudo docker-compose -f docker-compose.front.yaml down
