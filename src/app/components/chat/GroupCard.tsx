@@ -75,9 +75,16 @@ export default function GroupCard({
         <div className='text-sm text-secondary'>{memberNumber}</div>
       </div>
       <div className='flex justify-between gap-2 text-sm text-gray-500 mt-1'>
-        <p className='text-sm text-gray-500'>
-          {truncateText(lastChatMessage, 40)}
-        </p>
+        {lastChatMessage ? (
+          <p className='text-sm text-gray-500'>
+            {truncateText(lastChatMessage, 40)}
+          </p>
+        ) : (
+          <p className='text-sm text-gray-500'>
+            채팅방이 생성되었습니다. 채팅을 시작해보세요!
+          </p>
+        )}
+
         <p className='text-s text-gray-500'>{timeAgo}</p>
       </div>
     </div>
