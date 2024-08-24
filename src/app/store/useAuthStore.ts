@@ -1,3 +1,4 @@
+'use client'
 import { create } from 'zustand'
 import { api } from '../utils/api'
 interface AuthState {
@@ -10,7 +11,9 @@ interface AuthState {
     profileImage: string
   }) => void
   clearUser: () => void
-  fetchUser: () => Promise<'SUCCESS' | 'FIRST_LOGIN' | 'ERROR'>
+  fetchUser: () => Promise<
+    'SUCCESS' | 'FIRST_LOGIN' | 'ERROR' | 'NOT_FOUND_MEMBER'
+  >
 }
 
 const useAuthStore = create<AuthState>((set, get) => ({
@@ -50,6 +53,7 @@ const useAuthStore = create<AuthState>((set, get) => ({
           nickname,
           profileImage: profileImagePath,
         })
+
         return 'SUCCESS'
       } else {
         return 'ERROR'

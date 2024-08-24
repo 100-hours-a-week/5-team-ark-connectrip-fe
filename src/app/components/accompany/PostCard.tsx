@@ -13,8 +13,8 @@ import { useTimeStamp } from '../../hooks/useTimeStamp'
 interface PostCardProps {
   title: string
   content: string
-  startDate: string
-  endDate: string
+  startDate?: string
+  endDate?: string
   accompanyArea: string
   createdAt: string
   nickname: string
@@ -38,8 +38,12 @@ export default function PostCard({
   const timeAgo = useTimeStamp(createdAt)
 
   useEffect(() => {
-    setFormattedStartDate(formatShortDate(startDate))
-    setFormattedEndDate(formatShortDate(endDate))
+    if (startDate) {
+      setFormattedStartDate(formatShortDate(startDate))
+    }
+    if (endDate) {
+      setFormattedEndDate(formatShortDate(endDate))
+    }
   }, [createdAt, startDate, endDate])
 
   return (
@@ -60,10 +64,16 @@ export default function PostCard({
 
       <div className='flex justify-between gap-2 text-sm text-gray-50 mt-1'>
         <div className='flex gap-2 text-secondary'>
-          <InfoRow
-            icon={<CalendarIcon />}
-            text={`${formattedStartDate}~${formattedEndDate}`}
-          />
+          {/* 조건부 렌더링: startDate와 endDate가 존재할 때만 출력 */}
+          {!startDate && !endDate && (
+            <InfoRow icon={<CalendarIcon />} text='미정' />
+          )}
+          {startDate && endDate && (
+            <InfoRow
+              icon={<CalendarIcon />}
+              text={`${formattedStartDate}~${formattedEndDate}`}
+            />
+          )}
           <InfoRow icon={<PinIcon />} text={accompanyArea} />
         </div>
         <p className='text-s text-gray-500'>{timeAgo}</p>

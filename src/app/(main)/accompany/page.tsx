@@ -8,19 +8,9 @@ import PostCard from '@/app/components/accompany/PostCard'
 import { UpCircleFilled } from '@ant-design/icons'
 import LoadingSpinner from '@/app/components/common/LoadingSpinner'
 import { api } from '@/app/utils/api'
+import { PrevPost } from '@/interfaces'
 
 // 게시글 타입 정의
-interface Post {
-  id: number
-  title: string
-  content: string
-  startDate: string
-  endDate: string
-  accompanyArea: string
-  createdAt: string
-  nickname: string
-  profileImagePath: string | null
-}
 
 export default function Home() {
   // Next.js의 라우터 및 경로 관련 훅들
@@ -33,14 +23,22 @@ export default function Home() {
   // 검색어 및 로딩 상태를 관리하는 상태 변수
   const [searchQuery, setSearchQuery] = useState(query)
   const [loading, setLoading] = useState(true)
-  const [posts, setPosts] = useState<Post[]>([]) // Post 타입의 배열로 상태 정의
+  const [posts, setPosts] = useState<PrevPost[]>([]) // Post 타입의 배열로 상태 정의
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const data: Post[] = await api.get('/api/v1/accompany/posts') // 데이터 타입을 명시적으로 정의
-        setPosts(data)
-        console.log(data[0])
+        if (searchQuery) {
+          // 검색어가 있는 경우, 검색 API 호출
+          const data: PrevPost[] = await api.get(
+            `/api/v1/accompany/posts/search?query=${encodeURIComponent(searchQuery)}`
+          )
+          setPosts(data)
+        } else {
+          // 검색어가 없을 때는 전체 게시글을 불러옴
+          const data: PrevPost[] = await api.get('/api/v1/accompany/posts')
+          setPosts(data)
+        }
         setLoading(false)
       } catch (error) {
         console.error('게시글을 가져오는 중 오류 발생:', error)
@@ -49,7 +47,7 @@ export default function Home() {
     }
 
     fetchPosts()
-  }, [])
+  }, [searchQuery])
 
   // 사용자가 검색어를 입력하면 URL 쿼리 파라미터를 업데이트하는 함수
   const handleSearch = useDebouncedCallback((term: string) => {
@@ -117,22 +115,19 @@ export default function Home() {
         <UpCircleFilled style={{ color: 'var(--main)', fontSize: '30px' }} />
       </button>
 
-      {/* 게시글 리스트 */}
+      {/* 게시글 리스트 또는 "첫번째 게시글을 작성해보세요!" 메시지 */}
       <div className='container mx-auto mt-4 mb-10'>
-        {posts.map((post) => (
-          <div key={post.id} onClick={() => handleCardClick(post.id)}>
-            <PostCard
-              title={post.title}
-              content={post.content}
-              startDate={post.startDate}
-              endDate={post.endDate}
-              accompanyArea={post.accompanyArea}
-              createdAt={post.createdAt}
-              nickname={post.nickname}
-              profileImagePath={post.profileImagePath}
-            />
+        {posts.length > 0 ? (
+          posts.map(({ id, ...postProps }) => (
+            <div key={id} onClick={() => handleCardClick(id)}>
+              <PostCard {...postProps} />
+            </div>
+          ))
+        ) : (
+          <div className='flex justify-center items-center h-[300px] text-gray-500 text-base'>
+            첫번째 게시글을 작성해보세요!
           </div>
-        ))}
+        )}
       </div>
     </div>
   )

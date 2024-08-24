@@ -1,5 +1,3 @@
-import { getCookie } from 'cookies-next'
-
 interface RequestOptions extends RequestInit {
   headers?: HeadersInit
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -9,10 +7,10 @@ interface RequestOptions extends RequestInit {
 const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || ''
 
 const getHeaders = () => {
-  const accessToken = getCookie('accessToken')
   return {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${accessToken}`,
+    // TODO : 요청 헤더에 닉네임이나 유저ID를 담아서 보안 강화
+    // Authorization: `Bearer ${accessToken}`,
   }
 }
 
@@ -41,7 +39,10 @@ const handleRequestBody = (params: Record<string, unknown> | FormData) => {
 // 응답 데이터 처리
 const parseResponseData = async (response: Response) => {
   const contentType = response.headers.get('Content-Type')
-  if (!contentType) throw new Error('No content type in response')
+  // Content-Type이 없을 때 빈 객체를 반환
+  if (!contentType) {
+    return {}
+  }
 
   if (contentType.includes('application/json')) {
     return await response.json()
@@ -58,6 +59,7 @@ const handleResponse = async (response: Response) => {
 
   if (!response.ok) {
     // 에러 상태에 따른 상세 처리
+    // TODO: 에러 코드 별 처리 로직 추가
     const errorMessage =
       response.status === 404
         ? 'Requested resource not found'
