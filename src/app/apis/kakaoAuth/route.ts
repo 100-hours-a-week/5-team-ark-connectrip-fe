@@ -1,4 +1,4 @@
-// src/app/api/kakaoAuth/route.ts
+// src/app/apis/kakaoAuth/route.ts
 
 import { NextResponse } from 'next/server'
 

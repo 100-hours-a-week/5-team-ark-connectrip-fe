@@ -17,7 +17,7 @@ export default function Home() {
   }, [searchParams, showWarning])
 
   const kakaoLoginHandler = async () => {
-    const response = await fetch('/api/kakaoAuth')
+    const response = await fetch('/apis/kakaoAuth')
     if (response.ok) {
       const kakaoUrl = await response.json()
       window.location.href = kakaoUrl
