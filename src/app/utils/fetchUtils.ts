@@ -115,5 +115,26 @@ export const deleteComment = async (commentId: number) => {
 }
 
 // 동행 게시글 내 동행 신청 상태를 조회하는 유틸리티 함수
+export const fetchPendingStatus = async (postId: number) => {
+  try {
+    const response = await api.get(`/api/v1/accompany/posts/${postId}/pending`)
+    return response.status
+  } catch (error) {
+    console.error('Failed to fetch pending status:', error)
+    throw new Error('동행 신청 상태를 조회하는 데 실패했습니다.')
+  }
+}
 
 // 동행 게시글 내 동행 신청 상태를 변경하는 유틸리티 함수
+export const applyForAccompany = async (postId: number) => {
+  try {
+    const response = await api.post(
+      `/api/v1/accompany/posts/${postId}/pending`,
+      {}
+    )
+    return response.status
+  } catch (error) {
+    console.error('Failed to apply for accompany:', error)
+    throw new Error('동행 신청에 실패했습니다.')
+  }
+}

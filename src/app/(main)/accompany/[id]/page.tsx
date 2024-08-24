@@ -21,6 +21,8 @@ import {
   updateComment,
   deletePost,
   deleteComment,
+  fetchPendingStatus,
+  applyForAccompany,
 } from '@/app/utils/fetchUtils' // 유틸리티 함수 import
 import { formatCreatedAt } from '@/app/utils/dateUtils'
 
@@ -31,8 +33,12 @@ export default function AccompanyDetailPage() {
   const [post, setPost] = useState<Post | null>(null)
   const [comments, setComments] = useState<Comment[]>([])
   const [newComment, setNewComment] = useState<string>('')
-  const [isEditing, setIsEditing] = useState<boolean>(false) // 수정 모드 여부
-  const [editCommentId, setEditCommentId] = useState<number | null>(null) // 수정할 댓글 ID
+  // 수정 모드 여부
+  const [isEditing, setIsEditing] = useState<boolean>(false)
+  // 수정할 댓글 ID
+  const [editCommentId, setEditCommentId] = useState<number | null>(null)
+  // 동행 신청 상태
+  const [pendingStatus, setPendingStatus] = useState<string>('NONE')
 
   const { userId } = useAuthStore()
   const { contextHolder, showSuccess, showWarning } = useCustomMessage()
@@ -59,6 +65,10 @@ export default function AccompanyDetailPage() {
         const postData = await fetchPost(postId)
         setPost(postData)
 
+        // 동행 신청 상태 fetch
+        const status = await fetchPendingStatus(postId)
+        setPendingStatus(status)
+
         // 댓글 데이터 fetch
         const fetchedComments = await fetchComments(postId)
         setComments(fetchedComments)
@@ -76,16 +86,18 @@ export default function AccompanyDetailPage() {
 
   const handleButtonClick = async () => {
     try {
-      if (post.status === 'PENDING') {
+      if (pendingStatus === 'PENDING') {
         showWarning('현재 동행 승인 대기 중입니다.')
-      } else if (post.status === 'ACCEPTED') {
+      } else if (pendingStatus === 'ACCEPTED') {
         showSuccess('동행 그룹방으로 입장합니다.')
+        router.push(`/chat/${postId}`)
       } else {
-        // await api.post(`/api/accompany/${postId}/apply`)
-        setPost((prevPost) =>
-          prevPost ? { ...prevPost, status: 'PENDING' } : null
-        )
-        showSuccess('동행 신청이 완료되었습니다.')
+        // 동행 신청 API 호출
+        const status = await applyForAccompany(postId)
+        if (status === 'PENDING') {
+          setPendingStatus('PENDING')
+          showSuccess('동행 신청이 완료되었습니다.')
+        }
       }
     } catch (error) {
       console.error('Failed to apply for accompany:', error)
@@ -215,12 +227,16 @@ export default function AccompanyDetailPage() {
           {post.content}
         </div>
 
-        {post.status !== 'REJECTED' && (
+        {pendingStatus !== 'REJECTED' && pendingStatus !== 'NONE' && (
           <button
             className='w-full bg-main text-white py-2 px-3 rounded-full text-sm'
             onClick={handleButtonClick}
           >
-            {post.status === 'PENDING' ? '동행 승인 대기' : '동행 신청'}
+            {pendingStatus === 'ACCEPTED'
+              ? '채팅방으로 이동'
+              : pendingStatus === 'PENDING'
+                ? '동행 승인 대기'
+                : '동행 신청'}
           </button>
         )}
 

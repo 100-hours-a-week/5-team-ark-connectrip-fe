@@ -33,7 +33,6 @@ export interface Post {
   startDate?: string
   endDate?: string
   content: string
-  status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'DEFAULT'
   customUrl: string
   urlQrPath: string
 }
