@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev
+      - feature/deploy#2
 
 jobs:
   build:
