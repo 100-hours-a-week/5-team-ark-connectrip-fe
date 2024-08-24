@@ -173,7 +173,7 @@ export default function AccompanyForm({
         validateStatus={customUrlStatus === 'duplicated' ? 'error' : ''}
         help={customUrlHelperText}
         rules={[
-          { required: true, message: '커스텀 URL을 입력해 주세요.' },
+          { required: false, message: '커스텀 URL을 입력해 주세요.' },
           {
             pattern: /^[a-zA-Z0-9-_~.%]+$/,
             message:

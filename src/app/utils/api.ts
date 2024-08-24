@@ -12,7 +12,7 @@ const getHeaders = () => {
   const accessToken = getCookie('accessToken')
   return {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${accessToken}`,
+    // Authorization: `Bearer ${accessToken}`,
   }
 }
 

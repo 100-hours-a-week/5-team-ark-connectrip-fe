@@ -23,6 +23,7 @@ export default function Header() {
       if (status === 'FIRST_LOGIN') {
         router.push('/signup')
       }
+      // TODO: 백엔드 reissue api 구현 후 동작확인 필요 (at 만료시 어케되는지)
     }
 
     if (!nickname) {
@@ -34,7 +35,6 @@ export default function Header() {
     try {
       // 로그아웃 API 호출
       const response = await api.post('/api/v1/auth/logout', {})
-      console.log('로그아웃 응답:', response)
       if (response.message === 'SUCCESS') {
         // 상태 초기화
         useAuthStore.getState().clearUser()

@@ -66,7 +66,6 @@ export default function Home() {
               onClick={() => handleCardClick(chat.chatRoomId)}
             >
               {/* memberNumber가 없는 경우 기본값을 표시 */}
-              <div>{chat.memberNumber || 'Unknown Member'}</div>
               <GroupCard {...chat} memberNumber={chat.memberNumber || 0} />
             </div>
           ))}

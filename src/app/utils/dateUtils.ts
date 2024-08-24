@@ -18,7 +18,6 @@ export const formatBirthDate = (birthDate: string): string => {
 
 // UTC 날짜를 "yyyy.MM.dd HH:mm" 형식으로 변환
 export const formatToUtcDate = (utcString: string): string => {
-  console.log(utcString)
   if (!utcString) {
     throw new Error('Invalid date string provided')
   }
