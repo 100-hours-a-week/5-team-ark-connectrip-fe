@@ -1,13 +1,8 @@
-name: Front-dev build & push docker image to ghcr and deploy
+name: Front-Prod build & deploy
 
 on:
   push:
     branches:
-      - dev
-      - main
-  pull_request:
-    branches:
-      - dev
       - main
 
 jobs:
@@ -28,6 +23,8 @@ jobs:
 
     - name: Build Next.js app
       run: npm run build
+      env:
+        NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL }}
 
     - name: Log in to GitHub Container Registry
       uses: docker/login-action@v3
@@ -37,10 +34,13 @@ jobs:
         password: ${{ secrets.GHCR_TOKEN }}
 
     - name: Build Docker image
-      run: docker build -t ghcr.io/topazkang/fe-dev:latest .
+      run: |
+        docker build \
+        --build-arg NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL }} \
+        -t ghcr.io/topazkang/fe-prod:latest .
 
     - name: Push Docker image to GHCR
-      run: docker push ghcr.io/topazkang/fe-dev:latest
+      run: docker push ghcr.io/topazkang/fe-prod:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -50,14 +50,14 @@ jobs:
       - name: SSH and Deploy Frontend
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: ${{ secrets.EC2_HOST }}
+          host: ${{ secrets.EC2_HOST_PROD }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.ARK_DEPLOY }}
           port: 22
           script: |
-            echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u ${{ secrets.GIT_USER }} --password-stdin
-            cd deploy/conf
-            sudo docker-compose -f docker-compose.yaml stop front
-            sudo docker-compose -f docker-compose.yaml rm -f front
-            sudo docker image prune -a -f
-            sudo docker-compose up -d front
+            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GIT_USER }} --password-stdin
+            echo "${{ secrets.ENV_FILE_PROD }}" > deploy/front/.env
+            cd deploy/front
+            docker-compose -f docker-compose.front.yaml down
+            docker-compose -f docker-compose.front.yaml pull
+            docker-compose -f docker-compose.front.yaml up -d
