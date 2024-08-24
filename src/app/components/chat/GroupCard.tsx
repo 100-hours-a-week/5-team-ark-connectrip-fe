@@ -34,10 +34,20 @@ export default function GroupCard({
     setFormattedEndDate(formatShortDate(endDate))
   }, [startDate, endDate])
 
+  // 그룹방 나가기 기능을 수행하는 함수
+  const handleLeaveGroup = async () => {
+    try {
+      // TODO : 그룹방 삭제 API 호출
+      // await deleteGroup(accompanyPostTitle) // 여기서 accompanyPostTitle을 그룹 식별자(또는 ID)로 사용한다고 가정
+    } catch (error) {
+      console.error('그룹방 나가기 중 오류 발생:', error)
+    }
+  }
+
   const menuItems = [
     {
       label: '그룹방 나가기',
-      onClick: () => handleDeleteClick('그룹방', ''), // 모달 호출
+      onClick: () => handleDeleteClick('그룹방', '', handleLeaveGroup), // 모달 호출 후 삭제 처리
     },
   ]
 

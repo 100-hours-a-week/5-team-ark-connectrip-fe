@@ -46,6 +46,17 @@ export const updatePost = async (
   }
 }
 
+// 게시글을 삭제하는 유틸리티 함수
+export const deletePost = async (postId: number) => {
+  try {
+    const response = await api.post(`/api/v1/accompany/posts/${postId}`, {})
+    return response
+  } catch (error) {
+    console.error('게시글 삭제 중 오류 발생:', error)
+    throw new Error('게시글 삭제에 실패했습니다.')
+  }
+}
+
 // 댓글 데이터를 가져오는 유틸리티 함수
 export const fetchComments = async (postId: number) => {
   try {
@@ -91,3 +102,18 @@ export const updateComment = async (
     throw new Error('댓글 수정에 실패했습니다.')
   }
 }
+
+// 댓글 삭제 유틸리티 함수
+export const deleteComment = async (commentId: number) => {
+  try {
+    const response = await api.post(`/api/v1/comment/${commentId}`, {})
+    return response
+  } catch (error) {
+    console.error('댓글 삭제 중 오류 발생:', error)
+    throw new Error('댓글 삭제에 실패했습니다.')
+  }
+}
+
+// 동행 게시글 내 동행 신청 상태를 조회하는 유틸리티 함수
+
+// 동행 게시글 내 동행 신청 상태를 변경하는 유틸리티 함수

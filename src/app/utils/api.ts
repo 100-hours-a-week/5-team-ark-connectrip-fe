@@ -41,7 +41,10 @@ const handleRequestBody = (params: Record<string, unknown> | FormData) => {
 // 응답 데이터 처리
 const parseResponseData = async (response: Response) => {
   const contentType = response.headers.get('Content-Type')
-  if (!contentType) throw new Error('No content type in response')
+  // Content-Type이 없을 때 빈 객체를 반환
+  if (!contentType) {
+    return {}
+  }
 
   if (contentType.includes('application/json')) {
     return await response.json()
@@ -58,6 +61,7 @@ const handleResponse = async (response: Response) => {
 
   if (!response.ok) {
     // 에러 상태에 따른 상세 처리
+    // TODO: 에러 코드 별 처리 로직 추가
     const errorMessage =
       response.status === 404
         ? 'Requested resource not found'

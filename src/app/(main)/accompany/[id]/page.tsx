@@ -19,6 +19,8 @@ import {
   fetchComments,
   createComment,
   updateComment,
+  deletePost,
+  deleteComment,
 } from '@/app/utils/fetchUtils' // 유틸리티 함수 import
 import { formatCreatedAt } from '@/app/utils/dateUtils'
 
@@ -35,8 +37,20 @@ export default function AccompanyDetailPage() {
   const { userId } = useAuthStore()
   const { contextHolder, showSuccess, showWarning } = useCustomMessage()
   const { openModal, ShareModalComponent } = useShareModal() // 공유 모달 관련 훅 사용
+  const handleDeleteClick = useHandleDeleteClick()
 
-  const handleCardDeleteClick = useHandleDeleteClick()
+  // 게시글 삭제 버튼 클릭 시 호출되는 함수
+  const handleDeletePost = () => {
+    handleDeleteClick(
+      '게시글',
+      '/accompany',
+      async () => await deletePost(postId)
+    )
+  }
+  // 댓글 삭제 버튼 클릭 시 호출되는 함수
+  const handleDeleteComment = (commentId: number) => {
+    handleDeleteClick('댓글', '', async () => await deleteComment(commentId))
+  }
 
   useEffect(() => {
     const loadData = async () => {
@@ -159,10 +173,7 @@ export default function AccompanyDetailPage() {
               >
                 수정
               </button>
-              <button
-                className='text-sm text-main'
-                onClick={() => handleCardDeleteClick('게시글', '/accompany')}
-              >
+              <button className='text-sm text-main' onClick={handleDeletePost}>
                 삭제
               </button>
             </div>
@@ -244,7 +255,7 @@ export default function AccompanyDetailPage() {
                       </button>
                       <button
                         className='text-sm text-main'
-                        onClick={() => handleCardDeleteClick('댓글', '')}
+                        onClick={() => handleDeleteComment(comment.id)}
                       >
                         삭제
                       </button>
