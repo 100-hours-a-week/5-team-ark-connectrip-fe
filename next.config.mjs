@@ -1,6 +1,5 @@
 // Import the necessary plugin
 import withAntdLess from 'next-plugin-antd-less'
-const { NEXT_PUBLIC_SERVER_URL } = process.env
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -8,7 +7,7 @@ const nextConfig = {
     return [
       {
         source: '/api/v1/auth/redirected/kakao',
-        destination: `${NEXT_PUBLIC_SERVER_URL}/api/v1/auth/redirected/kakao`,
+        destination: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/auth/redirected/kakao`,
       },
     ]
   },

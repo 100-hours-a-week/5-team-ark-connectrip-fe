@@ -28,7 +28,7 @@ export const useHandleDeleteClick = () => {
           } else {
             window.location.reload()
           }
-        } catch (error) {
+        } catch {
           showError(`${text} 삭제에 실패했습니다.`)
         }
       }

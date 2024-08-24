@@ -30,13 +30,13 @@ export default function EditAccompanyPage() {
             customUrl: post.customUrl,
           })
         }
-      } catch (error) {
+      } catch {
         showError('게시글 정보를 불러오는 중 오류가 발생했습니다.')
       }
     }
 
     loadPostData()
-  }, [])
+  }, [id, showError])
 
   const handleFinish = async (values: FormValues) => {
     try {
@@ -46,7 +46,7 @@ export default function EditAccompanyPage() {
       setTimeout(() => {
         router.push(`/accompany/${id}`)
       }, 1000)
-    } catch (error) {
+    } catch {
       showError('게시글 수정에 실패했습니다.')
     }
   }

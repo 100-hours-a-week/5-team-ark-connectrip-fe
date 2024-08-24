@@ -1,5 +1,3 @@
-import { getCookie } from 'cookies-next'
-
 interface RequestOptions extends RequestInit {
   headers?: HeadersInit
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -9,9 +7,9 @@ interface RequestOptions extends RequestInit {
 const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || ''
 
 const getHeaders = () => {
-  const accessToken = getCookie('accessToken')
   return {
     'Content-Type': 'application/json',
+    // TODO : 요청 헤더에 닉네임이나 유저ID를 담아서 보안 강화
     // Authorization: `Bearer ${accessToken}`,
   }
 }

@@ -23,12 +23,13 @@ export default function CreateAccompanyPage() {
   }) => {
     try {
       const formData = formatFormData(values)
-      const response = await api.post(`/api/v1/accompany/posts`, formData)
+      await api.post(`/api/v1/accompany/posts`, formData)
       showSuccess('게시글 작성이 완료되었습니다.')
       setTimeout(() => {
         router.push('/accompany')
       }, 1000)
     } catch (error) {
+      console.error('Error occurred while creating post:', error)
       showError('게시글 작성에 실패했습니다.')
     }
   }

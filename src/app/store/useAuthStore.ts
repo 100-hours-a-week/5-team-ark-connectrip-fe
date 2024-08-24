@@ -1,7 +1,6 @@
 'use client'
 import { create } from 'zustand'
 import { api } from '../utils/api'
-import router from 'next/router'
 interface AuthState {
   userId: string | null
   nickname: string | null

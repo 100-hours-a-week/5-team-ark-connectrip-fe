@@ -5,6 +5,7 @@ import {
   formatShortDateFromUtc,
   formatCreatedAt,
 } from '@/app/utils/dateUtils'
+import { Comment } from '@/interfaces/index'
 
 // 게시글 데이터를 가져오는 유틸리티 함수
 export const fetchPost = async (postId: number) => {
@@ -61,7 +62,7 @@ export const deletePost = async (postId: number) => {
 export const fetchComments = async (postId: number) => {
   try {
     const commentData = await api.get(`/api/v1/comment/${postId}`)
-    return commentData.map((comment: any) => ({
+    return commentData.map((comment: Comment) => ({
       ...comment,
       createdDate: formatCreatedAt(comment.createdAt),
     }))
