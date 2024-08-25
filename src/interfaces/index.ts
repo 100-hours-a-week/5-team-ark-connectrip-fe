@@ -87,3 +87,10 @@ export interface AccompanyFormProps {
   onSubmit: (values: FormValues) => void
   submitText: string
 }
+
+// 캘린더 아이콘 인터페이스
+export interface CalendarIconProps {
+  width?: number
+  height?: number
+  fill?: string
+}
