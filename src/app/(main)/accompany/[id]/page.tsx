@@ -69,6 +69,8 @@ export default function AccompanyDetailPage() {
         const postData = await fetchPost(postId)
         setPost(postData)
         // setRecruitmentStatus(postData.recruitmentStatus)
+        // api 연결 전 임시
+        setRecruitmentStatus('PROGRESSING')
 
         // 동행 신청 상태 fetch
         const status = await fetchPendingStatus(postId)
