@@ -88,8 +88,8 @@ export default function AccompanyDetailPage() {
     try {
       if (pendingStatus === 'PENDING') {
         showWarning('현재 동행 승인 대기 중입니다.')
-      } else if (pendingStatus === 'ACCEPTED') {
-        showSuccess('동행 그룹방으로 입장합니다.')
+      } else if (pendingStatus === 'ACCEPTED' || pendingStatus === 'NONE') {
+        showSuccess('동행 채팅방으로 입장합니다.')
         router.push(`/chat/${postId}`)
       } else {
         // 동행 신청 API 호출
@@ -227,12 +227,12 @@ export default function AccompanyDetailPage() {
           {post.content}
         </div>
 
-        {pendingStatus !== 'REJECTED' && pendingStatus !== 'NONE' && (
+        {pendingStatus !== 'REJECTED' && (
           <button
             className='w-full bg-main text-white py-2 px-3 rounded-full text-sm'
             onClick={handleButtonClick}
           >
-            {pendingStatus === 'ACCEPTED'
+            {pendingStatus === 'ACCEPTED' || pendingStatus === 'NONE'
               ? '채팅방으로 이동'
               : pendingStatus === 'PENDING'
                 ? '동행 승인 대기'
