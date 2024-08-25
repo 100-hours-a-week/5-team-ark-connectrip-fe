@@ -24,7 +24,11 @@ jobs:
     - name: Build Next.js app
       run: npm run build
       env:
-        NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL }}
+        KAKAO_API_KEY: ${{ secrets.KAKAO_API_KEY_PROD }}
+        KAKAO_REDIRECT_URI: ${{ secrets.KAKAO_REDIRECT_URI_PROD }}
+        NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL_PROD }}
+        NEXT_PUBLIC_SELF_URL: ${{ secrets.NEXT_PUBLIC_SELF_URL_PROD }}
+        NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL_PROD }}
 
     - name: Log in to GitHub Container Registry
       uses: docker/login-action@v3
@@ -36,7 +40,11 @@ jobs:
     - name: Build Docker image
       run: |
         docker build \
-        --build-arg NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL }} \
+        --build-arg KAKAO_API_KEY=${{ secrets.KAKAO_API_KEY_PROD }} \
+        --build-arg KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI_PROD }} \
+        --build-arg NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL_PROD }} \
+        --build-arg NEXT_PUBLIC_SELF_URL=${{ secrets.NEXT_PUBLIC_SELF_URL_PROD }} \
+        --build-arg NEXT_PUBLIC_BASE_URL=${{ secrets.NEXT_PUBLIC_BASE_URL_PROD }} \
         -t ghcr.io/topazkang/fe-prod:latest .
 
     - name: Push Docker image to GHCR
@@ -56,7 +64,6 @@ jobs:
           port: 22
           script: |
             echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GIT_USER }} --password-stdin
-            echo "${{ secrets.ENV_FILE_PROD }}" > deploy/front/.env
             cd deploy/front
             docker-compose -f docker-compose.front.yaml down
             docker-compose -f docker-compose.front.yaml pull
