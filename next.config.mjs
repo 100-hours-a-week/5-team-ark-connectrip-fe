@@ -6,8 +6,8 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: `${process.env.KAKAO_REDIRECT_URI}`,
-        destination: `${process.env.NEXT_PUBLIC_SERVER_URL}${process.env.KAKAO_REDIRECT_URI}`,
+        source: '/api/v1/auth/redirected/kakao',
+        destination: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/auth/redirected/kakao`,
       },
     ]
   },
