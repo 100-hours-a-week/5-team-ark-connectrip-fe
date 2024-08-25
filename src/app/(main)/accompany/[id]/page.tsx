@@ -25,7 +25,6 @@ import {
   applyForAccompany,
 } from '@/app/utils/fetchUtils' // 유틸리티 함수 import
 import { formatCreatedAt } from '@/app/utils/dateUtils'
-import { set } from 'date-fns'
 
 export default function AccompanyDetailPage() {
   const { id } = useParams()
