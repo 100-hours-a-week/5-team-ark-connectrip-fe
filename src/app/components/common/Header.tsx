@@ -52,7 +52,7 @@ export default function Header() {
 
   const handleProfileEdit = () => {
     // 내 정보 수정 페이지로 이동
-    // router.push('/profile/edit')
+    router.push('/profile/edit')
   }
 
   const handleLogoClick = () => {

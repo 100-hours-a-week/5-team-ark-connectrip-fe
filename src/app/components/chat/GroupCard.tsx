@@ -85,7 +85,7 @@ export default function GroupCard({
           </p>
         )}
 
-        <p className='text-s text-gray-500'>{timeAgo}</p>
+        <p className='text-s text-gray-500 whitespace-nowrap'>{timeAgo}</p>
       </div>
     </div>
   )
