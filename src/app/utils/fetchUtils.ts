@@ -58,6 +58,17 @@ export const deletePost = async (postId: number) => {
   }
 }
 
+// 채팅방 나가기 유틸리티 함수
+export const leaveChatRoom = async (chatRoomId: number) => {
+  try {
+    const response = await api.post(`/api/v1/chatRoom/${chatRoomId}/exit`, {})
+    return response
+  } catch (error) {
+    console.error('Failed to leave chat room:', error)
+    throw new Error('채팅방 나가기에 실패했습니다.')
+  }
+}
+
 // 댓글 데이터를 가져오는 유틸리티 함수
 export const fetchComments = async (postId: number) => {
   try {

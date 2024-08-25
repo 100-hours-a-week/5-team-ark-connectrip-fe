@@ -11,9 +11,11 @@ import { MoreOutlined } from '@ant-design/icons'
 import { useTimeStamp } from '../../hooks/useTimeStamp'
 import DropdownMenu from '../common/DropdownMenu'
 import { useHandleDeleteClick } from '@/app/hooks/useHandleDeleteClick'
-import { GroupCardProps } from '@/interfaces'
+import { leaveChatRoom } from '@/app/utils/fetchUtils'
+import { Chat } from '@/interfaces'
 
 export default function GroupCard({
+  chatRoomId,
   accompanyPostTitle,
   accompanyArea,
   startDate,
@@ -21,7 +23,7 @@ export default function GroupCard({
   lastChatMessage,
   lastChatMessageTime,
   memberNumber,
-}: GroupCardProps) {
+}: Chat) {
   const [formattedStartDate, setFormattedStartDate] = useState('')
   const [formattedEndDate, setFormattedEndDate] = useState('')
   const handleDeleteClick = useHandleDeleteClick() // 모달 호출 유틸리티 사용
@@ -37,8 +39,7 @@ export default function GroupCard({
   // 그룹방 나가기 기능을 수행하는 함수
   const handleLeaveGroup = async () => {
     try {
-      // TODO : 그룹방 삭제 API 호출
-      // await deleteGroup(accompanyPostTitle) // 여기서 accompanyPostTitle을 그룹 식별자(또는 ID)로 사용한다고 가정
+      await leaveChatRoom(chatRoomId)
     } catch (error) {
       console.error('그룹방 나가기 중 오류 발생:', error)
     }
@@ -89,4 +90,7 @@ export default function GroupCard({
       </div>
     </div>
   )
+}
+function showSuccessToast(arg0: string) {
+  throw new Error('Function not implemented.')
 }
