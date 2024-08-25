@@ -8,7 +8,7 @@ interface MyChatContainerProps {
 
 const MyChatContainer: React.FC<MyChatContainerProps> = ({ message, time }) => {
   return (
-    <div className='flex w-full items-end justify-end mt-1 h-full'>
+    <div className='flex w-full items-end justify-end mt-2 h-full gap-1 pl-4'>
       <div className='text-xs text-gray-700 w-[45px]  whitespace-nowrap '>
         {time}
       </div>

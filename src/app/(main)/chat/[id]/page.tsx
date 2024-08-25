@@ -96,6 +96,16 @@ const messages = [
     profileImagePath: 'https://example.com/profiles/user1.png',
   },
   {
+    id: '66bf0a2171faff02a7e52533',
+    roomId: 1,
+    senderId: 1,
+    message:
+      ' 바람도 시원하게 불고 분위기도 좋을 것 같아요. 저녁 6시쯤 어떠세요?',
+    createdAt: '2024-08-18T17:23:30',
+    nickname: '세니',
+    profileImagePath: 'https://example.com/profiles/user1.png',
+  },
+  {
     id: '66bf0a2671faff02a7e52534',
     roomId: 1,
     senderId: 2,
@@ -137,7 +147,7 @@ export default function GroupDetailPage() {
         return (
           <div
             key={msg.id}
-            className='flex flex-col gap-1 w-full px-4 py-1 items-center justify-center'
+            className='flex flex-col w-full px-4 py-1 items-center justify-center'
           >
             {/* 날짜 구분선을 표시 */}
             {showDateSeparator && <DateSeparator date={msg.createdAt} />}
