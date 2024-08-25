@@ -25,6 +25,7 @@ import {
   applyForAccompany,
 } from '@/app/utils/fetchUtils' // 유틸리티 함수 import
 import { formatCreatedAt } from '@/app/utils/dateUtils'
+import { set } from 'date-fns'
 
 export default function AccompanyDetailPage() {
   const { id } = useParams()
@@ -39,6 +40,9 @@ export default function AccompanyDetailPage() {
   const [editCommentId, setEditCommentId] = useState<number | null>(null)
   // 동행 신청 상태
   const [pendingStatus, setPendingStatus] = useState<string>('NONE')
+  // 게시글 모집 상태
+  const [recruitmentStatus, setRecruitmentStatus] =
+    useState<string>('PROGRESSING')
 
   const { userId } = useAuthStore()
   const { contextHolder, showSuccess, showWarning } = useCustomMessage()
@@ -64,6 +68,7 @@ export default function AccompanyDetailPage() {
         // 게시글 데이터 fetch
         const postData = await fetchPost(postId)
         setPost(postData)
+        // setRecruitmentStatus(postData.recruitmentStatus)
 
         // 동행 신청 상태 fetch
         const status = await fetchPendingStatus(postId)
@@ -85,23 +90,27 @@ export default function AccompanyDetailPage() {
   }
 
   const handleButtonClick = async () => {
-    try {
-      if (pendingStatus === 'PENDING') {
-        showWarning('현재 동행 승인 대기 중입니다.')
-      } else if (pendingStatus === 'ACCEPTED' || pendingStatus === 'NONE') {
-        showSuccess('동행 채팅방으로 입장합니다.')
-        router.push(`/chat/${postId}`)
-      } else {
-        // 동행 신청 API 호출
-        const status = await applyForAccompany(postId)
-        if (status === 'PENDING') {
-          setPendingStatus('PENDING')
-          showSuccess('동행 신청이 완료되었습니다.')
+    if (recruitmentStatus === 'CLOSED' || recruitmentStatus === 'FINISHED') {
+      showWarning('모집이 완료된 게시글입니다.')
+    } else if (recruitmentStatus === 'PROGRESSING') {
+      try {
+        if (pendingStatus === 'PENDING') {
+          showWarning('현재 동행 승인 대기 중입니다.')
+        } else if (pendingStatus === 'ACCEPTED' || pendingStatus === 'NONE') {
+          showSuccess('동행 채팅방으로 입장합니다.')
+          router.push(`/chat/${postId}`)
+        } else {
+          // 동행 신청 API 호출
+          const status = await applyForAccompany(postId)
+          if (status === 'PENDING') {
+            setPendingStatus('PENDING')
+            showSuccess('동행 신청이 완료되었습니다.')
+          }
         }
+      } catch (error) {
+        console.error('Failed to apply for accompany:', error)
+        showWarning('동행 신청에 실패했습니다.')
       }
-    } catch (error) {
-      console.error('Failed to apply for accompany:', error)
-      showWarning('동행 신청에 실패했습니다.')
     }
   }
 
@@ -226,19 +235,28 @@ export default function AccompanyDetailPage() {
         <div className='text-gray-700 mb-4 whitespace-pre-wrap text-justify p-1'>
           {post.content}
         </div>
-
-        {pendingStatus !== 'REJECTED' && (
+        {recruitmentStatus !== 'PROGRESSING' && (
           <button
-            className='w-full bg-main text-white py-2 px-3 rounded-full text-sm'
+            className='w-full bg-gray-400 text-white py-2 px-3 rounded-full text-sm'
             onClick={handleButtonClick}
           >
-            {pendingStatus === 'ACCEPTED' || pendingStatus === 'NONE'
-              ? '채팅방으로 이동'
-              : pendingStatus === 'PENDING'
-                ? '동행 승인 대기'
-                : '동행 신청'}
+            모집 마감
           </button>
         )}
+
+        {pendingStatus !== 'REJECTED' &&
+          recruitmentStatus === 'PROGRESSING' && (
+            <button
+              className='w-full bg-main text-white py-2 px-3 rounded-full text-sm'
+              onClick={handleButtonClick}
+            >
+              {pendingStatus === 'ACCEPTED' || pendingStatus === 'NONE'
+                ? '채팅방으로 이동'
+                : pendingStatus === 'PENDING'
+                  ? '동행 승인 대기'
+                  : '동행 신청'}
+            </button>
+          )}
 
         <div className='mt-8 w-full'>
           <h2 className='text-[18px] font-bold mb-4'>댓글</h2>
