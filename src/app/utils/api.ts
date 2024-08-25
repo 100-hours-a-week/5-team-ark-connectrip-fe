@@ -55,7 +55,7 @@ const parseResponseData = async (response: Response) => {
 
 // 응답 처리
 const handleResponse = async (response: Response) => {
-  const data = await parseResponseData(response)
+  const data = await parseResponseData(await response)
 
   if (!response.ok) {
     // 에러 상태에 따른 상세 처리
