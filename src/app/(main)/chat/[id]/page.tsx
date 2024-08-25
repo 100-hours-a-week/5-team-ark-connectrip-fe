@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import MyChatContainer from '@/app/components/chat/MyChatContainer'
 import LeftChatContainer from '@/app/components/chat/LeftChatContainer'
 import DateSeparator from '@/app/components/chat/DateSeperator'
@@ -136,6 +136,12 @@ function formatWithMeridiem(date: Date) {
 
 export default function GroupDetailPage() {
   let lastDate = '' // 마지막으로 표시된 날짜를 저장
+  const bottomRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    // 페이지 로드 시 맨 아래로 스크롤
+    bottomRef.current?.scrollIntoView({ behavior: 'auto' })
+  }, [])
 
   return (
     <div className='bg-white w-full h-full mb-[120px]'>
@@ -168,6 +174,8 @@ export default function GroupDetailPage() {
           </div>
         )
       })}
+      {/* 스크롤이 이동할 위치 */}
+      <div ref={bottomRef}></div>
       <div className='px-4 py-2 fixed  w-full bg-white bottom-[60px] z-10'>
         <div className='flex items-center w-full'>
           <input
