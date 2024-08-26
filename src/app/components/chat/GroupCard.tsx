@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react'
 import CalendarIcon from '../Icon/CalendarIcon'
 import PinIcon from '../Icon/PinIcon'
 import InfoRow from '../accompany/InfoRow'
-import { formatShortDate } from '../../utils/dateUtils'
+import { formatShortDateFromUtc } from '../../utils/dateUtils'
 import { truncateText } from '../../utils/textUtils'
 import { MoreOutlined } from '@ant-design/icons'
 import { useTimeStamp } from '../../hooks/useTimeStamp'
@@ -32,8 +32,10 @@ export default function GroupCard({
   const timeAgo = useTimeStamp(lastChatMessageTime)
 
   useEffect(() => {
-    setFormattedStartDate(formatShortDate(startDate))
-    setFormattedEndDate(formatShortDate(endDate))
+    if (startDate && endDate) {
+      setFormattedStartDate(formatShortDateFromUtc(startDate))
+      setFormattedEndDate(formatShortDateFromUtc(endDate))
+    }
   }, [startDate, endDate])
 
   // 그룹방 나가기 기능을 수행하는 함수
@@ -70,7 +72,11 @@ export default function GroupCard({
       <div className='flex gap-2 items-center'>
         <InfoRow
           icon={<CalendarIcon />}
-          text={`${formattedStartDate}~${formattedEndDate}`}
+          text={
+            formattedStartDate && formattedEndDate
+              ? `${formattedStartDate}~${formattedEndDate}`
+              : '미정'
+          }
         />
         <InfoRow icon={<PinIcon />} text={accompanyArea} />
         <div className='text-sm text-secondary'>{memberNumber}</div>

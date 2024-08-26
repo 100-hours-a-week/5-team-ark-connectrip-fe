@@ -24,7 +24,7 @@ import {
   fetchPendingStatus,
   applyForAccompany,
 } from '@/app/utils/fetchUtils' // 유틸리티 함수 import
-import { formatCreatedAt } from '@/app/utils/dateUtils'
+import { formatToUtcDate } from '@/app/utils/dateUtils'
 import { AccompanyStatus, RecruitmentStatus } from '@/types'
 
 export default function AccompanyDetailPage() {
@@ -293,7 +293,7 @@ export default function AccompanyDetailPage() {
                 <p className='font-semibold'>{comment.memberNickname}</p>
                 <div className='flex justify-between items-center '>
                   <p className='text-sm text-gray-500'>
-                    {formatCreatedAt(comment.createdAt)}
+                    {formatToUtcDate(comment.createdAt)}
                   </p>
 
                   {comment.memberId.toString() === userId && ( // 댓글 작성자만 수정/삭제 버튼 표시
