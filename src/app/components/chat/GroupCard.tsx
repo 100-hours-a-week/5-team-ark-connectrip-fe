@@ -91,6 +91,3 @@ export default function GroupCard({
     </div>
   )
 }
-function showSuccessToast(arg0: string) {
-  throw new Error('Function not implemented.')
-}
