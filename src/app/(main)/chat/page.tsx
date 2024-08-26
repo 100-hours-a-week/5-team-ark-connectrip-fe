@@ -21,7 +21,6 @@ export default function Home() {
         const data: Chat[] = await api.get('/api/v1/chatRoom/list')
         setChats(data)
         setLoading(false)
-        console.log(data)
       } catch (error) {
         console.error('채팅 목록을 가져오는 중 오류 발생:', error)
         setLoading(false)
