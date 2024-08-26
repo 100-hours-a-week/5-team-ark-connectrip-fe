@@ -11,19 +11,10 @@ export default function ClientContent({
   children: React.ReactNode
 }) {
   return (
-    <div className='container'>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100vh',
-        }}
-      >
+    <div className='container mx-auto'>
+      <div className='flex flex-col h-screen'>
         <Header />
-        <main
-          style={{ flex: 1 }}
-          className='flex mt-[70px] justify-center items-start bg-white relative'
-        >
+        <main className='flex flex-1 mt-[70px] justify-center items-start bg-white relative'>
           {children}
         </main>
         <BottomNav />

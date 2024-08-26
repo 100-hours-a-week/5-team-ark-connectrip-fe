@@ -52,6 +52,14 @@ const config: Config = {
       height: {
         'h-50': '50px', // height 50px
       },
+      container: {
+        center: true,
+        padding: '1rem',
+        screens: {
+          sm: '100%',
+          md: '768px',
+        },
+      },
     },
   },
   plugins: [],
