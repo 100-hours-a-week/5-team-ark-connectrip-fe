@@ -232,7 +232,8 @@ export default function AccompanyDetailPage() {
         <div className='text-gray-700 mb-4 whitespace-pre-wrap text-justify p-1'>
           {post.content}
         </div>
-        {recruitmentStatus === 'PROGRESSING' &&
+        {/* //TODO : 동행 수락/거절 기능 생성시까지 노출 가림 */}
+        {/* {recruitmentStatus === 'PROGRESSING' &&
           pendingStatus !== 'REJECTED' && (
             <>
               {pendingStatus === 'EXIT' ? (
@@ -264,7 +265,7 @@ export default function AccompanyDetailPage() {
                 </button>
               )}
             </>
-          )}
+          )} */}
 
         {recruitmentStatus !== 'PROGRESSING' && (
           <button
