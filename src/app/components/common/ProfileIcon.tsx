@@ -8,7 +8,7 @@ interface ProfileIconProps {
 }
 
 const ProfileIcon: React.FC<ProfileIconProps> = ({ src, size, nickname }) => {
-  if (!src || (typeof src === 'string' && src.trim() === '')) {
+  if (!src) {
     // 이미지가 없을 때
     return (
       <div

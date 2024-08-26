@@ -38,6 +38,17 @@ export interface Post {
   urlQrPath: string
 }
 
+export interface PostCardProps {
+  title: string
+  content: string
+  startDate?: string
+  endDate?: string
+  accompanyArea: string
+  createdAt: string
+  nickname: string
+  profileImagePath: string | null
+}
+
 export interface PrevPost {
   id: number
   title: string
