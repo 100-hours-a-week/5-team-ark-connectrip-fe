@@ -24,8 +24,7 @@ export const formatToUtcDate = (utcString: string): string => {
 // UTC 날짜를 "M/d" 형식으로 변환
 export const formatShortDateFromUtc = (utcString: string): string => {
   if (!utcString) {
-    console.log(utcString)
-    // throw new Error('Invalid date string provided')
+    throw new Error('Invalid date string provided')
   }
 
   try {

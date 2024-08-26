@@ -63,7 +63,6 @@ export default function AccompanyDetailPage() {
   }
 
   useEffect(() => {
-    console.log('useEffect')
     const loadData = async () => {
       try {
         // 게시글 데이터 fetch
