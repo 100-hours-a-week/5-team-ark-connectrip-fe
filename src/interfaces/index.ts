@@ -25,6 +25,7 @@ export interface GroupCardProps {
 export interface Post {
   id: number
   memberId: number
+  leaderId: number
   title: string
   profileImagePath: string
   nickname: string

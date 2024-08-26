@@ -67,10 +67,7 @@ export default function AccompanyDetailPage() {
         // 게시글 데이터 fetch
         const postData = await fetchPost(postId)
         setPost(postData)
-        // setRecruitmentStatus(postData.recruitmentStatus)
-        // api 연결 전 임시
-        setRecruitmentStatus('PROGRESSING')
-
+        setRecruitmentStatus(postData.status)
         // 동행 신청 상태 fetch
         const status = await fetchPendingStatus(postId)
         setPendingStatus(status)
@@ -175,7 +172,6 @@ export default function AccompanyDetailPage() {
           </button>
         </div>
         <h2 className='text-lg font-semibold mb-3 break-all'>{post.title}</h2>
-
         {/* 프로필 섹션 */}
         <div className='flex items-center mb-1 w-full'>
           <ProfileIcon
@@ -201,7 +197,6 @@ export default function AccompanyDetailPage() {
             </div>
           )}
         </div>
-
         {/* 동행 지역 및 날짜 정보 */}
         <div className='w-full overflow-x-auto no-scrollbar mb-4 mt-2'>
           <div className='flex items-center space-x-3'>
@@ -232,10 +227,43 @@ export default function AccompanyDetailPage() {
             )}
           </div>
         </div>
-
         <div className='text-gray-700 mb-4 whitespace-pre-wrap text-justify p-1'>
           {post.content}
         </div>
+        {recruitmentStatus === 'PROGRESSING' &&
+          pendingStatus !== 'REJECTED' && (
+            <>
+              {pendingStatus === 'EXIT' ? (
+                <button
+                  className='w-full bg-gray-400 text-white py-2 px-3 rounded-full text-sm'
+                  onClick={() => showWarning('나가기가 완료된 동행글입니다.')}
+                >
+                  나가기가 완료된 동행글입니다.
+                </button>
+              ) : post.memberId.toString() === userId &&
+                pendingStatus === 'NONE' &&
+                post.memberId !== post.leaderId ? (
+                <button
+                  className='w-full bg-gray-400 text-white py-2 px-3 rounded-full text-sm'
+                  onClick={() => showWarning('나가기가 완료된 동행글입니다.')}
+                >
+                  나가기가 완료된 동행글입니다.
+                </button>
+              ) : (
+                <button
+                  className='w-full bg-main text-white py-2 px-3 rounded-full text-sm'
+                  onClick={handleButtonClick}
+                >
+                  {pendingStatus === 'ACCEPTED' || pendingStatus === 'NONE'
+                    ? '채팅방으로 이동'
+                    : pendingStatus === 'PENDING'
+                      ? '동행 승인 대기'
+                      : '동행 신청'}
+                </button>
+              )}
+            </>
+          )}
+
         {recruitmentStatus !== 'PROGRESSING' && (
           <button
             className='w-full bg-gray-400 text-white py-2 px-3 rounded-full text-sm'
@@ -244,20 +272,6 @@ export default function AccompanyDetailPage() {
             모집 마감
           </button>
         )}
-
-        {pendingStatus !== 'REJECTED' &&
-          recruitmentStatus === 'PROGRESSING' && (
-            <button
-              className='w-full bg-main text-white py-2 px-3 rounded-full text-sm'
-              onClick={handleButtonClick}
-            >
-              {pendingStatus === 'ACCEPTED' || pendingStatus === 'NONE'
-                ? '채팅방으로 이동'
-                : pendingStatus === 'PENDING'
-                  ? '동행 승인 대기'
-                  : '동행 신청'}
-            </button>
-          )}
 
         <div className='mt-8 w-full'>
           <h2 className='text-[18px] font-bold mb-4'>댓글</h2>
