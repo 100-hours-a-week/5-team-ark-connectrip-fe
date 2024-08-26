@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 컨테이너의 최대 너비를 768px로 고정 */
+.container {
+  margin: 0 auto;
+  max-width: 768px;
+}
+
+/* 기본적으로 반응형 */
+@media (max-width: 768px) {
+  .container {
+    max-width: 100%;
+  }
+}
+
 :root {
   /* --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
