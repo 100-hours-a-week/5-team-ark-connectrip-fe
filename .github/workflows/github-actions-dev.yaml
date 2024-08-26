@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - dev
+      - feature/deploy
+  pull_request:
+    branches:
+      - dev
 
 jobs:
   build:
@@ -24,7 +28,13 @@ jobs:
     - name: Build Next.js app
       run: npm run build
       env:
-        NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL }}
+        KAKAO_API_KEY: ${{ secrets.KAKAO_API_KEY_DEV }}
+        KAKAO_REDIRECT_URI: ${{ secrets.KAKAO_REDIRECT_URI_DEV }}
+        NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL_DEV }}
+        NEXT_PUBLIC_SELF_URL: ${{ secrets.NEXT_PUBLIC_SELF_URL_DEV }}
+        NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL_DEV }}
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
 
     - name: Log in to GitHub Container Registry
       uses: docker/login-action@v3
@@ -36,7 +46,13 @@ jobs:
     - name: Build Docker image
       run: |
         docker build \
-        --build-arg NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL }} \
+        --build-arg KAKAO_API_KEY=${{ secrets.KAKAO_API_KEY_DEV }} \
+        --build-arg KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI_DEV }} \
+        --build-arg NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL_DEV }} \
+        --build-arg NEXT_PUBLIC_SELF_URL=${{ secrets.NEXT_PUBLIC_SELF_URL_DEV }} \
+        --build-arg NEXT_PUBLIC_BASE_URL=${{ secrets.NEXT_PUBLIC_BASE_URL_DEV }} \
+        --build-arg SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
+        --build-arg NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }} \
         -t ghcr.io/topazkang/fe-dev:latest .
 
     - name: Push Docker image to GHCR
