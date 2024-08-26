@@ -29,6 +29,8 @@ jobs:
         NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL_PROD }}
         NEXT_PUBLIC_SELF_URL: ${{ secrets.NEXT_PUBLIC_SELF_URL_PROD }}
         NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL_PROD }}
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
 
     - name: Log in to GitHub Container Registry
       uses: docker/login-action@v3
@@ -45,6 +47,8 @@ jobs:
         --build-arg NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL_PROD }} \
         --build-arg NEXT_PUBLIC_SELF_URL=${{ secrets.NEXT_PUBLIC_SELF_URL_PROD }} \
         --build-arg NEXT_PUBLIC_BASE_URL=${{ secrets.NEXT_PUBLIC_BASE_URL_PROD }} \
+        --build-arg SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
+        --build-arg NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }} \
         -t ghcr.io/topazkang/fe-prod:latest .
 
     - name: Push Docker image to GHCR
@@ -63,6 +67,7 @@ jobs:
           key: ${{ secrets.ARK_DEPLOY }}
           port: 22
           script: |
+            echo "${{ secrets.ENV_FILE_PROD }}" > deploy/front/.env
             echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GIT_USER }} --password-stdin
             cd deploy/front
             docker-compose -f docker-compose.front.yaml down
