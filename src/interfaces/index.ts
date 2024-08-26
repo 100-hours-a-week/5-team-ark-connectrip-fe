@@ -95,3 +95,12 @@ export interface CalendarIconProps {
   height?: number
   fill?: string
 }
+
+// 회원가입 폼 값 인터페이스
+export interface SignupFormValues {
+  nickname: string
+  birthDate: string
+  gender: 'male' | 'female'
+  privacyPolicy: boolean // 개인정보 처리방침 동의 여부
+  termsOfService: boolean // 이용약관 동의 여부
+}

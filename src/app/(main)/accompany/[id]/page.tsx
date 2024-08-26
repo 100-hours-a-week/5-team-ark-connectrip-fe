@@ -25,6 +25,7 @@ import {
   applyForAccompany,
 } from '@/app/utils/fetchUtils' // 유틸리티 함수 import
 import { formatCreatedAt } from '@/app/utils/dateUtils'
+import { AccompanyStatus, RecruitmentStatus } from '@/types'
 
 export default function AccompanyDetailPage() {
   const { id } = useParams()
@@ -38,10 +39,10 @@ export default function AccompanyDetailPage() {
   // 수정할 댓글 ID
   const [editCommentId, setEditCommentId] = useState<number | null>(null)
   // 동행 신청 상태
-  const [pendingStatus, setPendingStatus] = useState<string>('NONE')
+  const [pendingStatus, setPendingStatus] = useState<AccompanyStatus>('NONE')
   // 게시글 모집 상태
   const [recruitmentStatus, setRecruitmentStatus] =
-    useState<string>('PROGRESSING')
+    useState<RecruitmentStatus>('PROGRESSING')
 
   const { userId } = useAuthStore()
   const { contextHolder, showSuccess, showWarning } = useCustomMessage()
@@ -62,6 +63,7 @@ export default function AccompanyDetailPage() {
   }
 
   useEffect(() => {
+    console.log('useEffect')
     const loadData = async () => {
       try {
         // 게시글 데이터 fetch

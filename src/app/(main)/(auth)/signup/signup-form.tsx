@@ -10,13 +10,8 @@ import { formatBirthDate } from '@/app/utils/dateUtils'
 import useAuthStore from '@/app/store/useAuthStore'
 import { CheckboxChangeEvent } from 'antd/es/checkbox'
 import LoadingSpinner from '@/app/components/common/LoadingSpinner'
-interface SignupFormValues {
-  nickname: string
-  birthDate: string
-  gender: 'male' | 'female'
-  privacyPolicy: boolean // 개인정보 처리방침 동의 여부
-  termsOfService: boolean // 이용약관 동의 여부
-}
+import { NicknameStatus } from '@/types'
+import { SignupFormValues } from '@/interfaces'
 
 const termsOptions = [
   { label: '개인정보 처리방침 동의 (필수)', value: 'privacyPolicy' },
@@ -29,9 +24,7 @@ const SignupPage: React.FC = () => {
   const router = useRouter()
   const { contextHolder, showSuccess, showError, showWarning } =
     useCustomMessage() // 커스텀 메시지 훅 사용
-  const [nicknameStatus, setNicknameStatus] = useState<
-    'valid' | 'invalid' | 'duplicated' | null
-  >(null)
+  const [nicknameStatus, setNicknameStatus] = useState<NicknameStatus>(null)
   const [loading, setLoading] = useState(true)
   const [nicknameHelperText, setNicknameHelperText] = useState<string>('') // 닉네임 헬퍼 텍스트 상태
   const [agreeAllChecked, setAgreeAllChecked] = useState<boolean>(false) // "모두 동의" 체크박스 상태
