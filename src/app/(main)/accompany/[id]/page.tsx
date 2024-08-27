@@ -174,7 +174,7 @@ export default function AccompanyDetailPage() {
         </div>
         <h2 className='text-lg font-semibold mb-3 break-all'>{post.title}</h2>
         {/* 프로필 섹션 */}
-        <div className='flex items-center mb-1'>
+        <div className='flex items-center mb-1 w-full'>
           <ProfileIcon
             src={post.profileImagePath}
             size={40}
