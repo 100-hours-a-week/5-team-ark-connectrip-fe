@@ -15,7 +15,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
   isOpen,
   onClose,
   customUrl,
-  customUrlQrPath,
+  // customUrlQrPath,
 }) => {
   const { contextHolder } = useCustomMessage()
   const pathname = usePathname()

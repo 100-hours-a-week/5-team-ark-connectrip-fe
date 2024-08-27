@@ -1,26 +1,26 @@
 // chat/page.tsx
 'use client'
 import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import SuspenseWrapper from '@/app/components/common/SuspenseWrapper'
+// import { useRouter } from 'next/navigation'
+// import SuspenseWrapper from '@/app/components/common/SuspenseWrapper'
 import LoadingSpinner from '@/app/components/common/LoadingSpinner'
-import GroupCard from '@/app/components/chat/GroupCard'
-import { api } from '@/app/utils/api'
-import { Chat } from '@/interfaces'
+// import GroupCard from '@/app/components/chat/GroupCard'
+// import { api } from '@/app/utils/api'
+// import { Chat } from '@/interfaces'
 import ServicePreparation from '@/app/components/common/ServicePreparation'
 
 export default function Home() {
-  const router = useRouter()
+  // const router = useRouter()
   // 로딩 상태를 관리하는 상태 변수
   const [loading, setLoading] = useState(true)
-  const [chats, setChats] = useState<Chat[]>([])
+  // const [chats, setChats] = useState<Chat[]>([])
 
   useEffect(() => {
     const fetchChats = async () => {
       try {
         // 채팅 목록을 가져오는 API 호출
-        const data: Chat[] = await api.get('/api/v1/chatRoom/list')
-        setChats(data)
+        // const data: Chat[] = await api.get('/api/v1/chatRoom/list')
+        // setChats(data)
         setLoading(false)
       } catch (error) {
         console.error('채팅 목록을 가져오는 중 오류 발생:', error)
@@ -32,9 +32,9 @@ export default function Home() {
   }, [])
 
   // 게시글 카드를 클릭했을 때 해당 게시글의 상세 페이지로 이동
-  const handleCardClick = (id: number) => {
-    router.push(`/chat/${id}`)
-  }
+  // const handleCardClick = (id: number) => {
+  //   router.push(`/chat/${id}`)
+  // }
 
   // 로딩 중일 때 로딩 스피너를 표시
   if (loading) {
