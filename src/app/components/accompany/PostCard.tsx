@@ -36,7 +36,8 @@ export default function PostCard({
   }, [createdAt, startDate, endDate])
 
   return (
-    <div className='bg-white p-4 rounded-lg shadow-md flex flex-col  mb-4 cursor-pointer '>
+    // <div className='bg-white p-4 rounded-lg shadow-md flex flex-col  mb-4 cursor-pointer '>
+    <div className='box-border bg-white border-solid border border-[#e7e4e4] hover:border-main  p-4 rounded-lg  flex flex-col  mb-4 cursor-pointer '>
       <div className='flex items-center space-x-2 mb-1'>
         <ProfileIcon
           src={profileImagePath || ''}
