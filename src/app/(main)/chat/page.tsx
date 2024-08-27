@@ -7,6 +7,7 @@ import LoadingSpinner from '@/app/components/common/LoadingSpinner'
 import GroupCard from '@/app/components/chat/GroupCard'
 import { api } from '@/app/utils/api'
 import { Chat } from '@/interfaces'
+import ServicePreparation from '@/app/components/common/ServicePreparation'
 
 export default function Home() {
   const router = useRouter()
@@ -41,35 +42,36 @@ export default function Home() {
   }
 
   return (
+    <ServicePreparation />
     // SuspenseWrapper를 사용하여 비동기 처리 시 로딩 스피너를 자동으로 보여줌
-    <SuspenseWrapper>
-      <div className='w-full p-6'>
-        {/* 페이지 헤더 */}
-        <div className='flex items-center justify-between mb-4'>
-          <h1 className='text-lg font-bold text-black'>내 채팅 목록</h1>
-        </div>
+    // <SuspenseWrapper>
+    //   <div className='w-full p-6'>
+    //     {/* 페이지 헤더 */}
+    //     <div className='flex items-center justify-between mb-4'>
+    //       <h1 className='text-lg font-bold text-black'>내 채팅 목록</h1>
+    //     </div>
 
-        {!chats.length && (
-          <div className='flex justify-center items-center h-[200px] text-center text-gray-600'>
-            <p>
-              동행 게시판에서 동행을 구해보세요! <br /> 채팅이 시작됩니다.
-            </p>
-          </div>
-        )}
+    //     {!chats.length && (
+    //       <div className='flex justify-center items-center h-[200px] text-center text-gray-600'>
+    //         <p>
+    //           동행 게시판에서 동행을 구해보세요! <br /> 채팅이 시작됩니다.
+    //         </p>
+    //       </div>
+    //     )}
 
-        {/* 게시글 리스트 */}
-        <section className='container mx-auto mt-4 mb-10'>
-          {chats.map((chat, index) => (
-            <div
-              key={`${chat.chatRoomId}-${chat.memberNumber || 'default'}-${index}`} // memberNumber가 없을 경우 기본값 사용
-              onClick={() => handleCardClick(chat.chatRoomId)}
-            >
-              {/* memberNumber가 없는 경우 기본값을 표시 */}
-              <GroupCard {...chat} memberNumber={chat.memberNumber || 0} />
-            </div>
-          ))}
-        </section>
-      </div>
-    </SuspenseWrapper>
+    //     {/* 게시글 리스트 */}
+    //     <section className='container mx-auto mt-4 mb-10'>
+    //       {chats.map((chat, index) => (
+    //         <div
+    //           key={`${chat.chatRoomId}-${chat.memberNumber || 'default'}-${index}`} // memberNumber가 없을 경우 기본값 사용
+    //           onClick={() => handleCardClick(chat.chatRoomId)}
+    //         >
+    //           {/* memberNumber가 없는 경우 기본값을 표시 */}
+    //           <GroupCard {...chat} memberNumber={chat.memberNumber || 0} />
+    //         </div>
+    //       ))}
+    //     </section>
+    //   </div>
+    // </SuspenseWrapper>
   )
 }
