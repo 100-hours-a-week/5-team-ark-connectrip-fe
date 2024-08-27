@@ -19,7 +19,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
 }) => {
   const { contextHolder } = useCustomMessage()
   const pathname = usePathname()
-  const defaultUrl = `https://example.com${pathname}`
+  const defaultUrl = `${process.env.NEXT_PUBLIC_SELF_URL}${pathname}`
 
   return (
     <>
@@ -38,7 +38,8 @@ const ShareModal: React.FC<ShareModalProps> = ({
       >
         <div className='text-center mb-5'>
           <div className='w-52 h-52 bg-gray-200 mx-auto flex items-center justify-center'>
-            <img src={customUrlQrPath} alt='QR Code' />
+            {/* <img src={customUrlQrPath} alt='QR Code' /> */}
+            QR 코드 서비스 준비중입니다.
           </div>
         </div>
 
