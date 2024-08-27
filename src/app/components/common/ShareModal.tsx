@@ -3,6 +3,7 @@ import React from 'react'
 import UrlInput from '@/app/components/accompany/UrlInput' // UrlInput 컴포넌트 임포트
 import { useCustomMessage } from '@/app/utils/alertUtils'
 import { usePathname } from 'next/navigation'
+import { QRCode } from 'antd'
 
 interface ShareModalProps {
   isOpen: boolean
@@ -37,9 +38,9 @@ const ShareModal: React.FC<ShareModalProps> = ({
         ]}
       >
         <div className='text-center mb-5'>
-          <div className='w-52 h-52 bg-gray-200 mx-auto flex items-center justify-center'>
-            {/* <img src={customUrlQrPath} alt='QR Code' /> */}
-            QR 코드 서비스 준비중입니다.
+          <div className='w-52 h-52 mx-auto flex items-center justify-center'>
+            {/* TODO : QR 내부에 우리 아이콘 넣기 */}
+            <QRCode errorLevel='H' value={defaultUrl} icon='' size={200} />
           </div>
         </div>
 
