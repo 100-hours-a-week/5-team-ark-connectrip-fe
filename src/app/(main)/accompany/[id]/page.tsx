@@ -26,6 +26,7 @@ import {
 } from '@/app/utils/fetchUtils' // 유틸리티 함수 import
 import { formatToUtcDate } from '@/app/utils/dateUtils'
 import { AccompanyStatus, RecruitmentStatus } from '@/types'
+import Link from 'next/link'
 
 export default function AccompanyDetailPage() {
   const { id } = useParams()
@@ -167,7 +168,11 @@ export default function AccompanyDetailPage() {
 
       <div className='w-full p-5 flex flex-col justify-start items-start mb-[80px]'>
         <div className='flex items-center justify-between w-full mb-2'>
-          <h1 className='text-lg  font-medium'>동행 게시판</h1>
+          <Link href='/accompany'>
+            <h1 className='text-sm cursor-pointer text-main hover:font-bold'>
+              메인페이지로 돌아가기
+            </h1>
+          </Link>
           <button onClick={openModal} className='cursor-pointer'>
             <ShareAltOutlined />
           </button>
@@ -324,7 +329,7 @@ export default function AccompanyDetailPage() {
           ))}
         </div>
       </div>
-      <div className='px-4 py-2 fixed  w-full md:w-[768px] bg-white bottom-[60px] z-10'>
+      <div className='px-4 py-2 fixed  w-full md:w-[500px] bg-white bottom-[60px] z-10'>
         <div className='flex items-center'>
           <input
             type='text'

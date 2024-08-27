@@ -16,7 +16,7 @@ const CarouselComponent: React.FC = () => {
   ]
 
   return (
-    <Carousel afterChange={onChange} autoplay autoplaySpeed={4000}>
+    <Carousel afterChange={onChange} autoplay autoplaySpeed={4000} draggable>
       {bannerImages.map((image, index) => (
         <div key={index} className='relative w-full rounded-xl'>
           <img
