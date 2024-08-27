@@ -30,13 +30,11 @@ export default function EditAccompanyPage() {
             customUrl: post.customUrl,
           })
         }
-      } catch {
-        showError('게시글 정보를 불러오는 중 오류가 발생했습니다.')
-      }
+      } catch {}
     }
 
     loadPostData()
-  }, [id, showError])
+  }, [id])
 
   const handleFinish = async (values: FormValues) => {
     try {
