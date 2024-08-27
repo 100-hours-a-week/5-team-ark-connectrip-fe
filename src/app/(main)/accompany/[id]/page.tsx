@@ -174,7 +174,7 @@ export default function AccompanyDetailPage() {
         </div>
         <h2 className='text-lg font-semibold mb-3 break-all'>{post.title}</h2>
         {/* 프로필 섹션 */}
-        <div className='flex items-center mb-1 w-full'>
+        <div className='flex items-center mb-1'>
           <ProfileIcon
             src={post.profileImagePath}
             size={40}
@@ -283,7 +283,10 @@ export default function AccompanyDetailPage() {
             </div>
           )}
           {comments.map((comment) => (
-            <div key={comment.id} className='flex items-start mb-4 flex-1'>
+            <div
+              key={comment.id}
+              className='flex items-start mb-4 flex-1 w-full'
+            >
               <ProfileIcon
                 src={comment.memberProfileImage}
                 size={35}

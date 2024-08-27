@@ -50,21 +50,23 @@ const BottomNav: React.FC = () => {
   return (
     <div className='fixed bottom-0 w-full md:w-[768px] bg-white shadow-md flex justify-around items-center p-2 z-10'>
       {tabs.map((tab) => (
-        <div
-          key={tab.name}
-          className='flex flex-col items-center cursor-pointer'
-          onClick={() => handleTabClick(tab.path)}
-        >
-          <tab.Icon
-            color={activeTab === tab.name ? 'text-main' : 'text-secondary'}
-          />
-          <span
-            className={`text-sm ${
-              activeTab === tab.name ? 'text-main' : 'text-secondary'
-            }`}
+        <div className='w-[52px]'>
+          <div
+            key={tab.name}
+            className='flex flex-col items-center cursor-pointer'
+            onClick={() => handleTabClick(tab.path)}
           >
-            {tab.label}
-          </span>
+            <tab.Icon
+              color={activeTab === tab.name ? 'text-main' : 'text-secondary'}
+            />
+            <span
+              className={`text-sm ${
+                activeTab === tab.name ? 'text-main' : 'text-secondary'
+              }`}
+            >
+              {tab.label}
+            </span>
+          </div>
         </div>
       ))}
     </div>
