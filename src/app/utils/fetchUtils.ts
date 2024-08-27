@@ -1,10 +1,6 @@
 // utils/fetchUtils.ts
 import { api } from '@/app/utils/api'
-import {
-  formatToUtcDate,
-  formatShortDateFromUtc,
-  formatCreatedAt,
-} from '@/app/utils/dateUtils'
+import { formatToUtcDate, formatShortDateFromUtc } from '@/app/utils/dateUtils'
 import { Comment } from '@/interfaces/index'
 
 // 게시글 데이터를 가져오는 유틸리티 함수
@@ -58,13 +54,24 @@ export const deletePost = async (postId: number) => {
   }
 }
 
+// 채팅방 나가기 유틸리티 함수
+export const leaveChatRoom = async (chatRoomId: number) => {
+  try {
+    const response = await api.post(`/api/v1/chatRoom/${chatRoomId}/exit`, {})
+    return response
+  } catch (error) {
+    console.error('Failed to leave chat room:', error)
+    throw new Error('채팅방 나가기에 실패했습니다.')
+  }
+}
+
 // 댓글 데이터를 가져오는 유틸리티 함수
 export const fetchComments = async (postId: number) => {
   try {
     const commentData = await api.get(`/api/v1/comment/${postId}`)
     return commentData.map((comment: Comment) => ({
       ...comment,
-      createdDate: formatCreatedAt(comment.createdAt),
+      createdDate: formatToUtcDate(comment.createdAt),
     }))
   } catch (error) {
     console.error('Failed to fetch comments:', error)

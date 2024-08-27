@@ -7,20 +7,13 @@ import { useCustomMessage } from '@/app/utils/alertUtils'
 import { formatFormData } from '@/app/utils/formUtils'
 import AccompanyForm from '@/app/components/accompany/AccompanyForm'
 import { api } from '@/app/utils/api'
-import dayjs from 'dayjs'
+import { FormValues } from '@/interfaces'
 
 export default function CreateAccompanyPage() {
   const router = useRouter()
   const { contextHolder, showSuccess, showError } = useCustomMessage()
 
-  const handleFinish = async (values: {
-    title: string
-    accompanyArea: string
-    startDate: dayjs.Dayjs | null
-    endDate: dayjs.Dayjs | null
-    content: string
-    customUrl: string | null
-  }) => {
+  const handleFinish = async (values: FormValues) => {
     try {
       const formData = formatFormData(values)
       await api.post(`/api/v1/accompany/posts`, formData)

@@ -78,7 +78,7 @@ export default function Home() {
   }
 
   return (
-    <div className='w-full p-6'>
+    <div className='w-full p-6 mb-6'>
       {/* 페이지 헤더 */}
       <div className='flex items-center justify-between mb-4'>
         <h1 className='text-lg font-bold text-black'>동행 게시판</h1>
@@ -116,7 +116,7 @@ export default function Home() {
       </button>
 
       {/* 게시글 리스트 또는 "첫번째 게시글을 작성해보세요!" 메시지 */}
-      <div className='container mx-auto mt-4 mb-10'>
+      <div className='container mx-auto mt-4 mb-10 '>
         {posts.length > 0 ? (
           posts.map(({ id, ...postProps }) => (
             <div key={id} onClick={() => handleCardClick(id)}>

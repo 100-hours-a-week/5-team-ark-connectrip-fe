@@ -1,25 +1,14 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { StaticImageData } from 'next/image'
 import CalendarIcon from '../Icon/CalendarIcon'
 import PinIcon from '../Icon/PinIcon'
 import ProfileIcon from '../common/ProfileIcon'
 import InfoRow from './InfoRow'
-import { formatShortDate } from '../../utils/dateUtils'
 import { truncateText } from '../../utils/textUtils'
 import { useTimeStamp } from '../../hooks/useTimeStamp'
-
-interface PostCardProps {
-  title: string
-  content: string
-  startDate?: string
-  endDate?: string
-  accompanyArea: string
-  createdAt: string
-  nickname: string
-  profileImagePath: StaticImageData | string | null
-}
+import { formatShortDateFromUtc } from '../../utils/dateUtils'
+import { PostCardProps } from '@/interfaces'
 
 export default function PostCard({
   title,
@@ -39,10 +28,10 @@ export default function PostCard({
 
   useEffect(() => {
     if (startDate) {
-      setFormattedStartDate(formatShortDate(startDate))
+      setFormattedStartDate(formatShortDateFromUtc(startDate))
     }
     if (endDate) {
-      setFormattedEndDate(formatShortDate(endDate))
+      setFormattedEndDate(formatShortDateFromUtc(endDate))
     }
   }, [createdAt, startDate, endDate])
 
@@ -64,7 +53,7 @@ export default function PostCard({
 
       <div className='flex justify-between gap-2 text-sm text-gray-50 mt-1'>
         <div className='flex gap-2 text-secondary'>
-          {/* 조건부 렌더링: startDate와 endDate가 존재할 때만 출력 */}
+          {/* 조건부 렌더링: startDate와 endDate가 존재하지 않을때만 출력 */}
           {!startDate && !endDate && (
             <InfoRow icon={<CalendarIcon />} text='미정' />
           )}

@@ -25,6 +25,7 @@ export interface GroupCardProps {
 export interface Post {
   id: number
   memberId: number
+  leaderId: number
   title: string
   profileImagePath: string
   nickname: string
@@ -35,6 +36,17 @@ export interface Post {
   content: string
   customUrl: string
   urlQrPath: string
+}
+
+export interface PostCardProps {
+  title: string
+  content: string
+  startDate?: string
+  endDate?: string
+  accompanyArea: string
+  createdAt: string
+  nickname: string
+  profileImagePath: string | null
 }
 
 export interface PrevPost {
@@ -93,4 +105,13 @@ export interface CalendarIconProps {
   width?: number
   height?: number
   fill?: string
+}
+
+// 회원가입 폼 값 인터페이스
+export interface SignupFormValues {
+  nickname: string
+  birthDate: string
+  gender: 'male' | 'female'
+  privacyPolicy: boolean // 개인정보 처리방침 동의 여부
+  termsOfService: boolean // 이용약관 동의 여부
 }

@@ -24,7 +24,8 @@ import {
   fetchPendingStatus,
   applyForAccompany,
 } from '@/app/utils/fetchUtils' // 유틸리티 함수 import
-import { formatCreatedAt } from '@/app/utils/dateUtils'
+import { formatToUtcDate } from '@/app/utils/dateUtils'
+import { AccompanyStatus, RecruitmentStatus } from '@/types'
 
 export default function AccompanyDetailPage() {
   const { id } = useParams()
@@ -38,10 +39,10 @@ export default function AccompanyDetailPage() {
   // 수정할 댓글 ID
   const [editCommentId, setEditCommentId] = useState<number | null>(null)
   // 동행 신청 상태
-  const [pendingStatus, setPendingStatus] = useState<string>('NONE')
+  const [pendingStatus, setPendingStatus] = useState<AccompanyStatus>('NONE')
   // 게시글 모집 상태
   const [recruitmentStatus, setRecruitmentStatus] =
-    useState<string>('PROGRESSING')
+    useState<RecruitmentStatus>('PROGRESSING')
 
   const { userId } = useAuthStore()
   const { contextHolder, showSuccess, showWarning } = useCustomMessage()
@@ -67,10 +68,7 @@ export default function AccompanyDetailPage() {
         // 게시글 데이터 fetch
         const postData = await fetchPost(postId)
         setPost(postData)
-        // setRecruitmentStatus(postData.recruitmentStatus)
-        // api 연결 전 임시
-        setRecruitmentStatus('PROGRESSING')
-
+        setRecruitmentStatus(postData.status)
         // 동행 신청 상태 fetch
         const status = await fetchPendingStatus(postId)
         setPendingStatus(status)
@@ -175,9 +173,8 @@ export default function AccompanyDetailPage() {
           </button>
         </div>
         <h2 className='text-lg font-semibold mb-3 break-all'>{post.title}</h2>
-
         {/* 프로필 섹션 */}
-        <div className='flex items-center mb-1 w-full'>
+        <div className='flex items-center mb-1'>
           <ProfileIcon
             src={post.profileImagePath}
             size={40}
@@ -201,7 +198,6 @@ export default function AccompanyDetailPage() {
             </div>
           )}
         </div>
-
         {/* 동행 지역 및 날짜 정보 */}
         <div className='w-full overflow-x-auto no-scrollbar mb-4 mt-2'>
           <div className='flex items-center space-x-3'>
@@ -232,10 +228,44 @@ export default function AccompanyDetailPage() {
             )}
           </div>
         </div>
-
         <div className='text-gray-700 mb-4 whitespace-pre-wrap text-justify p-1'>
           {post.content}
         </div>
+        {/* //TODO : 동행 수락/거절 기능 생성시까지 노출 가림 */}
+        {/* {recruitmentStatus === 'PROGRESSING' &&
+          pendingStatus !== 'REJECTED' && (
+            <>
+              {pendingStatus === 'EXIT' ? (
+                <button
+                  className='w-full bg-gray-400 text-white py-2 px-3 rounded-full text-sm'
+                  onClick={() => showWarning('나가기가 완료된 동행글입니다.')}
+                >
+                  나가기가 완료된 동행글입니다.
+                </button>
+              ) : post.memberId.toString() === userId &&
+                pendingStatus === 'NONE' &&
+                post.memberId !== post.leaderId ? (
+                <button
+                  className='w-full bg-gray-400 text-white py-2 px-3 rounded-full text-sm'
+                  onClick={() => showWarning('나가기가 완료된 동행글입니다.')}
+                >
+                  나가기가 완료된 동행글입니다.
+                </button>
+              ) : (
+                <button
+                  className='w-full bg-main text-white py-2 px-3 rounded-full text-sm'
+                  onClick={handleButtonClick}
+                >
+                  {pendingStatus === 'ACCEPTED' || pendingStatus === 'NONE'
+                    ? '채팅방으로 이동'
+                    : pendingStatus === 'PENDING'
+                      ? '동행 승인 대기'
+                      : '동행 신청'}
+                </button>
+              )}
+            </>
+          )} */}
+
         {recruitmentStatus !== 'PROGRESSING' && (
           <button
             className='w-full bg-gray-400 text-white py-2 px-3 rounded-full text-sm'
@@ -245,20 +275,6 @@ export default function AccompanyDetailPage() {
           </button>
         )}
 
-        {pendingStatus !== 'REJECTED' &&
-          recruitmentStatus === 'PROGRESSING' && (
-            <button
-              className='w-full bg-main text-white py-2 px-3 rounded-full text-sm'
-              onClick={handleButtonClick}
-            >
-              {pendingStatus === 'ACCEPTED' || pendingStatus === 'NONE'
-                ? '채팅방으로 이동'
-                : pendingStatus === 'PENDING'
-                  ? '동행 승인 대기'
-                  : '동행 신청'}
-            </button>
-          )}
-
         <div className='mt-8 w-full'>
           <h2 className='text-[18px] font-bold mb-4'>댓글</h2>
           {!comments.length && (
@@ -267,7 +283,10 @@ export default function AccompanyDetailPage() {
             </div>
           )}
           {comments.map((comment) => (
-            <div key={comment.id} className='flex items-start mb-4 flex-1'>
+            <div
+              key={comment.id}
+              className='flex items-start mb-4 flex-1 w-full'
+            >
               <ProfileIcon
                 src={comment.memberProfileImage}
                 size={35}
@@ -277,7 +296,7 @@ export default function AccompanyDetailPage() {
                 <p className='font-semibold'>{comment.memberNickname}</p>
                 <div className='flex justify-between items-center '>
                   <p className='text-sm text-gray-500'>
-                    {formatCreatedAt(comment.createdAt)}
+                    {formatToUtcDate(comment.createdAt)}
                   </p>
 
                   {comment.memberId.toString() === userId && ( // 댓글 작성자만 수정/삭제 버튼 표시
