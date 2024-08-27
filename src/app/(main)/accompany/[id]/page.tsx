@@ -322,7 +322,7 @@ export default function AccompanyDetailPage() {
           ))}
         </div>
       </div>
-      <div className='px-4 py-2 fixed  w-full bg-white bottom-[60px] z-10'>
+      <div className='px-4 py-2 fixed  w-full md:w-[768px] bg-white bottom-[60px] z-10'>
         <div className='flex items-center'>
           <input
             type='text'
