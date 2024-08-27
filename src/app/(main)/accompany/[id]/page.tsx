@@ -167,7 +167,7 @@ export default function AccompanyDetailPage() {
 
       <div className='w-full p-5 flex flex-col justify-start items-start mb-[80px]'>
         <div className='flex items-center justify-between w-full mb-2'>
-          <h1 className='text-lg font-bold text-main'>동행 게시판</h1>
+          <h1 className='text-lg  font-medium'>동행 게시판</h1>
           <button onClick={openModal} className='cursor-pointer'>
             <ShareAltOutlined />
           </button>
@@ -185,14 +185,17 @@ export default function AccompanyDetailPage() {
             <p className='text-sm text-gray-500'>{post.createdAt}</p>
           </div>
           {post.memberId.toString() === userId && ( // 게시글 작성자만 수정/삭제 버튼 표시
-            <div className='flex gap-2'>
+            <div className='flex gap-4'>
               <button
                 onClick={() => router.push(`/accompany/edit/${id}`)}
-                className='text-sm text-main'
+                className='text-sm text-secondary'
               >
                 수정
               </button>
-              <button className='text-sm text-main' onClick={handleDeletePost}>
+              <button
+                className='text-sm text-secondary'
+                onClick={handleDeletePost}
+              >
                 삭제
               </button>
             </div>
@@ -231,8 +234,7 @@ export default function AccompanyDetailPage() {
         <div className='text-gray-700 mb-4 whitespace-pre-wrap text-justify p-1'>
           {post.content}
         </div>
-        {/* //TODO : 동행 수락/거절 기능 생성시까지 노출 가림 */}
-        {/* {recruitmentStatus === 'PROGRESSING' &&
+        {recruitmentStatus === 'PROGRESSING' &&
           pendingStatus !== 'REJECTED' && (
             <>
               {pendingStatus === 'EXIT' ? (
@@ -264,7 +266,7 @@ export default function AccompanyDetailPage() {
                 </button>
               )}
             </>
-          )} */}
+          )}
 
         {recruitmentStatus !== 'PROGRESSING' && (
           <button
@@ -300,15 +302,15 @@ export default function AccompanyDetailPage() {
                   </p>
 
                   {comment.memberId.toString() === userId && ( // 댓글 작성자만 수정/삭제 버튼 표시
-                    <div className='flex gap-2'>
+                    <div className='flex gap-4'>
                       <button
-                        className='text-sm text-main'
+                        className='text-sm text-secondary'
                         onClick={() => handleCommentModifyClick(comment.id)}
                       >
                         수정
                       </button>
                       <button
-                        className='text-sm text-main'
+                        className='text-sm text-secondary'
                         onClick={() => handleDeleteComment(comment.id)}
                       >
                         삭제

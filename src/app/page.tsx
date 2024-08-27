@@ -2,7 +2,7 @@
 'use client'
 
 import React, { Suspense } from 'react'
-import Home from './with-search'
+import Home from '@/app/with-search'
 
 export default function HomeWithSuspense() {
   return (
