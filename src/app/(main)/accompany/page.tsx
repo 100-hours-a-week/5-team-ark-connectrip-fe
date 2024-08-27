@@ -9,6 +9,7 @@ import { UpCircleFilled } from '@ant-design/icons'
 import LoadingSpinner from '@/app/components/common/LoadingSpinner'
 import { api } from '@/app/utils/api'
 import { PrevPost } from '@/interfaces'
+import CarouselComponent from '@/app/components/accompany/CarouselComponent'
 
 // 게시글 타입 정의
 
@@ -79,14 +80,15 @@ export default function Home() {
 
   return (
     <div className='w-full p-6 mb-6'>
+      {/* 이미지 슬라이더 */}
+      <CarouselComponent />
       {/* 페이지 헤더 */}
-      <div className='flex items-center justify-between mb-4'>
-        <h1 className='text-lg font-bold text-black'>동행 게시판</h1>
+      <div className='flex items-center justify-between my-4'>
+        <h1 className='text-lg font-bold text-black mx-1'>동행 게시판</h1>
       </div>
-
       {/* 검색 바와 게시글 등록 버튼 */}
       <div className='flex items-center mb-2 gap-2 h-[40px]'>
-        <div className='flex items-center w-full h-[40px] border-2 border-main p-2 rounded-full flex-grow'>
+        <div className='flex items-center w-full h-[40px] border border-main p-2 rounded-full flex-grow'>
           <SearchIcon />
           <input
             type='text'
@@ -106,7 +108,6 @@ export default function Home() {
           게시글 등록 +
         </button>
       </div>
-
       {/* 페이지 상단으로 이동 버튼 */}
       <button
         className='fixed right-[10%] bottom-[10%] bg-white rounded-full cursor-pointer'
@@ -114,7 +115,6 @@ export default function Home() {
       >
         <UpCircleFilled style={{ color: 'var(--main)', fontSize: '30px' }} />
       </button>
-
       {/* 게시글 리스트 또는 "첫번째 게시글을 작성해보세요!" 메시지 */}
       <div className='container mx-auto mt-4 mb-10 '>
         {posts.length > 0 ? (
