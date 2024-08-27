@@ -176,7 +176,7 @@ export default function GroupDetailPage() {
       })}
       {/* 스크롤이 이동할 위치 */}
       <div ref={bottomRef}></div>
-      <div className='px-4 py-2 fixed w-full bg-white bottom-[60px] z-10'>
+      <div className='px-4 py-2 fixed w-full max-w-[500px] bg-white bottom-[60px] z-10'>
         <div className='flex items-center w-full'>
           <input
             type='text'

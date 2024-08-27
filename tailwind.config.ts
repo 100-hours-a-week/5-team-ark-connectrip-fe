@@ -56,7 +56,7 @@ const config: Config = {
         center: true,
         screens: {
           sm: '100%',
-          md: '768px',
+          md: '500px',
         },
       },
     },

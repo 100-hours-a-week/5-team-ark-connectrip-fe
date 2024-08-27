@@ -69,7 +69,7 @@ export default function Header() {
   ]
 
   return (
-    <header className='fixed top-0 w-full md:w-[768px] bg-white shadow-lg p-4 flex justify-between items-center border-b border-gray-100 z-10'>
+    <header className='fixed top-0 w-full md:w-[500px] bg-white shadow-lg p-4 flex justify-between items-center border-b border-gray-100 z-10'>
       {contextHolder}
       <div
         className='flex items-center cursor-pointer'
