@@ -36,7 +36,7 @@ export default function EditAccompanyPage() {
     }
 
     loadPostData()
-  }, [id, showError])
+  }, [id])
 
   const handleFinish = async (values: FormValues) => {
     try {
