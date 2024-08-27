@@ -2,12 +2,12 @@
 'use client'
 
 import React, { Suspense } from 'react'
-import Home from './with-search'
+import SignupPage from './signup-form'
 
 export default function HomeWithSuspense() {
   return (
     <Suspense>
-      <Home />
+      <SignupPage />
     </Suspense>
   )
 }

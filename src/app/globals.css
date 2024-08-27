@@ -7,6 +7,9 @@
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255; */
 }
+:root {
+  --main: #ff9068;
+}
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -14,6 +17,19 @@
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0; */
   }
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 body {
@@ -39,8 +55,25 @@ body {
     rgb(var(--background-start-rgb)); */
 }
 
+main {
+  flex: 1; /* 남은 공간을 차지하도록 설정 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 @layer utilities {
   /* .text-balance {
     text-wrap: balance;
   } */
+}
+
+/* 스크롤바 숨기기 */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE와 Edge */
+  scrollbar-width: none; /* Firefox */
 }

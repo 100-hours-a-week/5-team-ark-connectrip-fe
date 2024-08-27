@@ -1,5 +1,9 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import 'antd/dist/reset.css'
+import { AntdRegistry } from '@ant-design/nextjs-registry'
+import { ConfigProvider, ThemeConfig } from 'antd'
+import ClientContent from './components/common/ClientContent' // 클라이언트 전용 컴포넌트 가져오기
 
 // 메타데이터 설정
 export const metadata: Metadata = {
@@ -29,6 +33,12 @@ export const metadata: Metadata = {
   },
 }
 
+const config: ThemeConfig = {
+  token: {
+    colorPrimary: '#FF9068',
+  },
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -46,7 +56,6 @@ export default function RootLayout({
         <link
           rel='stylesheet'
           href='https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css'
-          // 웹 페이지에서 외부 리소스(예: 폰트, 이미지, 스크립트 등)를 로드할 때, 브라우저가 해당 리소스에 대해 CORS(Cross-Origin Resource Sharing) 요청을 수행하도록 지시
           crossOrigin='anonymous'
         />
         <link
@@ -60,7 +69,14 @@ export default function RootLayout({
           crossOrigin='anonymous'
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <AntdRegistry>
+          <ConfigProvider theme={config}>
+            {/* 클라이언트 전용 컴포넌트를 여기에서 사용 */}
+            <ClientContent>{children}</ClientContent>
+          </ConfigProvider>
+        </AntdRegistry>
+      </body>
     </html>
   )
 }

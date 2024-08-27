@@ -13,6 +13,12 @@
   "ignorePatterns": ["dist", ".eslintrc.cjs"],
   "parser": "@typescript-eslint/parser",
   "rules": {
-    "react-refresh/only-export-components": "off"
+    "react-refresh/only-export-components": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ]
   }
 }
