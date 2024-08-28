@@ -1,16 +1,10 @@
 import React from 'react'
 import ProfileIcon from '../common/ProfileIcon'
 import { Button } from 'antd'
-
-interface applyUsers {
-  accompanyPostId: number
-  memberId: number
-  memberNickname: string
-  profileImagePath: string
-}
+import { ApplyUsers } from '@/interfaces'
 
 interface HostContentProps {
-  applyUsers: applyUsers[] // users 데이터를 프롭스로 받음
+  applyUsers: ApplyUsers[] // users 데이터를 프롭스로 받음
 }
 
 const HostContent: React.FC<HostContentProps> = ({ applyUsers }) => {

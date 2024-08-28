@@ -7,24 +7,7 @@ import {
 } from '@ant-design/icons'
 import HostContent from './HostContent' // HostContent 컴포넌트 임포트
 import GuestContent from './GuestContent' // GuestContent 컴포넌트 임포트
-
-// ApplyUsers 인터페이스 정의
-interface ApplyUsers {
-  accompanyPostId: number
-  memberId: number
-  memberNickname: string
-  profileImagePath: string
-}
-
-// CompanionUsers 인터페이스 정의
-interface CompanionUsers {
-  chatRoomId: number
-  memberId: number
-  memberEmail: string
-  memberNickname: string
-  memberProfileImage: string | null
-  memberChatRoomStatus: string
-}
+import { ApplyUsers, CompanionUsers } from '@/interfaces'
 
 const mockData: ApplyUsers[] = [
   {
@@ -153,12 +136,7 @@ const MenuDrawer: React.FC = () => {
               key: '2',
               label: '동행 위치',
               icon: <AliwangwangOutlined />,
-              children: (
-                <GuestContent
-                  applyUsers={mockData}
-                  companionUsers={companionUsersData}
-                />
-              ), // Tab 2의 내용
+              children: <GuestContent companionUsers={companionUsersData} />, // Tab 2의 내용
             },
           ]}
         />

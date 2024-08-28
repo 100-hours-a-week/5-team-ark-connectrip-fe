@@ -115,3 +115,21 @@ export interface SignupFormValues {
   privacyPolicy: boolean // 개인정보 처리방침 동의 여부
   termsOfService: boolean // 이용약관 동의 여부
 }
+
+// ApplyUsers 인터페이스 정의
+export interface ApplyUsers {
+  accompanyPostId: number
+  memberId: number
+  memberNickname: string
+  profileImagePath: string
+}
+
+// CompanionUsers 인터페이스 정의
+export interface CompanionUsers {
+  chatRoomId: number
+  memberId: number
+  memberEmail: string
+  memberNickname: string
+  memberProfileImage: string | null
+  memberChatRoomStatus: string
+}
