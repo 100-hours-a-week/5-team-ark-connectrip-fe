@@ -74,6 +74,7 @@ jobs:
             echo "${{ secrets.ENV_FILE_DEV }}" > deploy/front/.env
             echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u ${{ secrets.GIT_USER }} --password-stdin
             cd deploy/front
+            sudo docker image prune -a -f
             sudo docker-compose -f docker-compose.front.yaml down
             sudo docker-compose -f docker-compose.front.yaml pull
             sudo docker-compose -f docker-compose.front.yaml up -d
