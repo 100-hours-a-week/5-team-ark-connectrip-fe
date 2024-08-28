@@ -4,6 +4,7 @@ import 'antd/dist/reset.css'
 import { AntdRegistry } from '@ant-design/nextjs-registry'
 import { ConfigProvider, ThemeConfig } from 'antd'
 import ClientContent from './components/common/ClientContent' // 클라이언트 전용 컴포넌트 가져오기
+import Head from 'next/head'
 
 // 메타데이터 설정
 export const metadata: Metadata = {
@@ -46,7 +47,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='ko'>
-      <head>
+      <Head>
         <meta
           name='viewport'
           content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
@@ -72,11 +73,10 @@ export default function RootLayout({
           href='https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css'
           crossOrigin='anonymous'
         />
-      </head>
+      </Head>
       <body>
         <AntdRegistry>
           <ConfigProvider theme={config}>
-            {/* 클라이언트 전용 컴포넌트를 여기에서 사용 */}
             <ClientContent>{children}</ClientContent>
           </ConfigProvider>
         </AntdRegistry>
