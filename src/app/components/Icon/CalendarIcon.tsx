@@ -5,7 +5,7 @@ import { CalendarIconProps } from '@/interfaces'
 const CalendarIcon: React.FC<CalendarIconProps> = ({
   width = 15,
   height = 16,
-  fill = '#FF9068',
+  fill = '#6B7280',
 }) => {
   return (
     <svg

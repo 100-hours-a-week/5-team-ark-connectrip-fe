@@ -17,7 +17,7 @@ const ProfileIcon: React.FC<ProfileIconProps> = ({ src, size, nickname }) => {
           style={{
             width: size,
             height: size,
-            backgroundColor: '#6d7992',
+            backgroundColor: '#919fe3',
             color: 'white',
             fontSize: size * 0.4, // 아이콘 크기에 비례하여 글자 크기를 조정
             fontWeight: 'bold',

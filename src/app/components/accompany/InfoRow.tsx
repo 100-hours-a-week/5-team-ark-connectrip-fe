@@ -18,7 +18,7 @@ const InfoRow: React.FC<InfoRowProps> = ({
   return (
     <div
       className={`flex w-auto items-center space-x-1 text-sm  ${
-        customStyle ? 'border border-[#e9a950] rounded-full px-3 py-1 ' : ''
+        customStyle ? 'border border-sub rounded-full px-3 py-1 ' : ''
       }`}
     >
       {icon}

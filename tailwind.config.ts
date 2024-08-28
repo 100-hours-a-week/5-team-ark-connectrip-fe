@@ -9,8 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        main: '#FF9068', // 메인 컬러
-        sub: '#FFF5E0', // 서브 컬러
+        main: '#74cccc', // 메인 컬러
+        sub: '#b3bbee', // 서브 컬러
         primary: '#1D4ED8', // 예시 기본 색상 (파란색)
         secondary: '#6B7280', // 예시 보조 색상 (회색)
         accent: '#F59E0B', // 예시 강조 색상 (주황색)
@@ -56,7 +56,7 @@ const config: Config = {
         center: true,
         screens: {
           sm: '100%',
-          md: '768px',
+          md: '500px',
         },
       },
     },

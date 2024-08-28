@@ -8,7 +8,7 @@
   --background-end-rgb: 255, 255, 255; */
 }
 :root {
-  --main: #ff9068;
+  --main: #74cccc;
 }
 
 @media (prefers-color-scheme: dark) {

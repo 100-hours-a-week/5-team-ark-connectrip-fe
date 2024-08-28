@@ -3,7 +3,7 @@
 
 import { useParams, useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import { ShareAltOutlined } from '@ant-design/icons'
+import { ShareAltOutlined, LeftOutlined } from '@ant-design/icons'
 import ProfileIcon from '@/app/components/common/ProfileIcon'
 import CalendarIcon from '@/app/components/Icon/CalendarIcon'
 import PinIcon from '@/app/components/Icon/PinIcon'
@@ -167,7 +167,13 @@ export default function AccompanyDetailPage() {
 
       <div className='w-full p-5 flex flex-col justify-start items-start mb-[80px]'>
         <div className='flex items-center justify-between w-full mb-2'>
-          <h1 className='text-lg font-bold text-main'>동행 게시판</h1>
+          <div
+            onClick={() => router.back()}
+            className='text-sm cursor-pointer text-secondary hover:text-black'
+          >
+            <LeftOutlined style={{ fontSize: 16 }} />
+          </div>
+
           <button onClick={openModal} className='cursor-pointer'>
             <ShareAltOutlined />
           </button>
@@ -185,14 +191,17 @@ export default function AccompanyDetailPage() {
             <p className='text-sm text-gray-500'>{post.createdAt}</p>
           </div>
           {post.memberId.toString() === userId && ( // 게시글 작성자만 수정/삭제 버튼 표시
-            <div className='flex gap-2'>
+            <div className='flex gap-4'>
               <button
                 onClick={() => router.push(`/accompany/edit/${id}`)}
-                className='text-sm text-main'
+                className='text-sm text-secondary'
               >
                 수정
               </button>
-              <button className='text-sm text-main' onClick={handleDeletePost}>
+              <button
+                className='text-sm text-secondary'
+                onClick={handleDeletePost}
+              >
                 삭제
               </button>
             </div>
@@ -231,8 +240,7 @@ export default function AccompanyDetailPage() {
         <div className='text-gray-700 mb-4 whitespace-pre-wrap text-justify p-1'>
           {post.content}
         </div>
-        {/* //TODO : 동행 수락/거절 기능 생성시까지 노출 가림 */}
-        {/* {recruitmentStatus === 'PROGRESSING' &&
+        {recruitmentStatus === 'PROGRESSING' &&
           pendingStatus !== 'REJECTED' && (
             <>
               {pendingStatus === 'EXIT' ? (
@@ -264,7 +272,7 @@ export default function AccompanyDetailPage() {
                 </button>
               )}
             </>
-          )} */}
+          )}
 
         {recruitmentStatus !== 'PROGRESSING' && (
           <button
@@ -300,15 +308,15 @@ export default function AccompanyDetailPage() {
                   </p>
 
                   {comment.memberId.toString() === userId && ( // 댓글 작성자만 수정/삭제 버튼 표시
-                    <div className='flex gap-2'>
+                    <div className='flex gap-4'>
                       <button
-                        className='text-sm text-main'
+                        className='text-sm text-secondary'
                         onClick={() => handleCommentModifyClick(comment.id)}
                       >
                         수정
                       </button>
                       <button
-                        className='text-sm text-main'
+                        className='text-sm text-secondary'
                         onClick={() => handleDeleteComment(comment.id)}
                       >
                         삭제
@@ -322,17 +330,17 @@ export default function AccompanyDetailPage() {
           ))}
         </div>
       </div>
-      <div className='px-4 py-2 fixed  w-full md:w-[768px] bg-white bottom-[60px] z-10'>
+      <div className='px-4 py-2 fixed w-full max-w-[500px] bg-white bottom-[60px] z-10'>
         <div className='flex items-center'>
           <input
             type='text'
             value={newComment}
             placeholder='댓글을 입력하세요.'
             onChange={(e) => setNewComment(e.target.value)}
-            className='flex-1 h-[35px] p-2 px-4 border border-gray-300 rounded-full focus:border-main focus:border-2 outline-none'
+            className='flex-1 w-full h-[35px] p-2 px-4 border border-gray-300 rounded-full focus:border-main focus:border-2 outline-none'
           />
           <button
-            className='ml-3 h-[35px] bg-main text-white py-0 px-5 rounded-full'
+            className='ml-3 h-[35px] bg-main text-white py-0 px-5 rounded-full whitespace-nowrap'
             onClick={handleCommentSubmit}
           >
             등록

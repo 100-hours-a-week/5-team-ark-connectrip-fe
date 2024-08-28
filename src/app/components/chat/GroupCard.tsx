@@ -55,7 +55,7 @@ export default function GroupCard({
   ]
 
   return (
-    <div className='bg-white p-4 rounded-lg shadow-md flex flex-col mb-4 cursor-pointer'>
+    <div className='bg-white p-4 rounded-lg border-solid border border-[#e7e4e4] hover:border-main flex flex-col mb-4 cursor-pointer'>
       <div className='flex justify-between mb-1'>
         <h2 className='text-lg font-semibold'>{accompanyPostTitle}</h2>
         <div
@@ -81,7 +81,7 @@ export default function GroupCard({
         <InfoRow icon={<PinIcon />} text={accompanyArea} />
         <div className='text-sm text-secondary'>{memberNumber}</div>
       </div>
-      <div className='flex justify-between gap-2 text-sm text-gray-500 mt-1'>
+      <div className='flex justify-between items-end gap-2 text-sm text-gray-500 mt-1'>
         {lastChatMessage ? (
           <p className='text-sm text-gray-500'>
             {truncateText(lastChatMessage, 40)}
