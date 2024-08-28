@@ -3,7 +3,6 @@
 import React, { Suspense } from 'react'
 import LoadingSpinner from '@/app/components/common/LoadingSpinner'
 import MenuDrawer from '@/app/components/chat/MenuDrawer'
-import Link from 'next/link'
 import { LeftOutlined } from '@ant-design/icons'
 import { useRouter } from 'next/navigation'
 
