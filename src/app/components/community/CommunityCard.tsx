@@ -1,6 +1,5 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
 import ProfileIcon from '../common/ProfileIcon'
 import { truncateText } from '../../utils/textUtils'
 import { useTimeStamp } from '../../hooks/useTimeStamp'
@@ -17,7 +16,6 @@ export default function CommunityCard({
   const timeAgo = useTimeStamp(createdAt)
 
   return (
-    // <div className='bg-white p-4 rounded-lg shadow-md flex flex-col  mb-4 cursor-pointer '>
     <div className='box-border bg-white border-solid border border-[#e7e4e4] hover:border-main  p-4 rounded-lg  flex flex-col  mb-4 cursor-pointer '>
       <div className='flex items-center space-x-2 mb-1'>
         <ProfileIcon
