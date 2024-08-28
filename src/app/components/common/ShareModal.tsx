@@ -35,6 +35,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
           }
         })
       } catch (error) {
+        console.log('QR 코드 생성 중 오류 발생:', error)
         showWarning('QR 코드를 생성하는 중 오류가 발생했습니다.')
       }
     }
@@ -48,6 +49,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
         await navigator.clipboard.write([item])
         showSuccess('QR 코드가 클립보드에 복사되었습니다!')
       } catch (error) {
+        console.error('클립보드 복사 중 오류 발생:', error)
         showWarning(
           'Safari 브라우저가 클립보드 복사를 지원하지 않습니다. Chrome 브라우저를 사용해주세요.'
         )

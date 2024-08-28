@@ -33,7 +33,7 @@ const HostContent: React.FC<GuestContent> = ({ companionUsers }) => {
           const mapNickname = nickname || '사용자'
           const kakaoMapLink = `https://map.kakao.com/link/map/${mapNickname}님의_현재위치,${latitude},${longitude}`
           setLocationLink(kakaoMapLink)
-          console.log(111)
+          // TODO : 채팅방에 링크 전송 기능 채팅과 연결 후 주석 삭제
           console.log(kakaoMapLink)
         } else {
           message.error('위치 추적이 비활성화되어 있습니다.')
