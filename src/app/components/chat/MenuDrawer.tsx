@@ -25,7 +25,7 @@ const MenuDrawer: React.FC = () => {
         className='pl-5 text-secondary hover:text-black cursor-pointer'
         onClick={showDrawer}
       >
-        <MenuOutlined />
+        <MenuOutlined style={{ fontSize: 20 }} />
       </div>
       <Drawer
         title='동행 채팅방'

@@ -68,6 +68,11 @@ export default function Header() {
     { label: '내 정보 수정', onClick: handleProfileEdit },
   ]
 
+  // /chat/[id] 경로에서는 헤더를 숨김
+  if (pathname.startsWith('/chat/')) {
+    return null
+  }
+
   return (
     <header className='fixed top-0 w-full max-w-[500px] bg-white shadow-lg p-4 flex justify-between items-center border-b border-gray-100 z-10'>
       {contextHolder}

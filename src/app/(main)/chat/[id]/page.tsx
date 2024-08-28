@@ -144,7 +144,7 @@ export default function GroupDetailPage() {
   }, [])
 
   return (
-    <div className='bg-white w-full h-full mb-[86px] mt-8'>
+    <div className='bg-white w-full h-full mb-[110px] mt-[-20px]'>
       {messages.map((msg) => {
         const currentDate = format(new Date(msg.createdAt), 'yyyy-MM-dd')
         const showDateSeparator = currentDate !== lastDate

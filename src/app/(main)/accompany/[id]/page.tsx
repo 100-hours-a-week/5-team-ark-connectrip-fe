@@ -3,7 +3,7 @@
 
 import { useParams, useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import { ShareAltOutlined } from '@ant-design/icons'
+import { ShareAltOutlined, LeftOutlined } from '@ant-design/icons'
 import ProfileIcon from '@/app/components/common/ProfileIcon'
 import CalendarIcon from '@/app/components/Icon/CalendarIcon'
 import PinIcon from '@/app/components/Icon/PinIcon'
@@ -26,7 +26,6 @@ import {
 } from '@/app/utils/fetchUtils' // 유틸리티 함수 import
 import { formatToUtcDate } from '@/app/utils/dateUtils'
 import { AccompanyStatus, RecruitmentStatus } from '@/types'
-import Link from 'next/link'
 
 export default function AccompanyDetailPage() {
   const { id } = useParams()
@@ -168,11 +167,13 @@ export default function AccompanyDetailPage() {
 
       <div className='w-full p-5 flex flex-col justify-start items-start mb-[80px]'>
         <div className='flex items-center justify-between w-full mb-2'>
-          <Link href='/accompany'>
-            <h1 className='text-sm cursor-pointer text-main hover:font-bold'>
-              메인페이지로 돌아가기
-            </h1>
-          </Link>
+          <div
+            onClick={() => router.back()}
+            className='text-sm cursor-pointer text-secondary hover:text-black'
+          >
+            <LeftOutlined style={{ fontSize: 16 }} />
+          </div>
+
           <button onClick={openModal} className='cursor-pointer'>
             <ShareAltOutlined />
           </button>
