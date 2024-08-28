@@ -28,11 +28,15 @@ const ShareModal: React.FC<ShareModalProps> = ({
     if (qrCodeRef.current) {
       try {
         const canvas = await html2canvas(qrCodeRef.current)
-        canvas.toBlob((blob) => {
+        canvas.toBlob(async (blob) => {
           if (blob) {
-            const item = new ClipboardItem({ 'image/png': blob })
-            navigator.clipboard.write([item])
-            showSuccess('QR 코드가 클립보드에 복사되었습니다!')
+            try {
+              const item = new ClipboardItem({ 'image/png': blob })
+              await navigator.clipboard.write([item])
+              showSuccess('QR 코드가 클립보드에 복사되었습니다!')
+            } catch (error) {
+              showSuccess('클립보드에 복사할 수 없습니다: ' + error)
+            }
           }
         })
       } catch (error) {
