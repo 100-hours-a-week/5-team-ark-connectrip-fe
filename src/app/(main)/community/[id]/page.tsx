@@ -228,7 +228,7 @@ export default function CommunityDetailPage() {
             className='flex-1 h-[35px] p-2 px-4 border border-gray-300 rounded-full focus:border-main focus:border-2 outline-none'
           />
           <button
-            className='ml-3 h-[35px] bg-main text-white py-0 px-5 rounded-full'
+            className='ml-3 h-[35px] bg-main text-white py-0 px-5 rounded-full whitespace-nowrap'
             onClick={handleCommentSubmit}
           >
             등록

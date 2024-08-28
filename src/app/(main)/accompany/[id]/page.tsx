@@ -329,7 +329,7 @@ export default function AccompanyDetailPage() {
           ))}
         </div>
       </div>
-      <div className='px-4 py-2 fixed  w-full md:w-[500px] bg-white bottom-[60px] z-10'>
+      <div className='px-4 py-2 fixed w-full max-w-[500px] bg-white bottom-[60px] z-10'>
         <div className='flex items-center'>
           <input
             type='text'
@@ -339,7 +339,7 @@ export default function AccompanyDetailPage() {
             className='flex-1 h-[35px] p-2 px-4 border border-gray-300 rounded-full focus:border-main focus:border-2 outline-none'
           />
           <button
-            className='ml-3 h-[35px] bg-main text-white py-0 px-5 rounded-full'
+            className='ml-3 h-[35px] bg-main text-white py-0 px-5 rounded-full whitespace-nowrap'
             onClick={handleCommentSubmit}
           >
             등록

@@ -48,7 +48,7 @@ const BottomNav: React.FC = () => {
   }
 
   return (
-    <div className='fixed bottom-0 w-full md:w-[500px] bg-white shadow-md flex justify-around items-center p-2 z-10'>
+    <div className='fixed bottom-0 w-full max-w-[500px] bg-white shadow-md flex justify-around items-center p-2 z-10'>
       {tabs.map((tab) => (
         <div className='w-[52px]'>
           <div
