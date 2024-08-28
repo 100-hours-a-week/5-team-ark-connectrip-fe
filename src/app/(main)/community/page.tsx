@@ -20,9 +20,9 @@ export default function CommunityHome() {
       try {
         const data = searchQuery
           ? await api.get(
-              `/api/v1/community/posts/search?query=${encodeURIComponent(searchQuery)}`
+              `/api/v1/accompany/posts/search?query=${encodeURIComponent(searchQuery)}`
             )
-          : await api.get('/api/v1/community/posts')
+          : await api.get('/api/v1/accompany/posts')
         setPosts(data)
         setLoading(false)
       } catch (error) {
@@ -44,7 +44,7 @@ export default function CommunityHome() {
 
   return (
     <div className='w-full p-6 mb-6'>
-      <div className='flex items-center justify-between my-4'>
+      <div className='flex items-center justify-between mt-1 mb-4'>
         <h1 className='text-lg font-bold text-black mx-1'>커뮤니티 게시판</h1>
       </div>
       <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
