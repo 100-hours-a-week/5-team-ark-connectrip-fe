@@ -183,10 +183,10 @@ export default function GroupDetailPage() {
             // value={newComment}
             placeholder='메시지를 입력하세요.'
             // onChange={(e) => setNewComment(e.target.value)}
-            className='flex-1 h-[35px] p-2 px-4 border border-gray-300 rounded-full focus:border-main focus:border-2 outline-none'
+            className='flex-1 w-full h-[35px] p-2 px-4 border border-gray-300 rounded-full focus:border-main focus:border-2 outline-none'
           />
           <button
-            className='ml-3 h-[35px] bg-sub text-white py-0 px-5 rounded-full'
+            className='ml-3 h-[35px] bg-sub text-white py-0 px-5 rounded-full text-sm whitespace-nowrap'
             // onClick={handleCommentSubmit}
           >
             전송
