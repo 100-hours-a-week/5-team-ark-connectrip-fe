@@ -1,23 +1,53 @@
 import React from 'react'
+import ProfileIcon from '../common/ProfileIcon'
+import { Button } from 'antd'
 
-const HostContent: React.FC = () => {
+interface applyUsers {
+  accompanyPostId: number
+  memberId: number
+  memberNickname: string
+  profileImagePath: string
+}
+
+interface HostContentProps {
+  applyUsers: applyUsers[] // users 데이터를 프롭스로 받음
+}
+
+const HostContent: React.FC<HostContentProps> = ({ applyUsers }) => {
   return (
     <div>
-      <div>
-        <h1>동행 상태 : 모집 중</h1>
-        <h2>동행 신청 목록</h2>
-        <p>
-          모집이 완료되었다면 모집 종료를 클릭해주세요! 더 이상 신청 내역이
-          보이지 않습니다.
-        </p>
-        {/* 여기에 동행 신청 목록 내용을 추가 */}
-        <p>신청자 1</p>
-        <p>신청자 2</p>
-        <br />
-        <h2>대화 상대</h2>
-        <p>닉네임 1</p>
-        <p>닉네임 2</p>
-      </div>
+      {/* 동행 신청 목록 컴포넌트 */}
+      {applyUsers.map((user) => (
+        <div key={user.memberId} className='mb-4'>
+          <div className='flex justify-between items-center'>
+            <div className='flex gap-2 justify-center items-center'>
+              <ProfileIcon
+                src={user.profileImagePath}
+                size={33}
+                nickname={user.memberNickname}
+              />
+              <div className='text-m font-semibold'>{user.memberNickname}</div>
+            </div>
+            <div className='flex gap-2'>
+              <Button type='primary' className='rounded-full'>
+                수락
+              </Button>
+              <Button type='default' className='rounded-full'>
+                거절
+              </Button>
+            </div>
+          </div>
+        </div>
+      ))}
+
+      <p className='p-3 text-center text-sm'>
+        모집이 완료되었다면 모집 종료를 클릭해주세요!
+        <br />더 이상 신청 내역이 보이지 않습니다.
+      </p>
+      <Button type='primary' className='w-full rounded-full'>
+        모집 종료
+      </Button>
+      <br />
     </div>
   )
 }
