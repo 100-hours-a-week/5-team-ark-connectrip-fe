@@ -36,7 +36,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
           }
         })
       } catch (error) {
-        showSuccess('QR 코드를 복사하는 중 오류가 발생했습니다.')
+        showSuccess(`${error}, QR 코드를 복사하는 중 오류가 발생했습니다.`)
       }
     }
   }

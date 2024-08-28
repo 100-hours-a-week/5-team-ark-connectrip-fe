@@ -81,7 +81,7 @@ export default function GroupCard({
         <InfoRow icon={<PinIcon />} text={accompanyArea} />
         <div className='text-sm text-secondary'>{memberNumber}</div>
       </div>
-      <div className='flex justify-between gap-2 text-sm text-gray-500 mt-1'>
+      <div className='flex justify-between items-end gap-2 text-sm text-gray-500 mt-1'>
         {lastChatMessage ? (
           <p className='text-sm text-gray-500'>
             {truncateText(lastChatMessage, 40)}

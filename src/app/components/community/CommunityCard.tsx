@@ -32,7 +32,7 @@ export default function CommunityCard({
           {truncateText(content, 35)}
         </div>
 
-        <div className='flex justify-between gap-2 text-sm text-gray-50 mt-1 text-s text-gray-500 whitespace-nowrap'>
+        <div className='flex justify-between gap-2 text-s text-gray-50 mt-1 text-s text-gray-500 whitespace-nowrap'>
           {timeAgo}
         </div>
       </div>
