@@ -25,7 +25,7 @@ const MenuDrawer: React.FC = () => {
         className='pl-5 text-secondary hover:text-black cursor-pointer'
         onClick={showDrawer}
       >
-        <MenuOutlined style={{ fontSize: 20 }} />
+        <MenuOutlined style={{ fontSize: 2 }} />
       </div>
       <Drawer
         title='동행 채팅방'
@@ -33,7 +33,7 @@ const MenuDrawer: React.FC = () => {
         closable={true}
         onClose={onClose}
         open={open}
-        bodyStyle={{ padding: '0 24px' }}
+        styles={{ body: { padding: '0 24px' } }}
       >
         <Tabs
           defaultActiveKey='1'
