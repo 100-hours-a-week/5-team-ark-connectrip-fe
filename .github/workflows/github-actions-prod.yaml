@@ -29,8 +29,8 @@ jobs:
         NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL_PROD }}
         NEXT_PUBLIC_SELF_URL: ${{ secrets.NEXT_PUBLIC_SELF_URL_PROD }}
         NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL_PROD }}
-        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN_PROD }}
+        NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN_PROD }}
 
     - name: Log in to GitHub Container Registry
       uses: docker/login-action@v3
@@ -47,8 +47,8 @@ jobs:
         --build-arg NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL_PROD }} \
         --build-arg NEXT_PUBLIC_SELF_URL=${{ secrets.NEXT_PUBLIC_SELF_URL_PROD }} \
         --build-arg NEXT_PUBLIC_BASE_URL=${{ secrets.NEXT_PUBLIC_BASE_URL_PROD }} \
-        --build-arg SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
-        --build-arg NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }} \
+        --build-arg SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN_PROD }} \
+        --build-arg NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN_PROD }} \
         -t ghcr.io/topazkang/fe-prod:latest .
 
     - name: Push Docker image to GHCR
