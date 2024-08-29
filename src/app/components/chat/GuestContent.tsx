@@ -79,6 +79,9 @@ const HostContent: React.FC<GuestContent> = ({ companionUsers }) => {
         ))}
       </div>
       <Button type='primary' className='w-full'>
+        모집 게시글로 이동
+      </Button>
+      <Button type='primary' className='w-full'>
         채팅방 나가기
       </Button>
     </div>

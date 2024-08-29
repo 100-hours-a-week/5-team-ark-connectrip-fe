@@ -50,9 +50,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
         showSuccess('QR 코드가 클립보드에 복사되었습니다!')
       } catch (error) {
         console.error('클립보드 복사 중 오류 발생:', error)
-        showWarning(
-          'Safari 브라우저가 클립보드 복사를 지원하지 않습니다. Chrome 브라우저를 사용해주세요.'
-        )
+        showWarning('클립보드에 복사할 수 없습니다.')
       }
     } else {
       showWarning('QR 코드 이미지가 아직 준비되지 않았습니다.')
