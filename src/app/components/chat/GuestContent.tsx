@@ -3,6 +3,8 @@ import ProfileIcon from '../common/ProfileIcon'
 import { Button, Switch, message } from 'antd'
 import useAuthStore from '@/app/store/useAuthStore'
 import { CompanionUsers } from '@/interfaces'
+import { useRouter } from 'next/navigation'
+
 interface GuestContent {
   companionUsers: CompanionUsers[] // 동행 참여자 목록
 }
@@ -13,6 +15,9 @@ const HostContent: React.FC<GuestContent> = ({ companionUsers }) => {
   // TODO : 내 위치 전송 기능 채팅과 연결 후 주석 삭제
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [locationLink, setLocationLink] = useState<string | null>(null)
+  const router = useRouter()
+  // TODO : postId 값 변경 필요
+  const postId = 1
 
   // 내 위치 추적 스위치 변경 핸들러
   const handleSwitchChange = (checked: boolean) => {
@@ -78,7 +83,11 @@ const HostContent: React.FC<GuestContent> = ({ companionUsers }) => {
           </div>
         ))}
       </div>
-      <Button type='primary' className='w-full'>
+      <Button
+        type='primary'
+        className='w-full'
+        onClick={() => router.push(`/accompany/${postId}`)}
+      >
         모집 게시글로 이동
       </Button>
       <Button type='primary' className='w-full'>
