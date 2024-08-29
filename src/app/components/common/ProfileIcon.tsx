@@ -11,7 +11,7 @@ const ProfileIcon: React.FC<ProfileIconProps> = ({ src, size, nickname }) => {
   if (!src) {
     // 이미지가 없을 때
     return (
-      <div>
+      <div className='flex-shrink-0'>
         <div
           className='flex items-center justify-center rounded-full'
           style={{
@@ -30,7 +30,7 @@ const ProfileIcon: React.FC<ProfileIconProps> = ({ src, size, nickname }) => {
   }
 
   return (
-    <div>
+    <div className='flex-shrink-0'>
       <Image
         src={src}
         alt='Profile'

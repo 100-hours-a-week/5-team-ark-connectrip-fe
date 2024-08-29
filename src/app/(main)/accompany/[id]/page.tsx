@@ -291,22 +291,18 @@ export default function AccompanyDetailPage() {
             </div>
           )}
           {comments.map((comment) => (
-            <div
-              key={comment.id}
-              className='flex items-start mb-4 flex-1 w-full'
-            >
+            <div className='flex items-start mb-4 w-full '>
               <ProfileIcon
                 src={comment.memberProfileImage}
                 size={35}
                 nickname={comment.memberNickname}
               />
-              <div className='ml-3 w-full'>
+              <div className='ml-3 flex-1 w-full'>
                 <p className='font-semibold'>{comment.memberNickname}</p>
                 <div className='flex justify-between items-center '>
                   <p className='text-sm text-gray-500'>
                     {formatToUtcDate(comment.createdAt)}
                   </p>
-
                   {comment.memberId.toString() === userId && ( // 댓글 작성자만 수정/삭제 버튼 표시
                     <div className='flex gap-4'>
                       <button
