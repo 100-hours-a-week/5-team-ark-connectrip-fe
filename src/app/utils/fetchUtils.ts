@@ -2,7 +2,6 @@
 import { api } from '@/app/utils/api'
 import { formatToUtcDate, formatShortDateFromUtc } from '@/app/utils/dateUtils'
 import { Comment } from '@/interfaces/index'
-import { FormValues } from '@/interfaces/index'
 
 // 게시글 데이터를 가져오는 유틸리티 함수
 export const fetchPost = async (postId: number) => {
