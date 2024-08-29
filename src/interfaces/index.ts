@@ -90,7 +90,6 @@ export interface FormValues {
   startDate: dayjs.Dayjs | null
   endDate: dayjs.Dayjs | null
   content: string
-  customUrl: string | null
 }
 
 // AccompanyForm 컴포넌트에 전달되는 props 인터페이스
