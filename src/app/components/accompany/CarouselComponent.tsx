@@ -4,9 +4,7 @@ import React from 'react'
 import { Carousel } from 'antd'
 
 const CarouselComponent: React.FC = () => {
-  const onChange = (currentSlide: number) => {
-    console.log(currentSlide)
-  }
+  const onChange = (currentSlide: number) => {}
 
   // 이미지 데이터를 배열로 정의
   const bannerImages = [
