@@ -243,7 +243,7 @@ export default function AccompanyDetailPage() {
         {recruitmentStatus === 'PROGRESSING' &&
           pendingStatus !== 'REJECTED' && (
             <>
-              {pendingStatus === 'EXIT' ? (
+              {pendingStatus === 'EXIT_ROOM' ? (
                 <button
                   className='w-full bg-gray-400 text-white py-2 px-3 rounded-full text-sm'
                   onClick={() => showWarning('나가기가 완료된 동행글입니다.')}
