@@ -1,11 +1,18 @@
 'use client'
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import MyChatContainer from '@/app/components/chat/MyChatContainer'
 import LeftChatContainer from '@/app/components/chat/LeftChatContainer'
 import DateSeparator from '@/app/components/chat/DateSeperator'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
+import { checkChatRoomEntry } from '@/app/utils/fetchUtils'
+import { useCustomMessage } from '@/app/utils/alertUtils'
+import { useRouter, usePathname } from 'next/navigation'
+import { ChatRoomEntryData } from '@/interfaces/index'
+import MenuDrawer from '@/app/components/chat/MenuDrawer'
+import LoadingSpinner from '@/app/components/common/LoadingSpinner' // 로딩 스피너 컴포넌트 추가
+import { LeftOutlined } from '@ant-design/icons'
 
 // 예시 데이터
 const messages = [
@@ -127,7 +134,7 @@ const messages = [
   },
 ]
 
-//오전/오후 형식으로 시간 변환
+// 오전/오후 형식으로 시간 변환
 function formatWithMeridiem(date: Date) {
   const hours = date.getHours()
   const meridiem = hours < 12 ? '오전' : '오후'
@@ -135,64 +142,129 @@ function formatWithMeridiem(date: Date) {
 }
 
 export default function GroupDetailPage() {
+  const [chatRoomData, setChatRoomData] = useState<ChatRoomEntryData | null>(
+    null
+  )
+  const [loading, setLoading] = useState(true) // 로딩 상태 추가
+  const { contextHolder, showWarning } = useCustomMessage()
   let lastDate = '' // 마지막으로 표시된 날짜를 저장
   const bottomRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
+  const path = usePathname()
+  const chatRoomId = parseInt(path.split('/').pop() || '0', 10)
+  const [isMember, setIsMember] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   useEffect(() => {
     // 페이지 로드 시 맨 아래로 스크롤
     bottomRef.current?.scrollIntoView({ behavior: 'auto' })
   }, [])
 
-  return (
-    <div className='bg-white w-full h-full mb-[110px] mt-[-20px]'>
-      {messages.map((msg) => {
-        const currentDate = format(new Date(msg.createdAt), 'yyyy-MM-dd')
-        const showDateSeparator = currentDate !== lastDate
-        lastDate = currentDate
+  useEffect(() => {
+    const fetchChatRoomData = async () => {
+      try {
+        if (isNaN(chatRoomId) || chatRoomId === 0) {
+          setErrorMessage('잘못된 채팅방 ID입니다.')
+          return
+        }
 
-        return (
-          <div
-            key={msg.id}
-            className='flex flex-col w-full px-4 py-1 items-center justify-center'
-          >
-            {/* 날짜 구분선을 표시 */}
-            {showDateSeparator && <DateSeparator date={msg.createdAt} />}
-            {/* 채팅 메시지 표시 */}
-            {msg.senderId === 1 ? (
-              <MyChatContainer
-                message={msg.message}
-                time={formatWithMeridiem(new Date(msg.createdAt))}
-              />
-            ) : (
-              <LeftChatContainer
-                message={msg.message}
-                time={formatWithMeridiem(new Date(msg.createdAt))}
-                nickname='세니'
-                profileSrc=''
-              />
-            )}
-          </div>
-        )
-      })}
-      {/* 스크롤이 이동할 위치 */}
-      <div ref={bottomRef}></div>
-      <div className='px-4 py-2 fixed w-full max-w-[500px] bg-white bottom-[60px] z-10'>
-        <div className='flex items-center w-full'>
-          <input
-            type='text'
-            // value={newComment}
-            placeholder='메시지를 입력하세요.'
-            // onChange={(e) => setNewComment(e.target.value)}
-            className='flex-1 w-full h-[35px] p-2 px-4 border border-gray-300 rounded-full focus:border-sub focus:border-2 outline-none'
-          />
-          <button
-            className='ml-3 h-[35px] bg-sub text-white py-0 px-5 rounded-full text-sm whitespace-nowrap'
-            // onClick={handleCommentSubmit}
-          >
-            전송
-          </button>
-        </div>
+        const response = await checkChatRoomEntry(chatRoomId)
+        if (response.message === 'SUCCESS' && !response.data.isPostDeleted) {
+          setChatRoomData(response.data)
+          setIsMember(true)
+        } else {
+          setErrorMessage('입장 권한이 없습니다.')
+        }
+      } catch (error) {
+        setErrorMessage('참여 중인 동행 채팅에만 입장할 있습니다.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchChatRoomData()
+  }, [chatRoomId])
+
+  useEffect(() => {
+    if (errorMessage) {
+      showWarning(errorMessage)
+      router.push('/chat')
+    }
+  }, [errorMessage, showWarning, router])
+
+  // 데이터 페칭 중일 때 로딩 스피너를 표시
+  if (loading) {
+    return (
+      <div className='flex justify-center items-center h-screen'>
+        <LoadingSpinner />
       </div>
-    </div>
+    )
+  }
+
+  return (
+    <>
+      {contextHolder}
+      {isMember && (
+        <div>
+          <div className='fixed top-0 left-1/2 transform -translate-x-1/2 w-full max-w-[500px] h-12 bg-white shadow-md z-10'>
+            <div className='w-full h-full flex items-center justify-between p-4'>
+              <div
+                onClick={() => router.back()}
+                className='text-sm cursor-pointer text-secondary hover:text-black'
+              >
+                <LeftOutlined style={{ fontSize: 20 }} />
+              </div>
+              {/* Menu Drawer Component */}
+              {chatRoomData && <MenuDrawer chatRoomData={chatRoomData} />}
+            </div>
+          </div>
+          <div className='bg-white w-full h-full mb-[110px] mt-[-20px]'>
+            {messages.map((msg) => {
+              const currentDate = format(new Date(msg.createdAt), 'yyyy-MM-dd')
+              const showDateSeparator = currentDate !== lastDate
+              lastDate = currentDate
+
+              return (
+                <div
+                  key={msg.id}
+                  className='flex flex-col w-full px-4 py-1 items-center justify-center'
+                >
+                  {/* 날짜 구분선을 표시 */}
+                  {showDateSeparator && <DateSeparator date={msg.createdAt} />}
+                  {/* 채팅 메시지 표시 */}
+                  {msg.senderId === 1 ? (
+                    <MyChatContainer
+                      message={msg.message}
+                      time={formatWithMeridiem(new Date(msg.createdAt))}
+                    />
+                  ) : (
+                    <LeftChatContainer
+                      message={msg.message}
+                      time={formatWithMeridiem(new Date(msg.createdAt))}
+                      nickname='세니'
+                      profileSrc=''
+                    />
+                  )}
+                </div>
+              )
+            })}
+            {/* 스크롤이 이동할 위치 */}
+            <div ref={bottomRef}></div>
+            <div className='px-4 py-2 fixed w-full max-w-[500px] bg-white bottom-[60px] z-10'>
+              <div className='flex items-center w-full'>
+                <input
+                  type='text'
+                  placeholder='메시지를 입력하세요.'
+                  className='flex-1 w-full h-[35px] p-2 px-4 border border-gray-300 rounded-full focus:border-sub focus:border-2 outline-none'
+                />
+                <button className='ml-3 h-[35px] bg-sub text-white py-0 px-5 rounded-full text-sm whitespace-nowrap'>
+                  전송
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }

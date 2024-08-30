@@ -1,7 +1,7 @@
 // utils/fetchUtils.ts
 import { api } from '@/app/utils/api'
 import { formatToUtcDate, formatShortDateFromUtc } from '@/app/utils/dateUtils'
-import { Comment } from '@/interfaces/index'
+import { Comment, ChatRoomEntryData } from '@/interfaces/index'
 
 // 게시글 데이터를 가져오는 유틸리티 함수
 export const fetchPost = async (postId: number) => {
@@ -196,5 +196,18 @@ export const rejectUser = async (postId: number, memberId: number) => {
   } catch (error) {
     console.error('Failed to reject user:', error)
     throw new Error('동행 신청을 거절하는 데 실패했습니다.')
+  }
+}
+
+// 채팅방 입장 유효성 체크 유틸리티 함수
+export const checkChatRoomEntry = async (
+  chatRoomId: number
+): Promise<{ message: string; data: ChatRoomEntryData }> => {
+  try {
+    const response = await api.get(`/api/v1/chatRoom/${chatRoomId}/enter`, {})
+    return response // 성공 시 반환되는 데이터
+  } catch (error) {
+    console.error('Failed to enter chat room:', error)
+    throw new Error('채팅방 입장에 실패했습니다.')
   }
 }

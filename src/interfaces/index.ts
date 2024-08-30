@@ -132,3 +132,12 @@ export interface CompanionUsers {
   memberProfileImage: string | null
   memberChatRoomStatus?: string
 }
+
+// ChatRoomEntryData 인터페이스 정의
+export interface ChatRoomEntryData {
+  accompanyPostId: number
+  chatRoomId: number
+  leaderId: number
+  status: 'PROGRESSING' | 'FINISHED' | 'CANCELLED' // 가능한 상태값에 따라 타입 지정
+  isPostDeleted: boolean
+}
