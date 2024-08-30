@@ -4,7 +4,7 @@
 import React, { Suspense } from 'react'
 import LoadingSpinner from '@/app/components/common/LoadingSpinner'
 
-// 이 레이아웃은 /accompany 경로의 모든 페이지에 적용됩니다.
+// 이 레이아웃은 /community 경로의 모든 페이지에 적용됩니다.
 export default function AccompanyLayout({
   children,
 }: {

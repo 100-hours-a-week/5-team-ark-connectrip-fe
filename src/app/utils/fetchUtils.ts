@@ -28,7 +28,6 @@ export const updatePost = async (
     content: string
     startDate: string | null
     endDate: string | null
-    customUrl: string | null
   }
 ) => {
   try {

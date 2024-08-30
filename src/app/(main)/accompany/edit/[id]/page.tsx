@@ -27,7 +27,6 @@ export default function EditAccompanyPage() {
             startDate: post.startDate ? dayjs(post.startDate) : null,
             endDate: post.endDate ? dayjs(post.endDate) : null,
             content: post.content,
-            customUrl: post.customUrl,
           })
         }
       } catch {
