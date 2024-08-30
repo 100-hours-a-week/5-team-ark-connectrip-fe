@@ -1,15 +1,72 @@
 import React from 'react'
 import ProfileIcon from '../common/ProfileIcon'
 import { Button } from 'antd'
-import { ApplyUsers } from '@/interfaces'
+import { ApplyUsers, CompanionUsers } from '@/interfaces'
+import { acceptUser, rejectUser } from '@/app/utils/fetchUtils'
+import { useCustomMessage } from '@/app/utils/alertUtils'
+import { usePathname } from 'next/navigation'
 
 interface HostContentProps {
-  applyUsers: ApplyUsers[] // users 데이터를 프롭스로 받음
+  applyUsers: ApplyUsers[]
+  postId: number
+  setCompanionUsers: React.Dispatch<React.SetStateAction<CompanionUsers[]>>
+  setApplyUsers: React.Dispatch<React.SetStateAction<ApplyUsers[]>>
 }
 
-const HostContent: React.FC<HostContentProps> = ({ applyUsers }) => {
+export const HostContent: React.FC<HostContentProps> = ({
+  applyUsers,
+  postId,
+  setCompanionUsers,
+  setApplyUsers,
+}) => {
+  const { contextHolder, showSuccess, showWarning } = useCustomMessage()
+  const path = usePathname()
+  const chatRoomId = parseInt(path.split('/').pop() || '0', 10)
+
+  const handleAccept = async (memberId: number) => {
+    try {
+      await acceptUser(postId, memberId)
+      // 새 companion user를 추가
+      const acceptedUser = applyUsers.find((user) => user.memberId === memberId)
+      if (acceptedUser) {
+        setCompanionUsers((prevCompanions) => [
+          ...prevCompanions,
+          {
+            chatRoomId: chatRoomId,
+            memberId: acceptedUser.memberId,
+            memberNickname: acceptedUser.memberNickname,
+            memberProfileImage: acceptedUser.profileImagePath,
+            memberChatRoomStatus: 'ACTIVE',
+          },
+        ])
+      }
+      showSuccess('수락이 완료되었습니다.')
+      // 수락 후, setApplyUsers를 통해 유저 목록에서 삭제
+      setApplyUsers((prevUsers) =>
+        prevUsers.filter((user) => user.memberId !== memberId)
+      )
+    } catch (error) {
+      console.error('Failed to accept user:', error)
+      showWarning('수락에 실패했습니다.')
+    }
+  }
+
+  const handleReject = async (memberId: number) => {
+    try {
+      await rejectUser(postId, memberId)
+      showSuccess('거절이 완료되었습니다.')
+      // 거절 후, setApplyUsers를 통해 유저 목록에서 삭제
+      setApplyUsers((prevUsers) =>
+        prevUsers.filter((user) => user.memberId !== memberId)
+      )
+    } catch (error) {
+      console.error('Failed to reject user:', error)
+      showWarning('거절에 실패했습니다.')
+    }
+  }
   return (
     <div>
+      {contextHolder}
       {/* 동행 신청 목록 컴포넌트 */}
       {applyUsers.length > 0 ? (
         applyUsers.map((user) => (
@@ -26,10 +83,18 @@ const HostContent: React.FC<HostContentProps> = ({ applyUsers }) => {
                 </div>
               </div>
               <div className='flex gap-2'>
-                <Button type='primary' className='rounded-full'>
+                <Button
+                  type='primary'
+                  className='rounded-full'
+                  onClick={() => handleAccept(user.memberId)}
+                >
                   수락
                 </Button>
-                <Button type='default' className='rounded-full'>
+                <Button
+                  type='default'
+                  className='rounded-full'
+                  onClick={() => handleReject(user.memberId)}
+                >
                   거절
                 </Button>
               </div>
@@ -52,5 +117,3 @@ const HostContent: React.FC<HostContentProps> = ({ applyUsers }) => {
     </div>
   )
 }
-
-export default HostContent

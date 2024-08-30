@@ -125,10 +125,10 @@ export interface ApplyUsers {
 
 // CompanionUsers 인터페이스 정의
 export interface CompanionUsers {
-  chatRoomId: number
+  chatRoomId?: number
   memberId: number
-  memberEmail: string
+  memberEmail?: string
   memberNickname: string
   memberProfileImage: string | null
-  memberChatRoomStatus: string
+  memberChatRoomStatus?: string
 }

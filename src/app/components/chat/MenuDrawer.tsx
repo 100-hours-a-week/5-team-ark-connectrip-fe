@@ -5,18 +5,19 @@ import {
   UsergroupAddOutlined,
   AliwangwangOutlined,
 } from '@ant-design/icons'
-import HostContent from './HostContent' // HostContent 컴포넌트 임포트
+import { HostContent } from './HostContent' // HostContent 컴포넌트 임포트
 import GuestContent from './GuestContent' // GuestContent 컴포넌트 임포트
 import { ApplyUsers, CompanionUsers } from '@/interfaces'
 import { fetchPendingUsers, fetchCompanionUsers } from '@/app/utils/fetchUtils'
 import { usePathname } from 'next/navigation'
+
 const MenuDrawer: React.FC = () => {
   const [open, setOpen] = useState(false)
   const [applyUsers, setApplyUsers] = useState<ApplyUsers[]>([])
   const [companionUsers, setCompanionUsers] = useState<CompanionUsers[]>([])
   const path = usePathname()
 
-  const postId = 35 // 동행 게시글 ID
+  const postId = 37 // 동행 게시글 ID
   const chatRoomId = parseInt(path.split('/').pop() || '0', 10)
 
   const fetchData = async () => {
@@ -78,7 +79,14 @@ const MenuDrawer: React.FC = () => {
               key: '1',
               label: '동행 신청 목록',
               icon: <UsergroupAddOutlined />,
-              children: <HostContent applyUsers={applyUsers} />, // Tab 1의 내용
+              children: (
+                <HostContent
+                  applyUsers={applyUsers}
+                  postId={postId}
+                  setCompanionUsers={setCompanionUsers}
+                  setApplyUsers={setApplyUsers}
+                />
+              ), // Tab 1의 내용
             },
             {
               key: '2',
