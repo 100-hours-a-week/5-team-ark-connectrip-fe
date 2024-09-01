@@ -4,7 +4,7 @@ import React, { Suspense } from 'react'
 import LoadingSpinner from '@/app/components/common/LoadingSpinner'
 import { useRouter } from 'next/navigation'
 import Script from 'next/script'
-export const API = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.KAKAOJSKEY}&libraries=services,clusterer&autoload=false`
+export const API = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAOJSKEY}&libraries=services,clusterer&autoload=false`
 
 export default function AccompanyLayout({
   children,
