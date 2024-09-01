@@ -2,15 +2,22 @@ import React from 'react'
 import ProfileIcon from '../common/ProfileIcon'
 import { Button } from 'antd'
 import { ApplyUsers, CompanionUsers } from '@/interfaces'
-import { acceptUser, rejectUser } from '@/app/utils/fetchUtils'
+import {
+  acceptUser,
+  rejectUser,
+  updatePostStatus,
+} from '@/app/utils/fetchUtils'
 import { useCustomMessage } from '@/app/utils/alertUtils'
 import { usePathname } from 'next/navigation'
+import { RecruitmentStatus } from '@/types'
 
 interface HostContentProps {
   applyUsers: ApplyUsers[]
   postId: number
   setCompanionUsers: React.Dispatch<React.SetStateAction<CompanionUsers[]>>
   setApplyUsers: React.Dispatch<React.SetStateAction<ApplyUsers[]>>
+  setAccompanyStatus: React.Dispatch<React.SetStateAction<RecruitmentStatus>>
+  accompanyStatus: RecruitmentStatus
 }
 
 export const HostContent: React.FC<HostContentProps> = ({
@@ -18,6 +25,8 @@ export const HostContent: React.FC<HostContentProps> = ({
   postId,
   setCompanionUsers,
   setApplyUsers,
+  setAccompanyStatus,
+  accompanyStatus,
 }) => {
   const { contextHolder, showSuccess, showWarning } = useCustomMessage()
   const path = usePathname()
@@ -64,55 +73,100 @@ export const HostContent: React.FC<HostContentProps> = ({
       showWarning('거절에 실패했습니다.')
     }
   }
+
+  const handleUpdateStatus = async (newStatus: RecruitmentStatus) => {
+    try {
+      await updatePostStatus(postId)
+      setAccompanyStatus(newStatus)
+      if (newStatus === 'CLOSED') {
+        showSuccess('모집이 종료되었습니다.')
+      } else if (newStatus === 'FINISHED') {
+        showSuccess('동행이 종료되었습니다.')
+      }
+    } catch (error) {
+      console.error('Failed to update post status:', error)
+      showWarning('상태 변경에 실패했습니다.')
+    }
+  }
+
+  // 상태에 따른 메시지 객체
+  const statusMessages: { [key in RecruitmentStatus]: string } = {
+    PROGRESSING:
+      '모집이 완료되었다면 모집 종료를 클릭해주세요!</br>더 이상 신청 내역이 보이지 않습니다.',
+    CLOSED:
+      '동행이 완료되었다면 동행 종료를 클릭해주세요!</br>동행 종료 시점부터 동행 간 후기 작성이 가능해집니다.',
+    FINISHED: '동행이 종료되었습니다.',
+  }
+
   return (
     <div>
       {contextHolder}
-      {/* 동행 신청 목록 컴포넌트 */}
-      {applyUsers.length > 0 ? (
-        applyUsers.map((user) => (
-          <div key={user.memberId} className='mb-4'>
-            <div className='flex justify-between items-center'>
-              <div className='flex gap-2 justify-center items-center'>
-                <ProfileIcon
-                  src={user.profileImagePath}
-                  size={33}
-                  nickname={user.memberNickname}
-                />
-                <div className='text-m font-semibold'>
-                  {user.memberNickname}
+      {accompanyStatus === 'PROGRESSING' && (
+        <>
+          {/* 동행 신청 목록 컴포넌트 */}
+          {applyUsers.length > 0 ? (
+            applyUsers.map((user) => (
+              <div key={user.memberId} className='mb-4'>
+                <div className='flex justify-between items-center'>
+                  <div className='flex gap-2 justify-center items-center'>
+                    <ProfileIcon
+                      src={user.profileImagePath}
+                      size={33}
+                      nickname={user.memberNickname}
+                    />
+                    <div className='text-m font-semibold'>
+                      {user.memberNickname}
+                    </div>
+                  </div>
+                  <div className='flex gap-2'>
+                    <Button
+                      type='primary'
+                      className='rounded-full'
+                      onClick={() => handleAccept(user.memberId)}
+                    >
+                      수락
+                    </Button>
+                    <Button
+                      type='default'
+                      className='rounded-full'
+                      onClick={() => handleReject(user.memberId)}
+                    >
+                      거절
+                    </Button>
+                  </div>
                 </div>
               </div>
-              <div className='flex gap-2'>
-                <Button
-                  type='primary'
-                  className='rounded-full'
-                  onClick={() => handleAccept(user.memberId)}
-                >
-                  수락
-                </Button>
-                <Button
-                  type='default'
-                  className='rounded-full'
-                  onClick={() => handleReject(user.memberId)}
-                >
-                  거절
-                </Button>
-              </div>
+            ))
+          ) : (
+            <div className='flex h-[100px] justify-center items-center text-center text-gray-500'>
+              동행을 신청한 유저가 없습니다.
             </div>
-          </div>
-        ))
-      ) : (
-        <div className='flex h-[100px] justify-center items-center text-center text-gray-500'>
-          동행을 신청한 유저가 없습니다.
-        </div>
+          )}
+        </>
       )}
-      <p className='p-3 text-center text-sm'>
-        모집이 완료되었다면 모집 종료를 클릭해주세요!
-        <br />더 이상 신청 내역이 보이지 않습니다.
-      </p>
-      <Button type='primary' className='w-full rounded-full'>
-        모집 종료
-      </Button>
+      <p
+        className='p-3 text-center text-sm'
+        dangerouslySetInnerHTML={{ __html: statusMessages[accompanyStatus] }}
+      />
+
+      {accompanyStatus === 'PROGRESSING' && (
+        <Button
+          type='primary'
+          className='w-full rounded-full'
+          onClick={() => handleUpdateStatus('CLOSED')}
+        >
+          모집 종료
+        </Button>
+      )}
+      {accompanyStatus === 'CLOSED' && (
+        <Button
+          type='primary'
+          className='w-full rounded-full'
+          onClick={() => handleUpdateStatus('FINISHED')}
+        >
+          동행 종료
+        </Button>
+      )}
       <br />
     </div>
   )

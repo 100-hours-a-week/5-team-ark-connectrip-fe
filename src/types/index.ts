@@ -8,6 +8,7 @@ export type AccompanyStatus =
   | 'REJECTED'
   | 'NONE'
   | 'EXIT_ROOM'
+  | 'DEFAULT'
 
 // 동행 게시글/채팅방의 모집 상태 ( 진행중, 모집마감, 동행종료 )
 export type RecruitmentStatus = 'PROGRESSING' | 'CLOSED' | 'FINISHED'

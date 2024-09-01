@@ -23,6 +23,7 @@ import {
   deleteComment,
   fetchPendingStatus,
   applyForAccompany,
+  cancelAccompanyApplication,
 } from '@/app/utils/fetchUtils' // 유틸리티 함수 import
 import { formatToUtcDate } from '@/app/utils/dateUtils'
 import { AccompanyStatus, RecruitmentStatus } from '@/types'
@@ -60,6 +61,16 @@ export default function AccompanyDetailPage() {
   // 댓글 삭제 버튼 클릭 시 호출되는 함수
   const handleDeleteComment = (commentId: number) => {
     handleDeleteClick('댓글', '', async () => await deleteComment(commentId))
+  }
+
+  // 동행 신청 취소 버튼 클릭 시 호출되는 함수
+  const handleCancelApplication = () => {
+    handleDeleteClick('동행 신청', '', async () => {
+      const response = await cancelAccompanyApplication(postId) // 동행 신청 취소 API 호출
+      console.log(response)
+      setPendingStatus('DEFAULT') // 상태를 NONE으로 변경
+      showSuccess('동행 신청이 취소되었습니다.')
+    })
   }
 
   useEffect(() => {
@@ -260,16 +271,25 @@ export default function AccompanyDetailPage() {
                   나가기가 완료된 동행글입니다.
                 </button>
               ) : (
-                <button
-                  className='w-full bg-main text-white py-2 px-3 rounded-full text-sm'
-                  onClick={handleButtonClick}
-                >
-                  {pendingStatus === 'ACCEPTED' || pendingStatus === 'NONE'
-                    ? '채팅방으로 이동'
-                    : pendingStatus === 'PENDING'
-                      ? '동행 승인 대기'
-                      : '동행 신청'}
-                </button>
+                <>
+                  {pendingStatus === 'PENDING' ? (
+                    <button
+                      className='w-full bg-main text-white py-2 px-3 rounded-full text-sm'
+                      onClick={handleCancelApplication} // 신청 취소 버튼 클릭 시 호출
+                    >
+                      동행 승인 대기 (취소)
+                    </button>
+                  ) : (
+                    <button
+                      className='w-full bg-main text-white py-2 px-3 rounded-full text-sm'
+                      onClick={handleButtonClick}
+                    >
+                      {pendingStatus === 'ACCEPTED' || pendingStatus === 'NONE'
+                        ? '채팅방으로 이동'
+                        : '동행 신청'}
+                    </button>
+                  )}
+                </>
               )}
             </>
           )}

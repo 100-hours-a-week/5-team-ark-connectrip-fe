@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { RecruitmentStatus } from '@/types'
 
 export interface Chat {
   chatRoomId: number
@@ -138,6 +139,6 @@ export interface ChatRoomEntryData {
   accompanyPostId: number
   chatRoomId: number
   leaderId: number
-  status: 'PROGRESSING' | 'FINISHED' | 'CANCELLED' // 가능한 상태값에 따라 타입 지정
+  status: RecruitmentStatus
   isPostDeleted: boolean
 }

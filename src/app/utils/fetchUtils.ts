@@ -2,6 +2,7 @@
 import { api } from '@/app/utils/api'
 import { formatToUtcDate, formatShortDateFromUtc } from '@/app/utils/dateUtils'
 import { Comment, ChatRoomEntryData } from '@/interfaces/index'
+import { RecruitmentStatus } from '@/types/index'
 
 // 게시글 데이터를 가져오는 유틸리티 함수
 export const fetchPost = async (postId: number) => {
@@ -50,6 +51,20 @@ export const deletePost = async (postId: number) => {
   } catch (error) {
     console.error('게시글 삭제 중 오류 발생:', error)
     throw new Error('게시글 삭제에 실패했습니다.')
+  }
+}
+
+// 동행 신청 취소 유틸리티 함수
+export const cancelAccompanyApplication = async (postId: number) => {
+  try {
+    const response = await api.post(
+      `/api/v1/accompany/posts/${postId}/pending/cancel`,
+      {}
+    )
+    return response
+  } catch (error) {
+    console.error('Failed to cancel accompany application:', error)
+    throw new Error('동행 신청 취소에 실패했습니다.')
   }
 }
 
@@ -209,5 +224,19 @@ export const leaveChatRoom = async (chatRoomId: number) => {
   } catch (error) {
     console.error('Failed to leave chat room:', error)
     throw new Error('채팅방 나가기에 실패했습니다.')
+  }
+}
+
+// 방장이 게시글 동행 상태를 변경하는 유틸리티 함수
+export const updatePostStatus = async (postId: number) => {
+  try {
+    const response = await api.post(
+      `/api/v1/accompany/posts/${postId}/status`,
+      {}
+    )
+    return response
+  } catch (error) {
+    console.error('Failed to update post status:', error)
+    throw new Error('게시글 상태 변경에 실패했습니다.')
   }
 }

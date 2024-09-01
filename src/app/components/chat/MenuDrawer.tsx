@@ -10,8 +10,15 @@ import GuestContent from './GuestContent' // GuestContent 컴포넌트 임포트
 import { ApplyUsers, CompanionUsers, ChatRoomEntryData } from '@/interfaces'
 import { fetchPendingUsers, fetchCompanionUsers } from '@/app/utils/fetchUtils'
 import useAuthStore from '@/app/store/useAuthStore'
+import { RecruitmentStatus } from '@/types'
 interface MenuDrawerProps {
   chatRoomData: ChatRoomEntryData
+}
+
+const statusTranslations: { [key in RecruitmentStatus]: string } = {
+  PROGRESSING: '모집중',
+  CLOSED: '모집 마감',
+  FINISHED: '동행 종료',
 }
 
 const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
@@ -20,10 +27,12 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
   const [companionUsers, setCompanionUsers] = useState<CompanionUsers[]>([])
   const { userId } = useAuthStore()
 
-  console.log(chatRoomData)
   const chatRoomId = chatRoomData?.chatRoomId || 0
   const postId = chatRoomData?.accompanyPostId || 0
   const leaderId = chatRoomData?.leaderId
+  const [accompanyStatus, setAccompanyStatus] = useState<RecruitmentStatus>(
+    chatRoomData?.status || 'PROGRESSING'
+  )
 
   // 데이터 fetch 함수
   const fetchData = async () => {
@@ -77,7 +86,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
         title={
           <div className='flex items-center gap-2'>
             <span>동행 채팅방</span>
-            <Tag color='#74cccc'>모집중</Tag>
+            <Tag color='#74cccc'>{statusTranslations[accompanyStatus]}</Tag>
           </div>
         }
         placement='right'
@@ -101,6 +110,8 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
                         postId={postId}
                         setCompanionUsers={setCompanionUsers}
                         setApplyUsers={setApplyUsers}
+                        setAccompanyStatus={setAccompanyStatus}
+                        accompanyStatus={accompanyStatus}
                       />
                     ),
                   },
@@ -108,7 +119,12 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
                     key: '2',
                     label: '동행 위치',
                     icon: <AliwangwangOutlined />,
-                    children: <GuestContent companionUsers={companionUsers} />,
+                    children: (
+                      <GuestContent
+                        companionUsers={companionUsers}
+                        postId={postId}
+                      />
+                    ),
                   },
                 ]
               : [
@@ -116,7 +132,12 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
                     key: '2',
                     label: '동행 위치',
                     icon: <AliwangwangOutlined />,
-                    children: <GuestContent companionUsers={companionUsers} />,
+                    children: (
+                      <GuestContent
+                        companionUsers={companionUsers}
+                        postId={postId}
+                      />
+                    ),
                   },
                 ]
           }
