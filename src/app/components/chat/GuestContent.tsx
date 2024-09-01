@@ -1,23 +1,31 @@
 import React, { useState } from 'react'
 import ProfileIcon from '../common/ProfileIcon'
-import { Button, Switch, message } from 'antd'
+import { Button, Switch } from 'antd'
 import useAuthStore from '@/app/store/useAuthStore'
 import { CompanionUsers } from '@/interfaces'
 import { useRouter } from 'next/navigation'
+import { leaveChatRoom } from '@/app/utils/fetchUtils'
+import { useHandleDeleteClick } from '@/app/hooks/useHandleDeleteClick'
+import { useCustomMessage } from '@/app/utils/alertUtils'
+import { usePathname } from 'next/navigation'
 
 interface GuestContent {
   companionUsers: CompanionUsers[] // 동행 참여자 목록
+  postId: number // 게시글 ID
 }
 
-const HostContent: React.FC<GuestContent> = ({ companionUsers }) => {
+const HostContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
   const { nickname } = useAuthStore() // zustand 스토어에서 유저 닉네임 가져오기
   const [trackingEnabled, setTrackingEnabled] = useState(false)
   // TODO : 내 위치 전송 기능 채팅과 연결 후 주석 삭제
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [locationLink, setLocationLink] = useState<string | null>(null)
   const router = useRouter()
-  // TODO : postId 값 변경 필요
-  const postId = 1
+  const handleDeleteClick = useHandleDeleteClick() // 모달 호출 유틸리티 사용
+  const { contextHolder, showSuccess, showWarning, showError } =
+    useCustomMessage()
+  const path = usePathname()
+  const chatRoomId = parseInt(path.split('/').pop() || '0', 10)
 
   // 내 위치 추적 스위치 변경 핸들러
   const handleSwitchChange = (checked: boolean) => {
@@ -27,7 +35,7 @@ const HostContent: React.FC<GuestContent> = ({ companionUsers }) => {
   //  내 위치 전송 핸들러
   const handleSendLocation = () => {
     if (!navigator.geolocation) {
-      message.error('위치 정보를 가져올 수 없습니다.')
+      showError('위치 정보를 가져올 수 없습니다.')
       return
     }
 
@@ -41,19 +49,30 @@ const HostContent: React.FC<GuestContent> = ({ companionUsers }) => {
           // TODO : 채팅방에 링크 전송 기능 채팅과 연결 후 주석 삭제
           console.log(kakaoMapLink)
         } else {
-          message.error('위치 추적이 비활성화되어 있습니다.')
+          showError('위치 추적이 비활성화되어 있습니다.')
           console.log('Location sharing is disabled.')
         }
       },
       (error) => {
         console.error('Error fetching location:', error)
-        message.error('팝업에서 위치 정보를 허용해주세요.')
+        showError('팝업에서 위치 정보를 허용해주세요.')
       }
     )
   }
 
+  // 채팅방 나가기 기능을 수행하는 함수
+  const handleLeaveGroup = async () => {
+    try {
+      await leaveChatRoom(chatRoomId)
+      showSuccess('채팅방에서 나가셨습니다.')
+    } catch (error) {
+      console.error('그룹방 나가기 중 오류 발생:', error)
+    }
+  }
+
   return (
     <div className='flex flex-col gap-3 mb-3'>
+      {contextHolder}
       {/* 동행 위치 조회 지도 컴포넌트 */}
       <div className='flex justify-center items-center h-[300px] bg-gray-200'>
         지도 컴포넌트
@@ -90,7 +109,11 @@ const HostContent: React.FC<GuestContent> = ({ companionUsers }) => {
       >
         모집 게시글로 이동
       </Button>
-      <Button type='primary' className='w-full'>
+      <Button
+        type='primary'
+        className='w-full'
+        onClick={() => handleDeleteClick('채팅방', '/chat', handleLeaveGroup)}
+      >
         채팅방 나가기
       </Button>
     </div>

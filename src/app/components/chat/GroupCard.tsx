@@ -38,19 +38,19 @@ export default function GroupCard({
     }
   }, [startDate, endDate])
 
-  // 그룹방 나가기 기능을 수행하는 함수
+  // 채팅방 나가기 기능을 수행하는 함수
   const handleLeaveGroup = async () => {
     try {
       await leaveChatRoom(chatRoomId)
     } catch (error) {
-      console.error('그룹방 나가기 중 오류 발생:', error)
+      console.error('채팅방 나가기 중 오류 발생:', error)
     }
   }
 
   const menuItems = [
     {
-      label: '그룹방 나가기',
-      onClick: () => handleDeleteClick('그룹방', '', handleLeaveGroup), // 모달 호출 후 삭제 처리
+      label: '채팅방 나가기',
+      onClick: () => handleDeleteClick('채팅방', '', handleLeaveGroup), // 모달 호출 후 삭제 처리
     },
   ]
 
