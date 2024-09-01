@@ -8,6 +8,8 @@ import { leaveChatRoom } from '@/app/utils/fetchUtils'
 import { useHandleDeleteClick } from '@/app/hooks/useHandleDeleteClick'
 import { useCustomMessage } from '@/app/utils/alertUtils'
 import { usePathname } from 'next/navigation'
+import { Map, MapMarker, CustomOverlayMap } from 'react-kakao-maps-sdk'
+import useKakaoLoader from '@/app/hooks/useKakaoLoader'
 
 interface GuestContent {
   companionUsers: CompanionUsers[] // 동행 참여자 목록
@@ -20,12 +22,18 @@ const HostContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
   // TODO : 내 위치 전송 기능 채팅과 연결 후 주석 삭제
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [locationLink, setLocationLink] = useState<string | null>(null)
+  const [location, setLocation] = useState<{ lat: number; lng: number }>({
+    lat: 33.450701,
+    lng: 126.570667,
+  })
   const router = useRouter()
   const handleDeleteClick = useHandleDeleteClick() // 모달 호출 유틸리티 사용
   const { contextHolder, showSuccess, showWarning, showError } =
     useCustomMessage()
   const path = usePathname()
   const chatRoomId = parseInt(path.split('/').pop() || '0', 10)
+  // 카카오 지도 로더 훅 사용
+  useKakaoLoader()
 
   // 내 위치 추적 스위치 변경 핸들러
   const handleSwitchChange = (checked: boolean) => {
@@ -46,6 +54,7 @@ const HostContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
           const mapNickname = nickname || '사용자'
           const kakaoMapLink = `https://map.kakao.com/link/map/${mapNickname}님의_현재위치,${latitude},${longitude}`
           setLocationLink(kakaoMapLink)
+          setLocation({ lat: latitude, lng: longitude }) // 위치 저장
           // TODO : 채팅방에 링크 전송 기능 채팅과 연결 후 주석 삭제
           console.log(kakaoMapLink)
         } else {
@@ -75,7 +84,35 @@ const HostContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
       {contextHolder}
       {/* 동행 위치 조회 지도 컴포넌트 */}
       <div className='flex justify-center items-center h-[300px] bg-gray-200'>
-        지도 컴포넌트
+        <Map
+          id='map'
+          center={location} // 저장된 위치 사용
+          style={{
+            width: '100%',
+            height: '300px', // 높이 조정
+          }}
+          level={3}
+        >
+          {/* 마커 생성 */}
+          <MapMarker
+            position={location}
+            image={{
+              src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png', // 마커이미지의 주소입니다
+              size: {
+                // 마커이미지의 크기
+                width: 64,
+                height: 69,
+              },
+              // 마커이미지의 옵션. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정
+              options: {
+                offset: {
+                  x: 27,
+                  y: 69,
+                },
+              },
+            }}
+          />
+        </Map>
       </div>
       <div className='flex justify-between items-center'>
         <Button className='w-auto rounded-full' onClick={handleSendLocation}>
