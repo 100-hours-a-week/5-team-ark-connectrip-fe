@@ -18,48 +18,33 @@ const mockData = [
     nickname: '트룰루',
     profileImage:
       'http://k.kakaocdn.net/dn/ZEQvV/btsIzAcVyYL/TkOaaPbnv0jGFEq3idt6Ck/img_640x640.jpg',
-    LastLocation: {
-      latitude: 37.5665,
-      longitude: 126.978,
-    },
+    LastLocation: { latitude: 37.5665, longitude: 126.978 },
   },
   {
     memberId: 2,
     nickname: '션말고숀',
     profileImage:
       'http://k.kakaocdn.net/dn/wAv8y/btsJg9GuEd2/F1WBAuNghQpR8u4dMM5Qn1/img_640x640.jpg',
-    LastLocation: {
-      latitude: 35.1796,
-      longitude: 129.0756,
-    },
+    LastLocation: { latitude: 35.1796, longitude: 129.0756 },
   },
   {
     memberId: 3,
     nickname: '냄뀨뀨',
     profileImage: ' ',
-    LastLocation: {
-      latitude: 37.4563,
-      longitude: 126.7052,
-    },
+    LastLocation: { latitude: 37.4563, longitude: 126.7052 },
   },
   {
     memberId: 4,
     nickname: '토파즈',
     profileImage:
       'http://k.kakaocdn.net/dn/cr7joo/btsI7OuRmrZ/wm49uKvLgMskVh5ZWWdCVk/m1.jpg',
-    LastLocation: {
-      latitude: 35.8722,
-      longitude: 128.6025,
-    },
+    LastLocation: { latitude: 35.8722, longitude: 128.6025 },
   },
   {
     memberId: 5,
     nickname: '노노아',
     profileImage: '',
-    LastLocation: {
-      latitude: 37.5113,
-      longitude: 127.098,
-    },
+    LastLocation: { latitude: 37.5113, longitude: 127.098 },
   },
 ]
 
@@ -80,19 +65,17 @@ const GuestContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
   const [loading, setLoading] = useState(false) // 로딩 상태 추가
   const router = useRouter()
   const handleDeleteClick = useHandleDeleteClick() // 모달 호출 유틸리티 사용
-  const { contextHolder, showSuccess, showWarning, showError } =
-    useCustomMessage()
+  const { contextHolder, showSuccess, showError } = useCustomMessage()
   const path = usePathname()
   const chatRoomId = parseInt(path.split('/').pop() || '0', 10)
-  // 카카오 지도 로더 훅 사용
-  useKakaoLoader()
+  useKakaoLoader() // 카카오 지도 로더 훅 사용
 
   // 내 위치 추적 스위치 변경 핸들러
   const handleSwitchChange = (checked: boolean) => {
     setTrackingEnabled(checked)
     if (checked) {
       setLoading(true)
-      fetchLocation()
+      fetchLocation() // 위치를 가져오고, 이후에 지도 업데이트
     }
   }
 
@@ -111,7 +94,8 @@ const GuestContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
         const { latitude, longitude } = position.coords
         const kakaoMapLink = `https://map.kakao.com/link/map/${mapNickname}님의_현재위치,${latitude},${longitude}`
         setLocationLink(kakaoMapLink)
-        console.log(kakaoMapLink)
+        setLocation({ latitude, longitude })
+        updateMapBounds() // 위치를 전송할 때 지도 업데이트
       },
       (error) => {
         console.error('Error fetching location:', error)
@@ -130,12 +114,14 @@ const GuestContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords
-        setLocation({ latitude: latitude, longitude: longitude }) // 위치 저장
+        setLocation({ latitude, longitude }) // 위치 저장
         setLoading(false) // 로딩 종료
+        updateMapBounds() // 위치를 가져올 때 지도 업데이트
       },
       (error) => {
         console.error('Error fetching location: ', error)
         showError('팝업에서 위치 정보를 허용해주세요.')
+        setLoading(false) // 로딩 종료
       }
     )
   }
@@ -150,13 +136,28 @@ const GuestContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
     }
   }
 
-  const allLocations = [
-    ...mockData.map((user) => user.LastLocation),
-    location,
-  ].filter(
-    (loc): loc is { latitude: number; longitude: number } => loc !== undefined
-  ) // 필터링하여 undefined 제거
+  // 모든 위치 데이터를 메모이제이션하여 필터링 (undefined 제거)
+  const allLocations = useMemo(
+    () =>
+      [...mockData.map((user) => user.LastLocation), location].filter(
+        (loc): loc is { latitude: number; longitude: number } =>
+          loc !== undefined
+      ),
+    [location]
+  )
 
+  // 지도 범위를 업데이트하는 함수
+  const updateMapBounds = () => {
+    if (mapRef.current && allLocations.length > 0) {
+      const bounds = new kakao.maps.LatLngBounds()
+      allLocations.forEach((loc) => {
+        bounds.extend(new kakao.maps.LatLng(loc.latitude, loc.longitude))
+      })
+      mapRef.current.setBounds(bounds)
+    }
+  }
+
+  // 지도의 범위를 재설정하는 컴포넌트
   const ReSetttingMapBounds = ({
     points,
   }: {
@@ -164,45 +165,24 @@ const GuestContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
   }) => {
     const map = useMap()
 
-    const bounds = useMemo(() => {
-      const bounds = new kakao.maps.LatLngBounds()
-
-      points.forEach((point) => {
-        bounds.extend(new kakao.maps.LatLng(point.latitude, point.longitude))
-      })
-
-      return bounds
-    }, [points])
-
     useEffect(() => {
       if (map && points.length > 0) {
-        map.setBounds(bounds) // 지도 범위를 설정
+        const bounds = new kakao.maps.LatLngBounds()
+        points.forEach((point) => {
+          bounds.extend(new kakao.maps.LatLng(point.latitude, point.longitude))
+        })
+        map.setBounds(bounds)
       }
-    }, [map, bounds, points])
+    }, [map, points])
 
     return null // 렌더링할 내용 없음
   }
 
   useEffect(() => {
     if (trackingEnabled && allLocations.length > 0) {
-      updateMapBounds()
+      updateMapBounds() // 위치 추적이 활성화되었을 때 지도 업데이트
     }
   }, [trackingEnabled, location])
-
-  const updateMapBounds = () => {
-    if (mapRef.current && allLocations.length > 0) {
-      const bounds = new kakao.maps.LatLngBounds()
-
-      allLocations.forEach((loc) => {
-        if (loc) {
-          const point = new kakao.maps.LatLng(loc.latitude, loc.longitude)
-          bounds.extend(point)
-        }
-      })
-
-      mapRef.current.setBounds(bounds)
-    }
-  }
 
   return (
     <div className='flex flex-col gap-3 mb-3'>
@@ -215,16 +195,14 @@ const GuestContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
           <Map
             id='map'
             center={{
-              // 지도의 중심좌표
               lat: 33.450701,
               lng: 126.570667,
             }}
             style={{
-              // 지도의 크기
               width: '100%',
               height: '300px',
             }}
-            level={3} // 지도의 확대 레벨
+            level={3}
             onCreate={(map) => (mapRef.current = map)}
           >
             {/* 사용자 위치 커스텀 오버레이 */}
@@ -237,8 +215,7 @@ const GuestContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
                   size={35}
                   nickname={nickname || ''}
                 />
-                {/* 핀 모양 삼각형 */}
-                <div className='absolute bottom-[-7px] left-1/2 transform -translatitudee-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[10px] border-t-main z-0' />
+                <div className='absolute bottom-[-7px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[10px] border-t-main z-0' />
               </div>
             </CustomOverlayMap>
 
@@ -259,8 +236,7 @@ const GuestContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
                         size={35}
                         nickname={user.nickname}
                       />
-                      {/* 핀 모양 삼각형 */}
-                      <div className='absolute bottom-[-7px] left-1/2 transform -translatitudee-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[10px] border-t-main z-0' />
+                      <div className='absolute bottom-[-7px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[10px] border-t-main z-0' />
                     </div>
                   </CustomOverlayMap>
                 )
@@ -286,7 +262,6 @@ const GuestContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
           <Switch onChange={handleSwitchChange} />
         </div>
       </div>
-      {/* 동행 상대 목록 컴포넌트 */}
       <h3>대화 상대</h3>
       <div className='flex flex-col'>
         {companionUsers.map((user) => (
