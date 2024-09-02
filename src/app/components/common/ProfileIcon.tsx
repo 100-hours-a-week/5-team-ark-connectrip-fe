@@ -8,7 +8,10 @@ interface ProfileIconProps {
 }
 
 const ProfileIcon: React.FC<ProfileIconProps> = ({ src, size, nickname }) => {
-  if (!src) {
+  const isValidSrc = typeof src === 'string' && src.trim() !== ''
+
+  if (!isValidSrc) {
+    // 이미지가 없을 때 닉네임의 첫 글자 표시
     // 이미지가 없을 때
     return (
       <div className='flex-shrink-0'>
@@ -21,6 +24,7 @@ const ProfileIcon: React.FC<ProfileIconProps> = ({ src, size, nickname }) => {
             color: 'white',
             fontSize: size * 0.4, // 아이콘 크기에 비례하여 글자 크기를 조정
             fontWeight: 'bold',
+            zIndex: 10,
           }}
         >
           {nickname.charAt(0).toUpperCase()} {/* 닉네임의 첫 글자 */}
