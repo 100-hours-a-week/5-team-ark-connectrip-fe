@@ -95,6 +95,7 @@ const GuestContent: React.FC<GuestContentProps> = ({
         const kakaoMapLink = `https://map.kakao.com/link/map/${mapNickname}님의_현재위치,${latitude},${longitude}`
         setLocationLink(kakaoMapLink)
         setLocation({ latitude, longitude })
+        console.log('Location sent:', kakaoMapLink)
       },
       (error) => {
         console.error('Error fetching location:', error)
