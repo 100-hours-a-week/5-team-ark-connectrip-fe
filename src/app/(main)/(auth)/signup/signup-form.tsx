@@ -114,8 +114,6 @@ const SignupPage: React.FC = () => {
         gender: values.gender === 'male' ? 'M' : 'F',
       })
 
-      console.log(response)
-
       if (response.message === 'SUCCESS') {
         const { memberId, nickname, profileImagePath } = response.data
         setUser({
