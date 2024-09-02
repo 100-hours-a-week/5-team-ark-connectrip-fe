@@ -68,6 +68,7 @@ jobs:
     steps:
       - name: Recreate .env file & login GHCR
         run: |
+          pwd
           echo "${{ secrets.ENV_FILE_DEV }}" > front/.env
           echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u ${{ secrets.GIT_USER }} --password-stdin
 
