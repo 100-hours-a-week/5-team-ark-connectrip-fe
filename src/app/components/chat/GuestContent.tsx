@@ -1,16 +1,16 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import ProfileIcon from '../common/ProfileIcon'
 import { Button, Switch } from 'antd'
 import useAuthStore from '@/app/store/useAuthStore'
 import { CompanionUsers } from '@/interfaces'
 import { useRouter } from 'next/navigation'
-import { leaveChatRoom } from '@/app/utils/fetchUtils'
 import { useHandleDeleteClick } from '@/app/hooks/useHandleDeleteClick'
 import { useCustomMessage } from '@/app/utils/alertUtils'
 import { usePathname } from 'next/navigation'
-import { Map, CustomOverlayMap, useMap } from 'react-kakao-maps-sdk'
 import useKakaoLoader from '@/app/hooks/useKakaoLoader'
 import LoadingSpinner from '../common/LoadingSpinner'
+import MapComponent from './MapComponent'
+import { leaveChatRoom } from '@/app/utils/fetchUtils'
 
 const mockData = [
   {
@@ -48,12 +48,15 @@ const mockData = [
   },
 ]
 
-interface GuestContent {
+interface GuestContentProps {
   companionUsers: CompanionUsers[] // 동행 참여자 목록
   postId: number // 게시글 ID
 }
 
-const GuestContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
+const GuestContent: React.FC<GuestContentProps> = ({
+  companionUsers,
+  postId,
+}) => {
   const { nickname, profileImage } = useAuthStore() // zustand 스토어에서 유저 닉네임 가져오기
   const [trackingEnabled, setTrackingEnabled] = useState(false)
   const [locationLink, setLocationLink] = useState<string | null>(null)
@@ -61,7 +64,6 @@ const GuestContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
     latitude: number
     longitude: number
   }>()
-  const mapRef = useRef<kakao.maps.Map | null>(null) // 지도 참조를 위해 useRef 사용
   const [loading, setLoading] = useState(false) // 로딩 상태 추가
   const router = useRouter()
   const handleDeleteClick = useHandleDeleteClick() // 모달 호출 유틸리티 사용
@@ -70,7 +72,6 @@ const GuestContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
   const chatRoomId = parseInt(path.split('/').pop() || '0', 10)
   useKakaoLoader() // 카카오 지도 로더 훅 사용
 
-  // 내 위치 추적 스위치 변경 핸들러
   const handleSwitchChange = (checked: boolean) => {
     setTrackingEnabled(checked)
     if (checked) {
@@ -79,7 +80,6 @@ const GuestContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
     }
   }
 
-  // 내 위치 전송 버튼 클릭 핸들러
   const handleSendLocation = () => {
     if (!navigator.geolocation) {
       showError('위치 정보를 가져올 수 없습니다.')
@@ -95,7 +95,6 @@ const GuestContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
         const kakaoMapLink = `https://map.kakao.com/link/map/${mapNickname}님의_현재위치,${latitude},${longitude}`
         setLocationLink(kakaoMapLink)
         setLocation({ latitude, longitude })
-        updateMapBounds() // 위치를 전송할 때 지도 업데이트
       },
       (error) => {
         console.error('Error fetching location:', error)
@@ -116,7 +115,6 @@ const GuestContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
         const { latitude, longitude } = position.coords
         setLocation({ latitude, longitude }) // 위치 저장
         setLoading(false) // 로딩 종료
-        updateMapBounds() // 위치를 가져올 때 지도 업데이트
       },
       (error) => {
         console.error('Error fetching location: ', error)
@@ -126,7 +124,6 @@ const GuestContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
     )
   }
 
-  // 채팅방 나가기 기능을 수행하는 함수
   const handleLeaveGroup = async () => {
     try {
       await leaveChatRoom(chatRoomId)
@@ -136,120 +133,49 @@ const GuestContent: React.FC<GuestContent> = ({ companionUsers, postId }) => {
     }
   }
 
-  // 모든 위치 데이터를 메모이제이션하여 필터링 (undefined 제거)
   const allLocations = useMemo(
-    () =>
-      [...mockData.map((user) => user.LastLocation), location].filter(
-        (loc): loc is { latitude: number; longitude: number } =>
-          loc !== undefined
-      ),
-    [location]
+    () => [
+      ...mockData.map((user) => ({
+        latitude: user.LastLocation.latitude,
+        longitude: user.LastLocation.longitude,
+        profileImage: user.profileImage,
+        nickname: user.nickname,
+      })),
+      ...(location
+        ? [
+            {
+              latitude: location.latitude,
+              longitude: location.longitude,
+              profileImage,
+              nickname,
+            },
+          ]
+        : []),
+    ],
+    [location, profileImage, nickname]
   )
-
-  // 지도 범위를 업데이트하는 함수
-  const updateMapBounds = () => {
-    if (mapRef.current && allLocations.length > 0) {
-      const bounds = new kakao.maps.LatLngBounds()
-      allLocations.forEach((loc) => {
-        bounds.extend(new kakao.maps.LatLng(loc.latitude, loc.longitude))
-      })
-      mapRef.current.setBounds(bounds)
-    }
-  }
-
-  // 지도의 범위를 재설정하는 컴포넌트
-  const ReSetttingMapBounds = ({
-    points,
-  }: {
-    points: { latitude: number; longitude: number }[]
-  }) => {
-    const map = useMap()
-
-    useEffect(() => {
-      if (map && points.length > 0) {
-        const bounds = new kakao.maps.LatLngBounds()
-        points.forEach((point) => {
-          bounds.extend(new kakao.maps.LatLng(point.latitude, point.longitude))
-        })
-        map.setBounds(bounds)
-      }
-    }, [map, points])
-
-    return null // 렌더링할 내용 없음
-  }
-
-  useEffect(() => {
-    if (trackingEnabled && allLocations.length > 0) {
-      updateMapBounds() // 위치 추적이 활성화되었을 때 지도 업데이트
-    }
-  }, [trackingEnabled, location])
 
   return (
     <div className='flex flex-col gap-3 mb-3'>
       {contextHolder}
-      {/* 동행 위치 조회 지도 컴포넌트 */}
       <div className='flex justify-center items-center h-[300px] bg-gray-100'>
         {loading ? (
           <LoadingSpinner /> // 로딩 중일 때 스피너 표시
-        ) : trackingEnabled && location ? (
-          <Map
-            id='map'
-            center={{
-              lat: 33.450701,
-              lng: 126.570667,
-            }}
-            style={{
-              width: '100%',
-              height: '300px',
-            }}
-            level={3}
-            onCreate={(map) => (mapRef.current = map)}
-          >
-            {/* 사용자 위치 커스텀 오버레이 */}
-            <CustomOverlayMap
-              position={{ lat: location.latitude, lng: location.longitude }}
-            >
-              <div className='-top-10 -left-5 w-[40px] h-[40px] rounded-full overflow-hidden bg-main border-main border-2 z-10'>
-                <ProfileIcon
-                  src={profileImage || ''}
-                  size={35}
-                  nickname={nickname || ''}
-                />
-                <div className='absolute bottom-[-7px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[10px] border-t-main z-0' />
-              </div>
-            </CustomOverlayMap>
-
-            {/* 동행자들 위치 커스텀 오버레이 */}
-            {mockData.map(
-              (user) =>
-                user.LastLocation && (
-                  <CustomOverlayMap
-                    position={{
-                      lat: user.LastLocation.latitude,
-                      lng: user.LastLocation.longitude,
-                    }}
-                    key={user.memberId}
-                  >
-                    <div className='-top-10 -left-5 w-[40px] h-[40px] rounded-full overflow-hidden bg-main border-main border-2 z-10'>
-                      <ProfileIcon
-                        src={user.profileImage || ''}
-                        size={35}
-                        nickname={user.nickname}
-                      />
-                      <div className='absolute bottom-[-7px] left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[10px] border-t-main z-0' />
-                    </div>
-                  </CustomOverlayMap>
-                )
-            )}
-            {allLocations.length > 0 && (
-              <ReSetttingMapBounds points={allLocations} />
-            )}
-          </Map>
+        ) : trackingEnabled ? (
+          <MapComponent
+            trackingEnabled={trackingEnabled}
+            allLocations={allLocations.map((loc) => ({
+              latitude: loc.latitude,
+              longitude: loc.longitude,
+              profileImage: loc.profileImage || undefined,
+              nickname: loc.nickname || undefined,
+            }))}
+          />
         ) : (
           <p className='text-center'>
             내 위치 추적을 허용하면
             <br />
-            동행들의 위치를 확인할 수 있어요!
+            동행들의 최근 위치를 확인할 수 있어요!
           </p>
         )}
       </div>
