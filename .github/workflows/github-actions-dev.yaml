@@ -61,11 +61,9 @@ jobs:
       run: docker push ghcr.io/topazkang/fe-dev:latest
 
   deploy:
-    runs-on: [ self-hosted, Linux, X64 ]
+    runs-on: [ self-hosted, Linux, X64, connectrip_fe ]
     name: Deploy on Self-Hosted Runner
     needs: build
-    labels:
-      - connectrip_fe
 
     steps:
       - name: Recreate .env file & login GHCR
