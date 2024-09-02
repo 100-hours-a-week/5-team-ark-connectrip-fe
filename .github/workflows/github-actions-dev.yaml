@@ -69,12 +69,12 @@ jobs:
       - name: Recreate .env file & login GHCR
         run: |
           pwd
-          echo "${{ secrets.ENV_FILE_DEV }}" > front/.env
+          echo "${{ secrets.ENV_FILE_DEV }}" > .env
           echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u ${{ secrets.GIT_USER }} --password-stdin
 
       - name: Prune Docker Images and Deploy With Docker-Compose
         run: |
           sudo docker image prune -a -f
-          sudo docker-compose -f front/docker-compose.front.yaml down
-          sudo docker-compose -f front/docker-compose.front.yaml pull
-          sudo docker-compose -f front/docker-compose.front.yaml up -d
+          sudo docker-compose -f docker-compose.front.yaml down
+          sudo docker-compose -f docker-compose.front.yaml pull
+          sudo docker-compose -f docker-compose.front.yaml up -d
