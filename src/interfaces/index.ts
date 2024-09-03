@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import { RecruitmentStatus } from '@/types'
+import { Stringifier } from 'postcss'
 
 export interface Chat {
   chatRoomId: number
@@ -80,8 +81,7 @@ export interface PostForm {
   accompanyArea: string
   startDate: string | null
   endDate: string | null
-  content: string
-  customUrl: string | null
+  content: Stringifier
 }
 
 // 폼 초기값 인터페이스
