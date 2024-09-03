@@ -20,7 +20,6 @@ interface AccompanyFormProps {
     startDate: dayjs.Dayjs | null
     endDate: dayjs.Dayjs | null
     content: string
-    customUrl: string | null
   }) => void
   submitText: string
 }

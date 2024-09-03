@@ -67,8 +67,7 @@ export default function AccompanyDetailPage() {
   const handleCancelApplication = () => {
     handleDeleteClick('동행 신청', '', async () => {
       const response = await cancelAccompanyApplication(postId) // 동행 신청 취소 API 호출
-      console.log(response)
-      setPendingStatus('DEFAULT') // 상태를 NONE으로 변경
+      setPendingStatus('DEFAULT') // 상태를 DEFAULT .로 변경
       showSuccess('동행 신청이 취소되었습니다.')
     })
   }
