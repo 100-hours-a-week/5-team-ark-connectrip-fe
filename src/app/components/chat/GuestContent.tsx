@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import ProfileIcon from '../common/ProfileIcon'
 import { Button, Switch } from 'antd'
 import useAuthStore from '@/app/store/useAuthStore'
@@ -59,6 +59,8 @@ const GuestContent: React.FC<GuestContentProps> = ({
 }) => {
   const { nickname, profileImage } = useAuthStore() // zustand 스토어에서 유저 닉네임 가져오기
   const [trackingEnabled, setTrackingEnabled] = useState(false)
+  // TODO : 위치 정보 전송 시, 링크를 저장할 수 있는 상태 추가  - 관련 로직 추가 후 삭제 필요
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [locationLink, setLocationLink] = useState<string | null>(null)
   const [location, setLocation] = useState<{
     latitude: number

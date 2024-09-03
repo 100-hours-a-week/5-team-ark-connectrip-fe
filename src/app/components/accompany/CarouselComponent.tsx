@@ -4,8 +4,6 @@ import React from 'react'
 import { Carousel } from 'antd'
 
 const CarouselComponent: React.FC = () => {
-  const onChange = (currentSlide: number) => {}
-
   // 이미지 데이터를 배열로 정의
   const bannerImages = [
     { src: '/banner/connectrip.svg', alt: '우리 동행의 시작, 커넥트립' },
@@ -14,7 +12,7 @@ const CarouselComponent: React.FC = () => {
   ]
 
   return (
-    <Carousel afterChange={onChange} autoplay autoplaySpeed={4000} draggable>
+    <Carousel autoplay autoplaySpeed={4000} draggable>
       {bannerImages.map((image, index) => (
         <div key={index} className='relative w-full rounded-xl'>
           <img

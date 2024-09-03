@@ -176,6 +176,7 @@ export default function GroupDetailPage() {
           setErrorMessage('입장 권한이 없습니다.')
         }
       } catch (error) {
+        console.error('채팅방 정보를 불러오는 중 오류 발생:', error)
         setErrorMessage('참여 중인 동행 채팅에만 입장할 있습니다.')
       } finally {
         setLoading(false)
