@@ -133,6 +133,7 @@ const SignupPage: React.FC = () => {
     } catch (error) {
       showError('회원가입에 실패했습니다.')
       console.error('Error:', error)
+      router.push('/')
     }
   }
 
