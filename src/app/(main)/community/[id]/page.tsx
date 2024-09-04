@@ -12,12 +12,12 @@ import LoadingSpinner from '@/app/components/common/LoadingSpinner'
 import useAuthStore from '@/app/store/useAuthStore'
 import { Post, Comment } from '@/interfaces'
 import {
-  fetchPost,
-  fetchComments,
-  createComment,
-  updateComment,
-  deletePost,
-  deleteComment,
+  fetchCommunityComments,
+  createCommunityComment,
+  updateCommunityComment,
+  deleteCommunityPost,
+  deleteCommunityComment,
+  fetchCommunityPost,
 } from '@/app/utils/fetchUtils' // 유틸리티 함수 import
 import { formatToUtcDate } from '@/app/utils/dateUtils'
 
@@ -43,23 +43,27 @@ export default function CommunityDetailPage() {
     handleDeleteClick(
       '게시글',
       '/community',
-      async () => await deletePost(postId)
+      async () => await deleteCommunityPost(postId)
     )
   }
   // 댓글 삭제 버튼 클릭 시 호출되는 함수
   const handleDeleteComment = (commentId: number) => {
-    handleDeleteClick('댓글', '', async () => await deleteComment(commentId))
+    handleDeleteClick(
+      '댓글',
+      '',
+      async () => await deleteCommunityComment(commentId)
+    )
   }
 
   useEffect(() => {
     const loadData = async () => {
       try {
         // 게시글 데이터 fetch
-        const postData = await fetchPost(postId)
+        const postData = await fetchCommunityPost(postId)
         setPost(postData)
 
         // 댓글 데이터 fetch
-        const fetchedComments = await fetchComments(postId)
+        const fetchedComments = await fetchCommunityComments(postId)
         setComments(fetchedComments)
       } catch (error) {
         console.error('Failed to fetch data:', error)
@@ -79,7 +83,11 @@ export default function CommunityDetailPage() {
 
     try {
       if (isEditing && editCommentId !== null) {
-        const response = await updateComment(editCommentId, postId, newComment) // 유틸리티 함수 사용
+        const response = await updateCommunityComment(
+          editCommentId,
+          postId,
+          newComment
+        ) // 유틸리티 함수 사용
 
         if (response) {
           showSuccess('댓글이 수정되었습니다.')
@@ -89,7 +97,7 @@ export default function CommunityDetailPage() {
           showWarning('댓글 수정에 실패했습니다.')
         }
       } else {
-        const response = await createComment(postId, newComment) // 유틸리티 함수 사용
+        const response = await createCommunityComment(postId, newComment) // 유틸리티 함수 사용
 
         if (response) {
           showSuccess('댓글이 등록되었습니다.')
@@ -99,7 +107,7 @@ export default function CommunityDetailPage() {
       }
 
       setNewComment('')
-      const newCommentData = await fetchComments(postId)
+      const newCommentData = await fetchCommunityComments(postId)
       setComments(newCommentData)
     } catch (error) {
       console.error('댓글 등록/수정 중 오류 발생:', error)
@@ -152,7 +160,7 @@ export default function CommunityDetailPage() {
           {post.memberId.toString() === userId && ( // 게시글 작성자만 수정/삭제 버튼 표시
             <div className='flex gap-4'>
               <button
-                onClick={() => router.push(`/accompany/edit/${id}`)}
+                onClick={() => router.push(`/community/edit/${id}`)}
                 className='text-sm text-secondary'
               >
                 수정
