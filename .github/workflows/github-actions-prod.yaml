@@ -62,7 +62,7 @@ jobs:
     steps:
       - name: set env & deploy
         run: |
-          cd /home/ubuntu/deploy/front
+          cd /home/ubuntu/front
           echo "${{ secrets.ENV_FILE_PROD }}" > .env
           echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u ${{ secrets.GIT_USER }} --password-stdin
           sudo docker image prune -a -f
