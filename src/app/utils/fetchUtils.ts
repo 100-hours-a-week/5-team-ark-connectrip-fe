@@ -277,10 +277,7 @@ export const updateCommunityPost = async (
   }
 ) => {
   try {
-    const response = await api.patch(
-      `/api/v1/community/posts/${postId}`,
-      payload
-    )
+    const response = await api.put(`/api/v1/community/posts/${postId}`, payload)
     return response
   } catch (error) {
     console.error('게시글 수정 중 오류 발생:', error)
@@ -291,7 +288,10 @@ export const updateCommunityPost = async (
 // 게시글을 삭제하는 유틸리티 함수
 export const deleteCommunityPost = async (postId: number) => {
   try {
-    const response = await api.post(`/api/v1/community/posts/${postId}`, {})
+    const response = await api.post(
+      `/api/v1/community/posts/${postId}/delete`,
+      {}
+    )
     return response
   } catch (error) {
     console.error('게시글 삭제 중 오류 발생:', error)
