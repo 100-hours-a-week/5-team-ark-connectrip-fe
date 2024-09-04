@@ -27,6 +27,14 @@ const SearchBar: React.FC<SearchBarProps> = ({
     router.replace(`${pathname}?${params.toString()}`)
   }, 300)
 
+  const handleCreateButtonClick = () => {
+    if (pathname === '/accompany') {
+      router.push('/accompany/create')
+    } else if (pathname === '/community') {
+      router.push('/community/create')
+    }
+  }
+
   return (
     <div className='flex items-center mb-2 gap-2 h-[40px]'>
       <div className='flex items-center w-full h-[40px] border border-main p-2 rounded-full flex-grow'>
@@ -43,7 +51,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         />
       </div>
       <button
-        onClick={() => router.push('/accompany/create')}
+        onClick={handleCreateButtonClick}
         className='bg-main text-white px-3 py-2 rounded-full flex-shrink-0 text-s h-[40px]'
       >
         게시글 등록 +
