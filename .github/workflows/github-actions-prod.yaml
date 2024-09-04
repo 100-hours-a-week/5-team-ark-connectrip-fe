@@ -55,22 +55,17 @@ jobs:
       run: docker push ghcr.io/topazkang/fe-prod:latest
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: [ self-hosted, Linux, X64, connectrip_fe_prod ]
+    name: Deploy on Self-Hosted Runner
     needs: build
 
     steps:
-      - name: SSH and Deploy Frontend
-        uses: appleboy/ssh-action@v0.1.8
-        with:
-          host: ${{ secrets.EC2_HOST_PROD }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.ARK_DEPLOY }}
-          port: 22
-          script: |
-            echo "${{ secrets.ENV_FILE_PROD }}" > deploy/front/.env
-            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GIT_USER }} --password-stdin
-            cd deploy/front
-            docker image prune -a -f
-            docker-compose -f docker-compose.front.yaml down
-            docker-compose -f docker-compose.front.yaml pull
-            docker-compose -f docker-compose.front.yaml up -d
+      - name: set env & deploy
+        run: |
+          cd /home/ubuntu/front
+          echo "${{ secrets.ENV_FILE_PROD }}" > .env
+          echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u ${{ secrets.GIT_USER }} --password-stdin
+          sudo docker image prune -a -f
+          sudo docker-compose -f docker-compose.front.yaml down
+          sudo docker-compose -f docker-compose.front.yaml pull
+          sudo docker-compose -f docker-compose.front.yaml up -d
