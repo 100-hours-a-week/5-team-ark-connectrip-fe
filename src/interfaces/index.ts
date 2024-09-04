@@ -93,6 +93,12 @@ export interface FormValues {
   content: string
 }
 
+// 커뮤니티 초기값 인터페이스
+export interface CommunityFormValues {
+  title: string
+  content: string
+}
+
 // AccompanyForm 컴포넌트에 전달되는 props 인터페이스
 export interface AccompanyFormProps {
   initialValues: FormValues
@@ -141,4 +147,16 @@ export interface ChatRoomEntryData {
   leaderId: number
   status: RecruitmentStatus
   isPostDeleted: boolean
+}
+
+// ChatMessage 인터페이스 정의
+export interface Message {
+  id: string
+  chatRoomId: number
+  senderId: string
+  content: string
+  createdAt: string
+  senderNickname: string
+  senderProfileImage: string
+  infoFlag: boolean
 }

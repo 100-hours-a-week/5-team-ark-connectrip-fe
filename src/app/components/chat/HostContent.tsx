@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import ProfileIcon from '../common/ProfileIcon'
 import { Button } from 'antd'
 import { ApplyUsers, CompanionUsers } from '@/interfaces'
@@ -10,6 +10,8 @@ import {
 import { useCustomMessage } from '@/app/utils/alertUtils'
 import { usePathname } from 'next/navigation'
 import { RecruitmentStatus } from '@/types'
+import { Client } from '@stomp/stompjs'
+import SockJS from 'sockjs-client'
 
 interface HostContentProps {
   applyUsers: ApplyUsers[]
@@ -31,6 +33,42 @@ export const HostContent: React.FC<HostContentProps> = ({
   const { contextHolder, showSuccess, showWarning } = useCustomMessage()
   const path = usePathname()
   const chatRoomId = parseInt(path.split('/').pop() || '0', 10)
+  const clientRef = useRef<Client | null>(null)
+
+  useEffect(() => {
+    const socket = new SockJS(`${process.env.NEXT_PUBLIC_SERVER_URL}/ws/init`)
+    const client = new Client({
+      webSocketFactory: () => socket as WebSocket,
+      onConnect: () => {
+        clientRef.current = client
+      },
+      onStompError: (error) => {
+        console.error('STOMP error:', error)
+      },
+    })
+    client.activate()
+
+    return () => {
+      if (clientRef.current) {
+        clientRef.current.deactivate()
+      }
+    }
+  }, [chatRoomId])
+
+  const sendAcceptMessage = (acUserId: number, acNickname: string) => {
+    if (clientRef.current?.connected) {
+      clientRef.current.publish({
+        destination: `/pub/chat/room/${chatRoomId}`,
+        body: JSON.stringify({
+          chatRoomId: chatRoomId,
+          senderId: acUserId,
+          content: `${acNickname}님이 입장하셨습니다.`,
+          infoFlag: true,
+        }),
+      })
+      console.log('Leave message sent')
+    }
+  }
 
   const handleAccept = async (memberId: number) => {
     try {
@@ -38,6 +76,7 @@ export const HostContent: React.FC<HostContentProps> = ({
       // 새 companion user를 추가
       const acceptedUser = applyUsers.find((user) => user.memberId === memberId)
       if (acceptedUser) {
+        sendAcceptMessage(acceptedUser.memberId, acceptedUser.memberNickname)
         setCompanionUsers((prevCompanions) => [
           ...prevCompanions,
           {
