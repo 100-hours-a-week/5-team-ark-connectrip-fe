@@ -232,7 +232,12 @@ export default function CommunityDetailPage() {
             type='text'
             value={newComment}
             placeholder='댓글을 입력하세요.'
-            onChange={(e) => setNewComment(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value
+              if (value.length <= 256) {
+                setNewComment(value)
+              }
+            }}
             className='flex-1 w-full h-[35px] p-2 px-4 border border-gray-300 rounded-full focus:border-main focus:border-2 outline-none'
           />
           <button
