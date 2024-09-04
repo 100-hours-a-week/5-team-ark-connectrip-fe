@@ -158,4 +158,5 @@ export interface Message {
   createdAt: string
   senderNickname: string
   senderProfileImage: string
+  infoFlag: boolean
 }

@@ -40,8 +40,7 @@ const MessageList: React.FC<MessageListProps> = React.memo(
               {/* 날짜 구분선을 표시 */}
               {showDateSeparator && <DateSeparator date={msg.createdAt} />}
               {/* 채팅 메시지 표시 */}
-              {/* TODO: 00님이 방에서 나가셨습니다라는 메시지로만 구분해서 하지 말도록 로직 나중에 변경 필요  */}
-              {isLeaveMessage ? (
+              {msg.infoFlag ? (
                 <div className='flex items-center justify-center gap-1 text-xs text-white bg-[rgba(0,0,0,0.2)] p-1 px-2 rounded-full my-2 mt-3'>
                   {msg.content}
                 </div>

@@ -159,6 +159,7 @@ const GuestContent: React.FC<GuestContentProps> = ({
           chatRoomId: chatRoomId,
           senderId: userId,
           content: `${nickname}님이 방에서 나가셨습니다.`,
+          infoFlag: true,
         }),
       })
       console.log('Leave message sent')
