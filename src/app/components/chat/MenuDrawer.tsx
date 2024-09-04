@@ -1,104 +1,78 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Drawer, Tabs, Tag } from 'antd'
 import {
   MenuOutlined,
   UsergroupAddOutlined,
   AliwangwangOutlined,
 } from '@ant-design/icons'
-import HostContent from './HostContent' // HostContent 컴포넌트 임포트
+import { HostContent } from './HostContent' // HostContent 컴포넌트 임포트
 import GuestContent from './GuestContent' // GuestContent 컴포넌트 임포트
-import { ApplyUsers, CompanionUsers } from '@/interfaces'
+import { ApplyUsers, CompanionUsers, ChatRoomEntryData } from '@/interfaces'
+import { fetchPendingUsers, fetchCompanionUsers } from '@/app/utils/fetchUtils'
+import useAuthStore from '@/app/store/useAuthStore'
+import { RecruitmentStatus } from '@/types'
+interface MenuDrawerProps {
+  chatRoomData: ChatRoomEntryData
+}
 
-const mockData: ApplyUsers[] = [
-  {
-    accompanyPostId: 1,
-    memberId: 2,
-    memberNickname: '세니',
-    profileImagePath: '',
-  },
-  {
-    accompanyPostId: 1,
-    memberId: 3,
-    memberNickname: '트룰룰루',
-    profileImagePath: '',
-  },
-  {
-    accompanyPostId: 1,
-    memberId: 4,
-    memberNickname: '냄뀨뀨',
-    profileImagePath: '',
-  },
-  {
-    accompanyPostId: 1,
-    memberId: 5,
-    memberNickname: '노아노아노아',
-    profileImagePath: '',
-  },
-  {
-    accompanyPostId: 1,
-    memberId: 6,
-    memberNickname: '파아아zz',
-    profileImagePath: '',
-  },
-]
+const statusTranslations: { [key in RecruitmentStatus]: string } = {
+  PROGRESSING: '모집중',
+  CLOSED: '모집 마감',
+  FINISHED: '동행 종료',
+}
 
-// CompanionUsers 데이터
-const companionUsersData: CompanionUsers[] = [
-  {
-    chatRoomId: 1,
-    memberId: 1,
-    memberEmail: 'a1@naver.com',
-    memberNickname: '노노아',
-    memberProfileImage: null,
-    memberChatRoomStatus: 'ACTIVE',
-  },
-  {
-    chatRoomId: 1,
-    memberId: 10,
-    memberEmail: 'kookv1002@naver.com',
-    memberNickname: '루뜨뜨',
-    memberProfileImage:
-      'http://k.kakaocdn.net/dn/ZEQvV/btsIzAcVyYL/TkOaaPbnv0jGFEq3idt6Ck/img_640x640.jpg',
-    memberChatRoomStatus: 'ACTIVE',
-  },
-  {
-    chatRoomId: 1,
-    memberId: 19,
-    memberEmail: 'pse6704@naver.com',
-    memberNickname: '센세니',
-    memberProfileImage:
-      'http://k.kakaocdn.net/dn/rzia4/btsEYPys3Ja/IIpIg8cU6mzrZm2DuNq5SK/img_640x640.jpg',
-    memberChatRoomStatus: 'ACTIVE',
-  },
-]
-
-const MenuDrawer: React.FC = () => {
+const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
   const [open, setOpen] = useState(false)
+  const [applyUsers, setApplyUsers] = useState<ApplyUsers[]>([])
+  const [companionUsers, setCompanionUsers] = useState<CompanionUsers[]>([])
+  const { userId } = useAuthStore()
 
-  const showDrawer = () => {
-    setOpen(true)
-  }
+  const chatRoomId = chatRoomData?.chatRoomId || 0
+  const postId = chatRoomData?.accompanyPostId || 0
+  const leaderId = chatRoomData?.leaderId
+  const [accompanyStatus, setAccompanyStatus] = useState<RecruitmentStatus>(
+    chatRoomData?.status || 'PROGRESSING'
+  )
 
-  const onClose = () => {
-    setOpen(false)
-  }
-
-  /*
-  // API 호출하여 데이터 가져오기 (주석 처리)
-  useEffect(() => {
-    const fetchData = async () => {
+  // 데이터 fetch 함수
+  const fetchData = async () => {
+    if (chatRoomId && postId) {
       try {
-        const response = await fetch('/api/your-endpoint')
-        const data = await response.json()
-        setUsers(data) // 가져온 데이터를 상태에 저장
+        // Leader와 현재 유저 ID를 비교하여 fetch할 데이터를 결정
+        if (leaderId.toString() === userId) {
+          const [pendingUsersData, companionUsersData] = await Promise.all([
+            fetchPendingUsers(postId),
+            fetchCompanionUsers(chatRoomId),
+          ])
+          setApplyUsers(pendingUsersData)
+          setCompanionUsers(companionUsersData)
+        } else {
+          const companionUsersData = await fetchCompanionUsers(chatRoomId)
+          setCompanionUsers(companionUsersData)
+        }
       } catch (error) {
         console.error('Error fetching data:', error)
       }
     }
+  }
 
+  // Drawer가 열릴 때 데이터를 fetch
+  const showDrawer = () => {
+    setOpen(true)
     fetchData()
-  }, []) // 컴포넌트가 마운트될 때 한 번만 실행
-  */
+  }
+
+  // Drawer를 닫을 때
+  const onClose = () => {
+    setOpen(false)
+  }
+
+  useEffect(() => {
+    // 유효한 chatRoomId와 postId가 있을 때만 데이터를 fetch
+    if (chatRoomId && postId) {
+      fetchData()
+    }
+  }, [postId, chatRoomId])
 
   return (
     <>
@@ -108,13 +82,11 @@ const MenuDrawer: React.FC = () => {
       >
         <MenuOutlined style={{ fontSize: 20 }} />
       </div>
-      {/*  {/*  main: '#74cccc', // 메인 컬러
-        sub: '#b3bbee', secondary: '#6B7280' */}
       <Drawer
         title={
           <div className='flex items-center gap-2'>
             <span>동행 채팅방</span>
-            <Tag color='#74cccc'>모집중</Tag>
+            <Tag color='#74cccc'>{statusTranslations[accompanyStatus]}</Tag>
           </div>
         }
         placement='right'
@@ -125,20 +97,50 @@ const MenuDrawer: React.FC = () => {
       >
         <Tabs
           defaultActiveKey='1'
-          items={[
-            {
-              key: '1',
-              label: '동행 신청 목록',
-              icon: <UsergroupAddOutlined />,
-              children: <HostContent applyUsers={mockData} />, // Tab 1의 내용
-            },
-            {
-              key: '2',
-              label: '동행 위치',
-              icon: <AliwangwangOutlined />,
-              children: <GuestContent companionUsers={companionUsersData} />, // Tab 2의 내용
-            },
-          ]}
+          items={
+            leaderId.toString() === userId
+              ? [
+                  {
+                    key: '1',
+                    label: '동행 신청 목록',
+                    icon: <UsergroupAddOutlined />,
+                    children: (
+                      <HostContent
+                        applyUsers={applyUsers}
+                        postId={postId}
+                        setCompanionUsers={setCompanionUsers}
+                        setApplyUsers={setApplyUsers}
+                        setAccompanyStatus={setAccompanyStatus}
+                        accompanyStatus={accompanyStatus}
+                      />
+                    ),
+                  },
+                  {
+                    key: '2',
+                    label: '동행 위치',
+                    icon: <AliwangwangOutlined />,
+                    children: (
+                      <GuestContent
+                        companionUsers={companionUsers}
+                        postId={postId}
+                      />
+                    ),
+                  },
+                ]
+              : [
+                  {
+                    key: '2',
+                    label: '동행 위치',
+                    icon: <AliwangwangOutlined />,
+                    children: (
+                      <GuestContent
+                        companionUsers={companionUsers}
+                        postId={postId}
+                      />
+                    ),
+                  },
+                ]
+          }
         />
       </Drawer>
     </>
