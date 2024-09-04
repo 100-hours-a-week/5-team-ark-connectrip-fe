@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useRef, useState, useLayoutEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { checkChatRoomEntry, getPreviousMessages } from '@/app/utils/fetchUtils'
 import { useCustomMessage } from '@/app/utils/alertUtils'
 import { useRouter, usePathname } from 'next/navigation'
