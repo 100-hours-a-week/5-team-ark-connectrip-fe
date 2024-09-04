@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useRef, useEffect } from 'react'
 import ProfileIcon from '../common/ProfileIcon'
 import { Button, Switch } from 'antd'
 import useAuthStore from '@/app/store/useAuthStore'
@@ -11,6 +11,8 @@ import useKakaoLoader from '@/app/hooks/useKakaoLoader'
 import LoadingSpinner from '../common/LoadingSpinner'
 import MapComponent from './MapComponent'
 import { leaveChatRoom } from '@/app/utils/fetchUtils'
+import { Client } from '@stomp/stompjs'
+import SockJS from 'sockjs-client'
 
 const mockData = [
   {
@@ -57,7 +59,7 @@ const GuestContent: React.FC<GuestContentProps> = ({
   companionUsers,
   postId,
 }) => {
-  const { nickname, profileImage } = useAuthStore() // zustand 스토어에서 유저 닉네임 가져오기
+  const { nickname, profileImage, userId } = useAuthStore() // zustand 스토어에서 유저 닉네임 가져오기
   const [trackingEnabled, setTrackingEnabled] = useState(false)
   // TODO : 위치 정보 전송 시, 링크를 저장할 수 있는 상태 추가  - 관련 로직 추가 후 삭제 필요
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -127,8 +129,45 @@ const GuestContent: React.FC<GuestContentProps> = ({
     )
   }
 
+  const clientRef = useRef<Client | null>(null)
+
+  useEffect(() => {
+    const socket = new SockJS(`${process.env.NEXT_PUBLIC_SERVER_URL}/ws/init`)
+    const client = new Client({
+      webSocketFactory: () => socket as WebSocket,
+      onConnect: () => {
+        clientRef.current = client
+      },
+      onStompError: (error) => {
+        console.error('STOMP error:', error)
+      },
+    })
+    client.activate()
+
+    return () => {
+      if (clientRef.current) {
+        clientRef.current.deactivate()
+      }
+    }
+  }, [chatRoomId])
+
+  const sendLeaveMessage = () => {
+    if (clientRef.current?.connected) {
+      clientRef.current.publish({
+        destination: `/pub/chat/room/${chatRoomId}`,
+        body: JSON.stringify({
+          chatRoomId: chatRoomId,
+          senderId: userId,
+          content: `${nickname}님이 방에서 나가셨습니다.`,
+        }),
+      })
+      console.log('Leave message sent')
+    }
+  }
+
   const handleLeaveGroup = async () => {
     try {
+      sendLeaveMessage() // 방 나가기 메시지 전송
       await leaveChatRoom(chatRoomId)
       showSuccess('채팅방에서 나가셨습니다.')
     } catch (error) {
