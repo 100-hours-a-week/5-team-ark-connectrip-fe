@@ -77,11 +77,10 @@ export default function Header() {
     <header className='fixed top-0 w-full max-w-[500px] bg-white shadow-lg p-4 flex justify-between items-center border-b border-gray-100 z-10'>
       {contextHolder}
       <div
-        className='flex items-center cursor-pointer'
+        className='flex items-center cursor-pointer mt-1'
         onClick={handleLogoClick} // 클릭 시 처리
       >
-        <Image src='/logo.png' alt='Logo' width={30} height={30} />
-        <h1 className='ml-2 text-2xl font-semibold'>ConnecTrip</h1>
+        <Image src='/logo.svg' alt='Logo' height={45} width={135} />
       </div>
       {nickname ? (
         <div className='flex gap-2'>

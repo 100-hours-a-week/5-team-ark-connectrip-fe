@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     siteName: 'ConnecTrip',
     images: [
       {
-        url: '',
+        url: '/logo.svg',
         width: 800,
         height: 600,
         alt: 'ConnecTrip',
