@@ -8,19 +8,21 @@ import Head from 'next/head'
 
 // 메타데이터 설정
 export const metadata: Metadata = {
-  title: 'ConnecTrip',
+  title: '커넥트립 | 국내 여행 동행 커뮤니티',
   description: '국내 여행 동행 모집 커뮤니티',
   openGraph: {
-    title: 'ConnecTrip',
-    description: '국내 여행 동행 모집 커뮤니티',
-    url: 'https://yourwebsite.com',
+    title: 'ConnecTrip | 국내 여행 동행 커뮤니티',
+    description:
+      'ConnecTrip은 국내 여행 동행자를 모집하고, 실시간 채팅 및 위치 공유 기능을 통해 안전하고 즐거운 여행을 지원하는 커뮤니티입니다.',
+    url: 'https://connectrip.travel/',
     siteName: 'ConnecTrip',
     images: [
       {
         url: '/logo.svg',
-        width: 800,
-        height: 600,
-        alt: 'ConnecTrip',
+        width: 1200,
+        height: 630,
+        alt: 'ConnecTrip 로고',
+        type: 'image/svg+xml',
       },
     ],
     locale: 'ko_KR',
@@ -28,9 +30,15 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ConnecTrip',
-    description: '국내 여행 동행 모집 커뮤니티',
-    images: [''],
+    title: 'ConnecTrip | 국내 여행 동행 커뮤니티',
+    description:
+      'ConnecTrip은 국내 여행 동행자를 모집하고 커뮤니티를 형성할 수 있는 서비스입니다.',
+    images: [
+      {
+        url: '/logo.svg',
+        alt: 'ConnecTrip 로고',
+      },
+    ],
   },
 }
 
@@ -73,6 +81,8 @@ export default function RootLayout({
           href='https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css'
           crossOrigin='anonymous'
         />
+        <meta name='robots' content='index,follow' />
+        <link rel='canonical' href='https://connectrip.travel/' />
       </Head>
       <body>
         <AntdRegistry>
