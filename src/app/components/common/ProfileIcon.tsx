@@ -34,7 +34,13 @@ const ProfileIcon: React.FC<ProfileIconProps> = ({ src, size, nickname }) => {
   }
 
   return (
-    <div className='flex-shrink-0'>
+    <div
+      className='flex-shrink-0 rounded-full overflow-hidden'
+      style={{
+        width: size,
+        height: size,
+      }}
+    >
       <Image
         src={src}
         alt='Profile'
@@ -43,8 +49,8 @@ const ProfileIcon: React.FC<ProfileIconProps> = ({ src, size, nickname }) => {
         className='rounded-full'
         style={{
           objectFit: 'cover', // 이미지를 크기에 맞게 자름
-          width: size,
-          height: size,
+          width: '100%', // 부모의 크기에 맞춰 조정
+          height: '100%', // 부모의 크기에 맞춰 조정
         }}
       />
     </div>
