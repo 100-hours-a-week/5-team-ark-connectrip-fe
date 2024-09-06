@@ -189,7 +189,7 @@ export default function CommunityDetailPage() {
           {comments.map((comment) => (
             <div
               key={comment.id}
-              className='flex items-start mb-4 flex-1 w-full'
+              className='flex items-start mb-4 flex-1 w-full '
             >
               <ProfileIcon
                 src={comment.memberProfileImage}
@@ -220,7 +220,12 @@ export default function CommunityDetailPage() {
                     </div>
                   )}
                 </div>
-                <p className='text-gray-700 mt-1'>{comment.content}</p>
+                <p
+                  className='text-gray-700 mt-1 break-all'
+                  style={{ wordBreak: 'break-word' }}
+                >
+                  {comment.content}
+                </p>
               </div>
             </div>
           ))}

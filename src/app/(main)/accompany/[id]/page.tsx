@@ -339,7 +339,12 @@ export default function AccompanyDetailPage() {
                     </div>
                   )}
                 </div>
-                <p className='text-gray-700 mt-1'>{comment.content}</p>
+                <p
+                  className='text-gray-700 mt-1 break-all'
+                  style={{ wordBreak: 'break-word' }}
+                >
+                  {comment.content}
+                </p>
               </div>
             </div>
           ))}
