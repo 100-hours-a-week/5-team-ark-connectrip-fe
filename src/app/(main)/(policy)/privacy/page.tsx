@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Privacy() {
   return (
-    <div className='max-w-3xl w-full p-6 mb-6 text-gray-600 mt-6 rounded-lg border border-gray-200 bg-white'>
+    <div className='max-w-3xl w-full p-6 mb-6 text-gray-600 mt-6 rounded-lg  bg-white'>
       <h1 className='text-2xl font-bold mb-4 text-black'>개인정보 처리방침</h1>
 
       <section className='mb-6'>
@@ -88,8 +88,8 @@ export default function Privacy() {
             회사는 이용자의 회사 서비스에 대한 회원가입을 위하여 다음과 같은
             정보를 수집합니다:
             <ul className='list-disc list-inside'>
-              <li>1. 필수 수집 정보: 이메일 주소, 닉네임 및 생년월일</li>
-              <li>2. 선택 수집 정보: 성별</li>
+              <p> 1. 필수 수집 정보: 이메일 주소, 닉네임 및 생년월일</p>
+              <p>2. 선택 수집 정보: 성별</p>
             </ul>
           </li>
         </ul>
@@ -103,17 +103,17 @@ export default function Privacy() {
           <li>
             회사는 다음과 같은 방법으로 이용자의 개인정보를 수집합니다:
             <ul className='list-disc list-inside'>
-              <li>
+              <p>
                 1. 이용자가 회사의 홈페이지에 자신의 개인정보를 입력하는 방식
-              </li>
-              <li>
+              </p>
+              <p>
                 2. 어플리케이션 등 회사가 제공하는 홈페이지 외의 서비스를 통해
                 이용자가 자신의 개인정보를 입력하는 방식
-              </li>
-              <li>
+              </p>
+              <p>
                 3. 이용자가 고객센터의 상담, 게시판에서의 활동 등 회사의
                 서비스를 이용하는 과정에서 이용자가 입력하는 방식
-              </li>
+              </p>
             </ul>
           </li>
         </ul>
@@ -127,20 +127,20 @@ export default function Privacy() {
           <li>
             회사는 개인정보를 다음 각 호의 경우에 이용합니다:
             <ul className='list-disc list-inside'>
-              <li>1. 공지사항의 전달 등 회사운영에 필요한 경우</li>
-              <li>
+              <p>1. 공지사항의 전달 등 회사운영에 필요한 경우</p>
+              <p>
                 2. 이용문의에 대한 회신, 불만의 처리 등 이용자에 대한 서비스
                 개선을 위한 경우
-              </li>
-              <li>3. 회사의 서비스를 제공하기 위한 경우</li>
-              <li>
+              </p>
+              <p>3. 회사의 서비스를 제공하기 위한 경우</p>
+              <p>
                 4. 법령 및 회사 약관을 위반하는 회원에 대한 이용 제한 조치, 부정
                 이용 행위를 포함하여 서비스의 원활한 운영에 지장을 주는 행위에
                 대한 방지 및 제재를 위한 경우
-              </li>
-              <li>
+              </p>
+              <p>
                 5. 개인정보 및 관심에 기반한 이용자간 관계의 형성을 위한 경우
-              </li>
+              </p>
             </ul>
           </li>
         </ul>
@@ -171,7 +171,7 @@ export default function Privacy() {
           <li>
             회사는 관계법령에 따라 다음과 같이 개인정보를 보유 및 이용합니다:
             <ul className='list-disc list-inside'>
-              <li>
+              <p>
                 1. 전자상거래 등에서의 소비자보호에 관한 법률에 따른 보유정보 및
                 보유기간:
                 <ul className='list-disc list-inside'>
@@ -180,25 +180,25 @@ export default function Privacy() {
                   <li>다. 소비자의 불만 또는 분쟁처리에 관한 기록: 3년</li>
                   <li>라. 표시•광고에 관한 기록: 6개월</li>
                 </ul>
-              </li>
-              <li>
+              </p>
+              <p>
                 2. 통신비밀보호법에 따른 보유정보 및 보유기간:
                 <ul className='list-disc list-inside'>
                   <li>가. 웹사이트 로그 기록 자료: 3개월</li>
                 </ul>
-              </li>
-              <li>
+              </p>
+              <p>
                 3. 전자금융거래법에 따른 보유정보 및 보유기간:
                 <ul className='list-disc list-inside'>
                   <li>가. 전자금융거래에 관한 기록: 5년</li>
                 </ul>
-              </li>
-              <li>
+              </p>
+              <p>
                 4. 위치정보의 보호 및 이용 등에 관한 법률:
                 <ul className='list-disc list-inside'>
                   <li>가. 개인위치정보에 관한 기록: 6개월</li>
                 </ul>
-              </li>
+              </p>
             </ul>
           </li>
         </ul>
@@ -254,16 +254,16 @@ export default function Privacy() {
             경우 이용자의 명시적인 사전 동의를 받습니다. 다만, 다음 각호 어느
             하나에 해당하는 경우에는 사전 동의를 받지 않습니다:
             <ul className='list-disc list-inside'>
-              <li>
+              <p>
                 가. 회사가 재화 등의 거래관계를 통해 수신자로부터 직접 연락처를
                 수집한 경우, 거래가 종료된 날로부터 6개월 이내에 회사가 처리하고
                 수신자와 거래한 것과 동종의 재화 등에 대한 영리목적의 광고성
                 정보를 전송하려는 경우
-              </li>
-              <li>
+              </p>
+              <p>
                 나. 『방문판매 등에 관한 법률』에 따른 전화권유판매자가 육성으로
                 수신자에게 개인정보의 수집 출처를 고지하고 전화권유를 하는 경우
-              </li>
+              </p>
             </ul>
           </li>
           <li>
@@ -280,36 +280,36 @@ export default function Privacy() {
             회사는 전자적 전송매체를 이용하여 영리목적의 광고성 정보를 전송하는
             경우 다음의 사항 등을 광고성 정보에 구체적으로 밝힙니다:
             <ul className='list-disc list-inside'>
-              <li>가. 회사명 및 연락처</li>
-              <li>
+              <p>가. 회사명 및 연락처</p>
+              <p>
                 나. 수신 거부 또는 수신 동의의 철회 의사표시에 관한 사항의 표시
-              </li>
+              </p>
             </ul>
           </li>
           <li>
             회사는 전자적 전송매체를 이용하여 영리목적의 광고성 정보를 전송하는
             경우 다음 각 호의 어느 하나에 해당하는 조치를 하지 않습니다:
             <ul className='list-disc list-inside'>
-              <li>
+              <p>
                 가. 광고성 정보 수신자의 수신거부 또는 수신동의의 철회를
                 회피•방해하는 조치
-              </li>
-              <li>
+              </p>
+              <p>
                 나. 숫자•부호 또는 문자를 조합하여 전화번호•전자우편주소 등
                 수신자의 연락처를 자동으로 만들어 내는 조치
-              </li>
-              <li>
+              </p>
+              <p>
                 다. 영리목적의 광고성 정보를 전송할 목적으로 전화번호 또는
                 전자우편주소를 자동으로 등록하는 조치
-              </li>
-              <li>
+              </p>
+              <p>
                 라. 광고성 정보 전송자의 신원이나 광고 전송 출처를 감추기 위한
                 각종 조치
-              </li>
-              <li>
+              </p>
+              <p>
                 마. 영리목적의 광고성 정보를 전송할 목적으로 수신자를 기망하여
                 회신을 유도하는 각종 조치
-              </li>
+              </p>
             </ul>
           </li>
         </ul>
@@ -370,18 +370,18 @@ export default function Privacy() {
             웹브라우저 옵션 설정을 통해 쿠키 허용, 쿠키 차단 등의 설정을 할 수
             있습니다:
             <ul className='list-disc list-inside'>
-              <li>
+              <p>
                 1. Edge: 웹브라우저 우측 상단의 설정 메뉴 {'>'} 쿠키 및 사이트
                 권한 {'>'} 쿠키 및 사이트 데이터 관리 및 삭제
-              </li>
-              <li>
+              </p>
+              <p>
                 2. Chrome: 웹브라우저 우측 상단의 설정 메뉴 {'>'} 개인정보 및
                 보안 {'>'} 쿠키 및 기타 사이트 데이터
-              </li>
-              <li>
+              </p>
+              <p>
                 3. Whale: 웹브라우저 우측 상단의 설정 메뉴 {'>'} 개인정보 보호{' '}
                 {'>'} 쿠키 및 기타 사이트 데이터
-              </li>
+              </p>
             </ul>
           </li>
         </ul>
@@ -397,11 +397,11 @@ export default function Privacy() {
             처리하기 위하여 아래와 같이 관련 부서 및 개인정보 보호 책임자를
             지정하고 있습니다:
             <ul className='list-disc list-inside'>
-              <li>가. 개인정보 보호 책임자</li>
-              <li>1. 성명:</li>
-              <li>2. 직책:</li>
-              <li>3. 전화번호:</li>
-              <li>4. 이메일: 49ehyeon42@gmail.com</li>
+              <p>가. 개인정보 보호 책임자</p>
+              <p>1. 성명:</p>
+              <p>2. 직책:</p>
+              <p>3. 전화번호:</p>
+              <p>4. 이메일: 49ehyeon42@gmail.com</p>
             </ul>
           </li>
         </ul>
@@ -419,15 +419,15 @@ export default function Privacy() {
             개인정보침해의 신고, 상담에 대하여는 아래의 기관에 문의하시기
             바랍니다:
             <ul className='list-disc list-inside'>
-              <li>
+              <p>
                 가. 개인정보분쟁조정위원회 : (국번없이) 1833-6972
                 (www.kopico.go.kr)
-              </li>
-              <li>
+              </p>
+              <p>
                 나. 개인정보침해신고센터 : (국번없이) 118 (privacy.kisa.or.kr)
-              </li>
-              <li>다. 대검찰청 : (국번없이) 1301 (www.spo.go.kr)</li>
-              <li>라. 경찰청 : (국번없이) 182 (ecrm.cyber.go.kr)</li>
+              </p>
+              <p>다. 대검찰청 : (국번없이) 1301 (www.spo.go.kr)</p>
+              <p>라. 경찰청 : (국번없이) 182 (ecrm.cyber.go.kr)</p>
             </ul>
           </li>
           <li>
@@ -442,9 +442,7 @@ export default function Privacy() {
             이익의 침해를 받은 자는 행정심판법이 정하는 바에 따라 행정심판을
             청구할 수 있습니다:
             <ul className='list-disc list-inside'>
-              <li>
-                가. 중앙행정심판위원회 : (국번없이) 110 (www.simpan.go.kr)
-              </li>
+              <p>가. 중앙행정심판위원회 : (국번없이) 110 (www.simpan.go.kr)</p>
             </ul>
           </li>
         </ul>
