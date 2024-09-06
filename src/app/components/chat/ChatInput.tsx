@@ -24,7 +24,12 @@ const ChatInput: React.FC<ChatInputProps> = ({
           placeholder='메시지를 입력하세요.'
           className='flex-1 w-full h-[35px] p-2 px-4 border border-gray-300 rounded-full focus:border-sub focus:border-2 outline-none'
           value={content}
-          onChange={(e) => setContent(e.target.value)} // 입력된 값을 상태로 업데이트
+          onChange={(e) => {
+            const value = e.target.value
+            if (value.length <= 258) {
+              setContent(value)
+            }
+          }}
         />
         <button
           type='submit'

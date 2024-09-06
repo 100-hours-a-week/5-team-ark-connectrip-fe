@@ -28,10 +28,6 @@ const MessageList: React.FC<MessageListProps> = React.memo(
           const showDateSeparator = currentDate !== lastDate
           lastDate = currentDate
 
-          // "00님이 방에서 나가셨습니다." 메시지를 처리하는 부분
-          const isLeaveMessage =
-            msg.content.includes('님이 방에서 나가셨습니다.')
-
           return (
             <div
               key={msg.id}

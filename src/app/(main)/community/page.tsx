@@ -20,9 +20,9 @@ export default function CommunityHome() {
       try {
         const data = searchQuery
           ? await api.get(
-              `/api/v1/accompany/posts/search?query=${encodeURIComponent(searchQuery)}`
+              `/api/v1/community/posts/search?query=${encodeURIComponent(searchQuery)}`
             )
-          : await api.get('/api/v1/accompany/posts')
+          : await api.get('/api/v1/community/posts')
         setPosts(data)
         setLoading(false)
       } catch (error) {

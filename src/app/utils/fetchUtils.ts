@@ -250,3 +250,114 @@ export const getPreviousMessages = async (chatRoomId: number) => {
     throw new Error('이전 메시지를 불러오는 데 실패했습니다.')
   }
 }
+
+//커뮤니티//////////////////////////////////////////////////////////////
+// 게시글 데이터를 가져오는 유틸리티 함수
+export const fetchCommunityPost = async (postId: number) => {
+  try {
+    const data = await api.get(`/api/v1/community/posts/${postId}`)
+    return {
+      ...data,
+      createdAt: formatToUtcDate(data.createdAt),
+      startDate: data.startDate ? formatShortDateFromUtc(data.startDate) : null,
+      endDate: data.endDate ? formatShortDateFromUtc(data.endDate) : null,
+    }
+  } catch (error) {
+    console.error('Failed to fetch post:', error)
+    throw new Error('게시글을 불러오는 데 실패했습니다.')
+  }
+}
+
+// 게시글을 수정하는 유틸리티 함수
+export const updateCommunityPost = async (
+  postId: number,
+  payload: {
+    title: string
+    content: string
+  }
+) => {
+  try {
+    const response = await api.put(`/api/v1/community/posts/${postId}`, payload)
+    return response
+  } catch (error) {
+    console.error('게시글 수정 중 오류 발생:', error)
+    throw new Error('게시글 수정에 실패했습니다.')
+  }
+}
+
+// 게시글을 삭제하는 유틸리티 함수
+export const deleteCommunityPost = async (postId: number) => {
+  try {
+    const response = await api.post(
+      `/api/v1/community/posts/${postId}/delete`,
+      {}
+    )
+    return response
+  } catch (error) {
+    console.error('게시글 삭제 중 오류 발생:', error)
+    throw new Error('게시글 삭제에 실패했습니다.')
+  }
+}
+
+// 댓글 데이터를 가져오는 유틸리티 함수
+export const fetchCommunityComments = async (postId: number) => {
+  try {
+    const commentData = await api.get(`/api/v1/community/comment/${postId}`)
+    return commentData.map((comment: Comment) => ({
+      ...comment,
+      createdDate: formatToUtcDate(comment.createdAt),
+    }))
+  } catch (error) {
+    console.error('Failed to fetch comments:', error)
+    throw new Error('댓글을 불러오는 데 실패했습니다.')
+  }
+}
+
+// 댓글 등록 유틸리티 함수
+export const createCommunityComment = async (
+  postId: number,
+  content: string
+) => {
+  try {
+    const response = await api.post(`/api/v1/community/comment`, {
+      postId,
+      content,
+    })
+    return response
+  } catch (error) {
+    console.error('댓글 등록 중 오류 발생:', error)
+    throw new Error('댓글 등록에 실패했습니다.')
+  }
+}
+
+// 댓글 수정 유틸리티 함수
+export const updateCommunityComment = async (
+  commentId: number,
+  postId: number,
+  content: string
+) => {
+  try {
+    const response = await api.put(`/api/v1/community/comment/${commentId}`, {
+      postId,
+      content,
+    })
+    return response
+  } catch (error) {
+    console.error('댓글 수정 중 오류 발생:', error)
+    throw new Error('댓글 수정에 실패했습니다.')
+  }
+}
+
+// 댓글 삭제 유틸리티 함수
+export const deleteCommunityComment = async (commentId: number) => {
+  try {
+    const response = await api.post(
+      `/api/v1/community/comment/${commentId}`,
+      {}
+    )
+    return response
+  } catch (error) {
+    console.error('댓글 삭제 중 오류 발생:', error)
+    throw new Error('댓글 삭제에 실패했습니다.')
+  }
+}

@@ -1,7 +1,6 @@
 // components/chat/LeftChatContainer.tsx
 import React from 'react'
 import ProfileIcon from '@/app/components/common/ProfileIcon'
-import { profile } from 'console'
 
 interface LeftChatContainerProps {
   message: string

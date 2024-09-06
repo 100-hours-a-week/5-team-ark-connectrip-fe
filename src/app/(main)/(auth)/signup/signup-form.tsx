@@ -14,8 +14,12 @@ import { NicknameStatus } from '@/types'
 import { SignupFormValues } from '@/interfaces'
 
 const termsOptions = [
-  { label: '개인정보 처리방침 동의 (필수)', value: 'privacyPolicy' },
-  { label: '이용약관 동의 (필수)', value: 'termsOfService' },
+  {
+    label: '개인정보 처리방침 동의 (필수)',
+    value: 'privacyPolicy',
+    link: '/policy',
+  },
+  { label: '이용약관 동의 (필수)', value: 'termsOfService', link: '/privacy' },
 ]
 
 const SignupPage: React.FC = () => {
@@ -133,6 +137,7 @@ const SignupPage: React.FC = () => {
     } catch (error) {
       showError('회원가입에 실패했습니다.')
       console.error('Error:', error)
+      router.push('/')
     }
   }
 
@@ -272,7 +277,14 @@ const SignupPage: React.FC = () => {
                   onChange={() => handleOptionChange(option.value)}
                   checked={checkedList.includes(option.value)}
                 >
-                  {option.label}
+                  <a
+                    href={option.link}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='no-underline text-gray-700' // 기본 색상으로 변경
+                  >
+                    {option.label}
+                  </a>
                 </Checkbox>
               </div>
             ))}
