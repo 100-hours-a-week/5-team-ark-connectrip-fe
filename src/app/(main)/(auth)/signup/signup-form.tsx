@@ -58,7 +58,7 @@ const SignupPage: React.FC = () => {
     if (
       nickname.length < 3 ||
       nickname.length > 20 ||
-      /[^가-힣a-zA-Z\s]/.test(nickname) // 특수 문자 및 숫자 방지
+      /[^가-힣a-zA-Z0-9\s]/.test(nickname) // 특수 문자 방지, 숫자 허용
     ) {
       setNicknameStatus('invalid')
       setNicknameHelperText(
