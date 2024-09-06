@@ -175,7 +175,7 @@ export default function CommunityDetailPage() {
           )}
         </div>
 
-        <div className='text-gray-700 mb-2 whitespace-pre-wrap text-justify p-1'>
+        <div className='text-gray-700 mb-4 whitespace-pre-wrap text-justify p-1 break-all'>
           {post.content}
         </div>
 
