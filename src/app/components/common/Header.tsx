@@ -80,7 +80,7 @@ export default function Header() {
         className='flex items-center cursor-pointer mt-1'
         onClick={handleLogoClick} // 클릭 시 처리
       >
-        <Image src='/logo.svg' alt='Logo' height={45} width={135} />
+        <Image src='/logo.svg' alt='Logo' height={40} width={120} />
       </div>
       {nickname ? (
         <div className='flex gap-2'>
