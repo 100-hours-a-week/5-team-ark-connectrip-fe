@@ -12,9 +12,12 @@ import CommunityForm from '@/app/components/community/CommunityForm'
 export default function CreateAccompanyPage() {
   const router = useRouter()
   const { contextHolder, showSuccess, showError } = useCustomMessage()
+  const [isClick, setIsClick] = React.useState(false)
 
   const handleFinish = async (values: CommunityFormValues) => {
     try {
+      if (isClick) return
+      setIsClick(true)
       const formData = formatCommunityFormData(values)
       await api.post(`/api/v1/community/posts`, formData)
       showSuccess('게시글 작성이 완료되었습니다.')

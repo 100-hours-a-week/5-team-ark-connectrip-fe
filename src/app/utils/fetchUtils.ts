@@ -352,7 +352,7 @@ export const updateCommunityComment = async (
 export const deleteCommunityComment = async (commentId: number) => {
   try {
     const response = await api.post(
-      `/api/v1/community/comment/${commentId}`,
+      `/api/v1/community/comment/${commentId}/delete`,
       {}
     )
     return response
