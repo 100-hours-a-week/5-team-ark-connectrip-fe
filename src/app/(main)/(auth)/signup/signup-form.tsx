@@ -17,9 +17,9 @@ const termsOptions = [
   {
     label: '개인정보 처리방침 동의 (필수)',
     value: 'privacyPolicy',
-    link: '/policy',
+    link: '/privacy',
   },
-  { label: '이용약관 동의 (필수)', value: 'termsOfService', link: '/privacy' },
+  { label: '이용약관 동의 (필수)', value: 'termsOfService', link: '/policy' },
 ]
 
 const SignupPage: React.FC = () => {
