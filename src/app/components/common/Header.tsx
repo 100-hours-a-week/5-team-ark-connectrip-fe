@@ -80,7 +80,14 @@ export default function Header() {
         className='flex items-center cursor-pointer mt-1'
         onClick={handleLogoClick} // 클릭 시 처리
       >
-        <Image src='/logo.svg' alt='Logo' height={40} width={120} />
+        <Image
+          src='/logo.svg'
+          alt='Logo'
+          height={40}
+          width={120}
+          priority
+          style={{ objectFit: 'contain' }} // 이미지 비율을 유지하면서 영역에 맞게 표시
+        />
       </div>
       {nickname ? (
         <div className='flex gap-2'>

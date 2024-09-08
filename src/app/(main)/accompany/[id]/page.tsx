@@ -310,7 +310,7 @@ export default function AccompanyDetailPage() {
             </div>
           )}
           {comments.map((comment) => (
-            <div className='flex items-start mb-4 w-full '>
+            <div key={comment.id} className='flex items-start mb-4 w-full '>
               <ProfileIcon
                 src={comment.memberProfileImage}
                 size={35}
