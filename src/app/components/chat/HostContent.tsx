@@ -66,7 +66,6 @@ export const HostContent: React.FC<HostContentProps> = ({
           infoFlag: true,
         }),
       })
-      console.log('Leave message sent')
     }
   }
 

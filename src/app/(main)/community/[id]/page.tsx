@@ -32,6 +32,8 @@ export default function CommunityDetailPage() {
   const [isEditing, setIsEditing] = useState<boolean>(false)
   // 수정할 댓글 ID
   const [editCommentId, setEditCommentId] = useState<number | null>(null)
+  // 댓글 여러번 입력 막기 위한 상태
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const { userId } = useAuthStore()
   const { contextHolder, showSuccess, showWarning } = useCustomMessage()
@@ -80,8 +82,10 @@ export default function CommunityDetailPage() {
   // 댓글 작성 버튼 클릭 시
   const handleCommentSubmit = async () => {
     if (!newComment.trim()) return showWarning('댓글을 입력해주세요.')
+    if (isSubmitting) return
 
     try {
+      setIsSubmitting(true) // 댓글 등록 중 여러번 클릭 방지
       if (isEditing && editCommentId !== null) {
         const response = await updateCommunityComment(
           editCommentId,
@@ -104,6 +108,7 @@ export default function CommunityDetailPage() {
         } else {
           showWarning('댓글 등록에 실패했습니다.')
         }
+        setIsSubmitting(false)
       }
 
       setNewComment('')

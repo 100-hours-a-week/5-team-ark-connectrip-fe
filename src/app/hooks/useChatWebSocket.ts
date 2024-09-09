@@ -17,7 +17,6 @@ export const useChatWebSocket = (chatRoomId: number, userId: string) => {
           content: content,
         }),
       })
-      console.log('Message sent:', content)
     }
   }
 
@@ -30,7 +29,6 @@ export const useChatWebSocket = (chatRoomId: number, userId: string) => {
         client.subscribe(
           `/sub/chat/room/${chatRoomId}`,
           (message: IMessage) => {
-            console.log('New message received!')
             const body = JSON.parse(message.body)
             if (body) {
               setMessages((prevMessages) => [...prevMessages, body])

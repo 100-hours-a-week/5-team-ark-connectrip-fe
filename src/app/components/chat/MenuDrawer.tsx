@@ -33,6 +33,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
   const [accompanyStatus, setAccompanyStatus] = useState<RecruitmentStatus>(
     chatRoomData?.status || 'PROGRESSING'
   )
+  const isPostExists = chatRoomData.isPostExists
 
   // 데이터 fetch 함수
   const fetchData = async () => {
@@ -123,6 +124,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
                       <GuestContent
                         companionUsers={companionUsers}
                         postId={postId}
+                        isPostExists={isPostExists}
                       />
                     ),
                   },
@@ -136,6 +138,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
                       <GuestContent
                         companionUsers={companionUsers}
                         postId={postId}
+                        isPostExists={isPostExists}
                       />
                     ),
                   },

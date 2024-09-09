@@ -248,11 +248,13 @@ import { sendLeaveMessage } from '@/app/utils/sendLeaveMessage'
 interface GuestContentProps {
   companionUsers: CompanionUsers[] // 동행 참여자 목록
   postId: number // 게시글 ID
+  isPostExists: boolean // 게시글 존재 여부
 }
 
 const GuestContent: React.FC<GuestContentProps> = ({
   companionUsers,
   postId,
+  isPostExists,
 }) => {
   const { nickname, userId } = useAuthStore() // zustand 스토어에서 유저 닉네임 가져오기
   // TODO : 위치 정보 전송 시, 링크를 저장할 수 있는 상태 추가  - 관련 로직 추가 후 삭제 필요
@@ -279,8 +281,9 @@ const GuestContent: React.FC<GuestContentProps> = ({
   return (
     <div className='flex flex-col gap-3 mb-3'>
       {contextHolder}
-      <div className='flex justify-center items-center h-[300px] bg-gray-100'>
-        {/* {loading ? (
+      {/* <div className='flex justify-center items-center h-[300px] bg-gray-100'> */}
+
+      {/* {loading ? (
           <LoadingSpinner /> // 로딩 중일 때 스피너 표시
         ) : trackingEnabled ? (
           <MapComponent
@@ -308,7 +311,7 @@ const GuestContent: React.FC<GuestContentProps> = ({
           <p>내 위치 추적</p>
           <Switch onChange={handleSwitchChange} />
         </div> */}
-      </div>
+      {/* </div> */}
       <h3>대화 상대</h3>
       <div className='flex flex-col'>
         {companionUsers.map((user) => (
@@ -324,13 +327,15 @@ const GuestContent: React.FC<GuestContentProps> = ({
           </div>
         ))}
       </div>
-      <Button
-        type='primary'
-        className='w-full'
-        onClick={() => router.push(`/accompany/${postId}`)}
-      >
-        모집 게시글로 이동
-      </Button>
+      {isPostExists && (
+        <Button
+          type='primary'
+          className='w-full'
+          onClick={() => router.push(`/accompany/${postId}`)}
+        >
+          모집 게시글로 이동
+        </Button>
+      )}
       <Button
         type='primary'
         className='w-full'
