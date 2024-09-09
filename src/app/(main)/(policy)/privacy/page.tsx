@@ -2,11 +2,11 @@ import React from 'react'
 
 export default function Privacy() {
   return (
-    <div className='max-w-3xl w-full p-6 mb-6 text-gray-600 mt-6 rounded-lg  bg-white'>
-      <h1 className='text-2xl font-bold mb-4 text-black'>개인정보 처리방침</h1>
+    <div className='max-w-3xl w-full p-6 mb-6 text-gray-600 mt-6 rounded-lg'>
+      <h1 className='text-xl font-bold mb-6 text-black'>개인정보 처리방침</h1>
 
       <section className='mb-6'>
-        <h2 className='text-xl font-medium mb-2 text-black'>제1조 (목적)</h2>
+        <h2 className='text-l font-medium mb-2 text-black'>제1조 (목적)</h2>
         <p className='mb-4'>
           connectrip(이하 '회사'라고 함)는 회사가 제공하고자 하는 서비스(이하
           '회사 서비스')를 이용하는 개인(이하 '이용자' 또는 '개인')의 정보(이하
@@ -19,7 +19,7 @@ export default function Privacy() {
       </section>
 
       <section className='mb-6'>
-        <h2 className='text-xl font-medium mb-2 text-black'>
+        <h2 className='text-l font-medium mb-2 text-black'>
           제2조 (개인정보 처리의 원칙)
         </h2>
         <p className='mb-4'>
@@ -32,7 +32,7 @@ export default function Privacy() {
       </section>
 
       <section className='mb-6'>
-        <h2 className='text-xl font-medium mb-2 text-black'>
+        <h2 className='text-l font-medium mb-2 text-black'>
           제3조 (본 방침의 공개)
         </h2>
         <p className='mb-4'>
@@ -44,7 +44,7 @@ export default function Privacy() {
       </section>
 
       <section className='mb-6'>
-        <h2 className='text-xl font-medium mb-2 text-black'>
+        <h2 className='text-l font-medium mb-2 text-black'>
           제4조 (본 방침의 변경)
         </h2>
         <p className='mb-4'>
@@ -59,7 +59,7 @@ export default function Privacy() {
       </section>
 
       <section className='mb-6'>
-        <h2 className='text-xl font-medium mb-2 text-black'>
+        <h2 className='text-l font-medium mb-2 text-black'>
           제5조 (회원 가입을 위한 정보)
         </h2>
         <p className='mb-4'>
@@ -70,7 +70,7 @@ export default function Privacy() {
       </section>
 
       <section className='mb-6'>
-        <h2 className='text-xl font-medium mb-2 text-black'>
+        <h2 className='text-l font-medium mb-2 text-black'>
           제6조 (개인정보 수집 방법)
         </h2>
         <p className='mb-4'>
@@ -80,7 +80,7 @@ export default function Privacy() {
       </section>
 
       <section className='mb-6'>
-        <h2 className='text-xl font-medium mb-2 text-black'>
+        <h2 className='text-l font-medium mb-2 text-black'>
           제7조 (개인정보의 이용)
         </h2>
         <p className='mb-4'>
@@ -91,7 +91,7 @@ export default function Privacy() {
       </section>
 
       <section className='mb-6'>
-        <h2 className='text-xl font-medium mb-2 text-black'>
+        <h2 className='text-l font-medium mb-2 text-black'>
           제8조 (개인정보의 보유 및 이용기간)
         </h2>
         <p className='mb-4'>
@@ -102,7 +102,7 @@ export default function Privacy() {
       </section>
 
       <section className='mb-6'>
-        <h2 className='text-xl font-medium mb-2 text-black'>
+        <h2 className='text-l font-medium mb-2 text-black'>
           제9조 (법령에 따른 개인정보의 보유 및 이용기간)
         </h2>
         <p className='mb-4'>
@@ -113,7 +113,7 @@ export default function Privacy() {
       </section>
 
       <section className='mb-6'>
-        <h2 className='text-xl font-medium mb-2 text-black'>
+        <h2 className='text-l font-medium mb-2 text-black'>
           제10조 (개인정보의 파기원칙)
         </h2>
         <p className='mb-4'>
@@ -123,7 +123,7 @@ export default function Privacy() {
       </section>
 
       <section className='mb-6'>
-        <h2 className='text-xl font-medium mb-2 text-black'>
+        <h2 className='text-l font-medium mb-2 text-black'>
           제11조 (개인정보 파기 절차)
         </h2>
         <p className='mb-4'>
@@ -134,7 +134,7 @@ export default function Privacy() {
       </section>
 
       <section className='mb-6'>
-        <h2 className='text-xl font-medium mb-2 text-black'>
+        <h2 className='text-l font-medium mb-2 text-black'>
           제12조 (개인정보 파기 방법)
         </h2>
         <p className='mb-4'>
@@ -145,7 +145,7 @@ export default function Privacy() {
       </section>
 
       <section className='mb-6'>
-        <h2 className='text-xl font-medium mb-2 text-black'>
+        <h2 className='text-l font-medium mb-2 text-black'>
           제13조 (광고성 정보의 전송 조치)
         </h2>
         <p className='mb-4'>
@@ -157,7 +157,7 @@ export default function Privacy() {
       </section>
 
       <section className='mb-6'>
-        <h2 className='text-xl font-medium mb-2 text-black'>
+        <h2 className='text-l font-medium mb-2 text-black'>
           제14조 (이용자의 의무)
         </h2>
         <p className='mb-4'>
@@ -168,7 +168,7 @@ export default function Privacy() {
       </section>
 
       <section className='mb-6'>
-        <h2 className='text-xl font-medium mb-2 text-black'>
+        <h2 className='text-l font-medium mb-2 text-black'>
           제15조 (개인정보 자동 수집 장치의 설치•운영 및 거부에 관한 사항)
         </h2>
         <p className='mb-4'>
@@ -179,7 +179,7 @@ export default function Privacy() {
       </section>
 
       <section className='mb-6'>
-        <h2 className='text-xl font-medium mb-2 text-black'>
+        <h2 className='text-l font-medium mb-2 text-black'>
           제16조 (쿠키 설치 허용 지정 방법)
         </h2>
         <p className='mb-4'>
@@ -189,7 +189,7 @@ export default function Privacy() {
       </section>
 
       <section className='mb-6'>
-        <h2 className='text-xl font-medium mb-2 text-black'>
+        <h2 className='text-l font-medium mb-2 text-black'>
           제17조 (회사의 개인정보 보호 책임자 지정)
         </h2>
         <p className='mb-4'>
@@ -200,7 +200,7 @@ export default function Privacy() {
       </section>
 
       <section className='mb-6'>
-        <h2 className='text-xl font-medium mb-2 text-black'>
+        <h2 className='text-l font-medium mb-2 text-black'>
           제18조 (권익침해에 대한 구제방법)
         </h2>
         <p className='mb-4'>
@@ -211,7 +211,7 @@ export default function Privacy() {
       </section>
 
       <section className='mb-6'>
-        <h2 className='text-xl font-medium mb-2 text-black'>부칙</h2>
+        <h2 className='text-l font-medium mb-2 text-black'>부칙</h2>
         <p className='mb-4'>본 방침은 2024년 9월 9일부터 시행됩니다.</p>
       </section>
     </div>
