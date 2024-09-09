@@ -146,7 +146,7 @@ export interface ChatRoomEntryData {
   chatRoomId: number
   leaderId: number
   status: RecruitmentStatus
-  isPostDeleted: boolean
+  isPostExists: boolean
 }
 
 // ChatMessage 인터페이스 정의

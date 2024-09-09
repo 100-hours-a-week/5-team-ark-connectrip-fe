@@ -70,7 +70,7 @@ export default function ChatDetailPage() {
         }
 
         const response = await checkChatRoomEntry(chatRoomId)
-        if (response.message === 'SUCCESS' && !response.data.isPostDeleted) {
+        if (response.message === 'SUCCESS') {
           setChatRoomData(response.data)
           setIsMember(true)
         } else {
