@@ -23,6 +23,5 @@ export const sendLeaveMessage = ({
         infoFlag: true,
       }),
     })
-    console.log('Leave message sent')
   }
 }
