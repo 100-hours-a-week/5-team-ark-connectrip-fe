@@ -244,7 +244,6 @@ import useKakaoLoader from '@/app/hooks/useKakaoLoader'
 import { leaveChatRoom } from '@/app/utils/fetchUtils'
 import { useWebSocketClient } from '@/app/hooks/useWebSocketClient' // WebSocket 훅 import
 import { sendLeaveMessage } from '@/app/utils/sendLeaveMessage'
-import { is } from 'date-fns/locale'
 
 interface GuestContentProps {
   companionUsers: CompanionUsers[] // 동행 참여자 목록
