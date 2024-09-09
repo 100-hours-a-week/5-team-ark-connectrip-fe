@@ -26,7 +26,8 @@ export default function Header() {
       // TODO: 백엔드 reissue api 구현 후 동작확인 필요 (at 만료시 어케되는지)
     }
 
-    if (!nickname) {
+    // '/' 및 '/signup' 경로에서는 fetchUser 호출 안함
+    if (!nickname && pathname !== '/' && pathname !== '/signup') {
       fetchUserData()
     }
   }, [fetchUser, router, nickname])
