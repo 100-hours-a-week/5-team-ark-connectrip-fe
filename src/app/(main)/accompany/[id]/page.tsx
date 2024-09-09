@@ -44,6 +44,8 @@ export default function AccompanyDetailPage() {
   // 게시글 모집 상태
   const [recruitmentStatus, setRecruitmentStatus] =
     useState<RecruitmentStatus>('PROGRESSING')
+  // 댓글 여러번 입력 막기 위한 상태
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const { userId } = useAuthStore()
   const { contextHolder, showSuccess, showWarning } = useCustomMessage()
@@ -126,8 +128,10 @@ export default function AccompanyDetailPage() {
   // 댓글 작성 버튼 클릭 시
   const handleCommentSubmit = async () => {
     if (!newComment.trim()) return showWarning('댓글을 입력해주세요.')
+    if (isSubmitting) return
 
     try {
+      setIsSubmitting(true) // 댓글 등록 중 여러번 클릭 방지
       if (isEditing && editCommentId !== null) {
         const response = await updateComment(editCommentId, postId, newComment) // 유틸리티 함수 사용
 
@@ -155,6 +159,7 @@ export default function AccompanyDetailPage() {
       console.error('댓글 등록/수정 중 오류 발생:', error)
       showWarning('댓글 처리에 실패했습니다.')
     }
+    setIsSubmitting(false)
   }
 
   const handleCommentModifyClick = (commentId: number) => {
