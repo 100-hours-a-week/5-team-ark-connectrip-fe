@@ -5,4 +5,4 @@ export const protectedRoutes = ['/accompany', '/chat', '/community', '/profile']
 export const signupOnlyRoutes = ['/signup', '/privacy', '/policy']
 
 // 로그인이 되면 접근할 수 없는 페이지 목록
-export const guestRoutes = ['/', 'signup']
+export const guestRoutes = ['/']
