@@ -7,11 +7,25 @@ import { Comment, ChatRoomEntryData } from '@/interfaces/index'
 export const fetchPost = async (postId: number) => {
   try {
     const data = await api.get(`/api/v1/accompany/posts/${postId}`)
+    console.log(data)
     return {
       ...data,
       createdAt: formatToUtcDate(data.createdAt),
       startDate: data.startDate ? formatShortDateFromUtc(data.startDate) : null,
       endDate: data.endDate ? formatShortDateFromUtc(data.endDate) : null,
+    }
+  } catch (error) {
+    console.error('Failed to fetch post:', error)
+    throw new Error('게시글을 불러오는 데 실패했습니다.')
+  }
+}
+
+// 게시글 수정 페이지에서 데이터를 가져오는 유틸리티 함수
+export const fetchEditPost = async (postId: number) => {
+  try {
+    const data = await api.get(`/api/v1/accompany/posts/${postId}`)
+    return {
+      data,
     }
   } catch (error) {
     console.error('Failed to fetch post:', error)
