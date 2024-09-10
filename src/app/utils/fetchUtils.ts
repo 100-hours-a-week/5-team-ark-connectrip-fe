@@ -7,7 +7,6 @@ import { Comment, ChatRoomEntryData } from '@/interfaces/index'
 export const fetchPost = async (postId: number) => {
   try {
     const data = await api.get(`/api/v1/accompany/posts/${postId}`)
-    console.log(data)
     return {
       ...data,
       createdAt: formatToUtcDate(data.createdAt),
