@@ -8,7 +8,9 @@ import {
 } from './app/constants/protectedRoutes'
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|fonts|images).*)'],
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|fonts|images|logo.svg).*)',
+  ],
 }
 
 export function middleware(request: NextRequest) {
