@@ -31,6 +31,20 @@ export default function AccompanyForm({
 }: AccompanyFormProps) {
   const [form] = Form.useForm()
 
+  // 현재 날짜 이전을 비활성화하는 함수
+  const disablePastDates = (current: dayjs.Dayjs) => {
+    return current && current < dayjs().startOf('day')
+  }
+
+  // 종료 날짜에서 시작 날짜 이후만 선택 가능하도록 설정하는 함수
+  const disableEndDate = (current: dayjs.Dayjs) => {
+    const startDate = form.getFieldValue('startDate')
+    if (!startDate) {
+      return disablePastDates(current) // 시작 날짜가 없으면 현재 날짜 이전 비활성화
+    }
+    return current && (current < dayjs().startOf('day') || current < startDate)
+  }
+
   return (
     <Form
       form={form}
@@ -62,7 +76,11 @@ export default function AccompanyForm({
         />
       </Form.Item>
       <Form.Item name='startDate' label='시작 날짜'>
-        <DatePicker style={{ width: '100%' }} format='YYYY-MM-DD' />
+        <DatePicker
+          style={{ width: '100%' }}
+          format='YYYY-MM-DD'
+          disabledDate={disablePastDates} // 현재 날짜 이전 비활성화
+        />
       </Form.Item>
       <Form.Item
         name='endDate'
@@ -81,7 +99,11 @@ export default function AccompanyForm({
           }),
         ]}
       >
-        <DatePicker style={{ width: '100%' }} format='YYYY-MM-DD' />
+        <DatePicker
+          style={{ width: '100%' }}
+          format='YYYY-MM-DD'
+          disabledDate={disableEndDate} // 시작 날짜 이후만 선택 가능하도록 비활성화
+        />
       </Form.Item>
       <Form.Item
         name='content'

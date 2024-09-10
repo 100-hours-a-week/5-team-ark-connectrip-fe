@@ -21,8 +21,6 @@ export const useHandleDeleteClick = () => {
             showSuccess(`${text}이 취소되었습니다.`)
             if (redirectPath) {
               router.push(redirectPath)
-            } else {
-              window.location.reload()
             }
           } catch {
             showError(`${text} 취소에 실패했습니다.`)

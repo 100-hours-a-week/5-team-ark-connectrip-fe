@@ -19,6 +19,19 @@ export const fetchPost = async (postId: number) => {
   }
 }
 
+// 게시글 수정 페이지에서 데이터를 가져오는 유틸리티 함수
+export const fetchEditPost = async (postId: number) => {
+  try {
+    const data = await api.get(`/api/v1/accompany/posts/${postId}`)
+    return {
+      data,
+    }
+  } catch (error) {
+    console.error('Failed to fetch post:', error)
+    throw new Error('게시글을 불러오는 데 실패했습니다.')
+  }
+}
+
 // 게시글을 수정하는 유틸리티 함수
 export const updatePost = async (
   postId: number,

@@ -125,6 +125,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
                         companionUsers={companionUsers}
                         postId={postId}
                         isPostExists={isPostExists}
+                        leaderId={leaderId}
                       />
                     ),
                   },
@@ -139,6 +140,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
                         companionUsers={companionUsers}
                         postId={postId}
                         isPostExists={isPostExists}
+                        leaderId={leaderId}
                       />
                     ),
                   },

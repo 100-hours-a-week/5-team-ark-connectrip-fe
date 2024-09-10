@@ -233,7 +233,7 @@
 // export default GuestContent
 
 import ProfileIcon from '../common/ProfileIcon'
-import { Button } from 'antd'
+import { Button, Tag } from 'antd'
 import useAuthStore from '@/app/store/useAuthStore'
 import { CompanionUsers } from '@/interfaces'
 import { useRouter } from 'next/navigation'
@@ -249,12 +249,14 @@ interface GuestContentProps {
   companionUsers: CompanionUsers[] // 동행 참여자 목록
   postId: number // 게시글 ID
   isPostExists: boolean // 게시글 존재 여부
+  leaderId: number // 방장 ID
 }
 
 const GuestContent: React.FC<GuestContentProps> = ({
   companionUsers,
   postId,
   isPostExists,
+  leaderId,
 }) => {
   const { nickname, userId } = useAuthStore() // zustand 스토어에서 유저 닉네임 가져오기
   // TODO : 위치 정보 전송 시, 링크를 저장할 수 있는 상태 추가  - 관련 로직 추가 후 삭제 필요
@@ -323,6 +325,8 @@ const GuestContent: React.FC<GuestContentProps> = ({
                 nickname={user.memberNickname}
               />
               <div className='text-m font-semibold'>{user.memberNickname}</div>
+              {/* 방장 여부를 확인하고 표시 */}
+              {user.memberId === leaderId && <Tag color='#b3bbee'>방장</Tag>}
             </div>
           </div>
         ))}

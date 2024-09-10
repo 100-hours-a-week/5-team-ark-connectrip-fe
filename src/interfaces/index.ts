@@ -40,6 +40,14 @@ export interface Post {
   urlQrPath: string
 }
 
+export interface EditPost {
+  title: string
+  accompanyArea: string
+  startDate: string
+  endDate: string
+  content: string
+}
+
 export interface PostCardProps {
   title: string
   content: string

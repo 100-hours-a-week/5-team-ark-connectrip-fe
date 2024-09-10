@@ -5,10 +5,13 @@ import React, { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { useCustomMessage } from '@/app/utils/alertUtils'
 import AccompanyForm from '@/app/components/accompany/AccompanyForm'
-import { fetchPost, updatePost } from '@/app/utils/fetchUtils'
+import { fetchEditPost, updatePost } from '@/app/utils/fetchUtils'
 import { formatFormData } from '@/app/utils/formUtils'
 import dayjs from 'dayjs'
-import { FormValues, Post } from '@/interfaces'
+import utc from 'dayjs/plugin/utc' // UTC 플러그인 추가
+import { EditPost, FormValues } from '@/interfaces'
+
+dayjs.extend(utc) // dayjs에서 UTC 사용하도록 설정
 
 export default function EditAccompanyPage() {
   const [initialValues, setInitialValues] = useState<FormValues | null>(null)
@@ -19,7 +22,8 @@ export default function EditAccompanyPage() {
   useEffect(() => {
     const loadPostData = async () => {
       try {
-        const post: Post = await fetchPost(parseInt(id as string, 10))
+        const response = await fetchEditPost(parseInt(id as string, 10)) // id를 숫자로 변환
+        const post: EditPost = response.data // Assign the correct type to the post variable
         if (post) {
           setInitialValues({
             title: post.title,
