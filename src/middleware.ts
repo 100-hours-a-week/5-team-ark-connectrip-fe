@@ -9,7 +9,7 @@ import {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|fonts|images|logo.svg).*)',
+    '/((?!_next/static|_next/image|favicon.ico|fonts|images|.*\\.svg$).*)',
   ],
 }
 
