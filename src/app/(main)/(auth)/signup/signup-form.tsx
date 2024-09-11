@@ -14,8 +14,12 @@ import { NicknameStatus } from '@/types'
 import { SignupFormValues } from '@/interfaces'
 
 const termsOptions = [
-  { label: '개인정보 처리방침 동의 (필수)', value: 'privacyPolicy' },
-  { label: '이용약관 동의 (필수)', value: 'termsOfService' },
+  {
+    label: '개인정보 처리방침 동의 (필수)',
+    value: 'privacyPolicy',
+    link: '/privacy',
+  },
+  { label: '이용약관 동의 (필수)', value: 'termsOfService', link: '/policy' },
 ]
 
 const SignupPage: React.FC = () => {
@@ -51,10 +55,15 @@ const SignupPage: React.FC = () => {
 
   // 닉네임 유효성 확인 (3~20자, 한글/영문/띄어쓰기 허용)
   const checkNicknameValidity = (nickname: string) => {
+    if (!nickname) {
+      setNicknameStatus('invalid') // 비어 있을 때도 invalid 상태로 설정
+      setNicknameHelperText('닉네임을 입력해 주세요.') // 헬퍼 텍스트에 필수 입력 메시지 표시
+      return false
+    }
     if (
       nickname.length < 3 ||
       nickname.length > 20 ||
-      /[^가-힣a-zA-Z\s]/.test(nickname) // 특수 문자 및 숫자 방지
+      /[^가-힣a-zA-Z0-9\s]/.test(nickname) // 특수 문자 방지, 숫자 허용
     ) {
       setNicknameStatus('invalid')
       setNicknameHelperText(
@@ -101,8 +110,18 @@ const SignupPage: React.FC = () => {
 
   const handleFinish = async (values: SignupFormValues) => {
     try {
-      if (nicknameStatus === 'invalid' || nicknameStatus === 'duplicated') {
-        showError('닉네임을 확인해 주세요.')
+      // 닉네임 유효성 확인 (입력값이 없을 경우 처리)
+      const nicknameValue = form.getFieldValue('nickname') || ''
+      if (!checkNicknameValidity(nicknameValue)) {
+        return // 닉네임이 유효하지 않으면 회원가입을 막음
+      }
+
+      // 약관 동의 여부 확인
+      if (
+        !checkedList.includes('privacyPolicy') ||
+        !checkedList.includes('termsOfService')
+      ) {
+        showError('필수 약관에 동의해주세요.')
         return
       }
 
@@ -113,8 +132,6 @@ const SignupPage: React.FC = () => {
         birthDate: formattedUTCDate,
         gender: values.gender === 'male' ? 'M' : 'F',
       })
-
-      console.log(response)
 
       if (response.message === 'SUCCESS') {
         const { memberId, nickname, profileImagePath } = response.data
@@ -135,6 +152,7 @@ const SignupPage: React.FC = () => {
     } catch (error) {
       showError('회원가입에 실패했습니다.')
       console.error('Error:', error)
+      router.push('/')
     }
   }
 
@@ -186,6 +204,15 @@ const SignupPage: React.FC = () => {
         <Form
           form={form}
           onFinish={handleFinish}
+          onFinishFailed={(errorInfo) => {
+            const nicknameError = errorInfo.errorFields.find(
+              (field) => field.name[0] === 'nickname'
+            )
+            if (nicknameError) {
+              setNicknameHelperText('닉네임을 입력해 주세요.') // 헬퍼 텍스트 설정
+              setNicknameStatus('invalid') // 상태 설정
+            }
+          }}
           layout='vertical'
           initialValues={{
             nickname: '', // 기본값을 빈 문자열로 설정하여 undefined 방지
@@ -274,7 +301,14 @@ const SignupPage: React.FC = () => {
                   onChange={() => handleOptionChange(option.value)}
                   checked={checkedList.includes(option.value)}
                 >
-                  {option.label}
+                  <a
+                    href={option.link}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='no-underline text-gray-700' // 기본 색상으로 변경
+                  >
+                    {option.label}
+                  </a>
                 </Checkbox>
               </div>
             ))}

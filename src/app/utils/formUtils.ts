@@ -1,4 +1,5 @@
 // antd의 DatePicker 컴포넌트가 dayjs 기반
+import { CommunityFormValues, FormValues } from '@/interfaces'
 import dayjs from 'dayjs'
 
 // 날짜 처리 함수
@@ -22,25 +23,10 @@ export function formatDates(
 
   return { formattedStartDate, formattedEndDate }
 }
-// 커스텀 URL 처리 함수 (환경 변수 사용)
-export function formatCustomUrl(customUrl?: string | null): string | null {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
-  return customUrl ? `${baseUrl}/${customUrl}` : null
-}
 
 // 폼 데이터 처리 함수
-interface FormValues {
-  title: string
-  accompanyArea: string
-  startDate: dayjs.Dayjs | null
-  endDate: dayjs.Dayjs | null
-  content: string
-  customUrl?: string | null
-}
-
 export function formatFormData(values: FormValues) {
-  const { title, accompanyArea, startDate, endDate, content, customUrl } =
-    values
+  const { title, accompanyArea, startDate, endDate, content } = values
 
   const { formattedStartDate, formattedEndDate } = formatDates(
     startDate,
@@ -53,6 +39,15 @@ export function formatFormData(values: FormValues) {
     content,
     startDate: formattedStartDate,
     endDate: formattedEndDate,
-    customUrl: formatCustomUrl(customUrl),
+  }
+}
+
+// 커뮤니티 폼 데이터 처리 함수
+export function formatCommunityFormData(values: CommunityFormValues) {
+  const { title, content } = values
+
+  return {
+    title,
+    content,
   }
 }

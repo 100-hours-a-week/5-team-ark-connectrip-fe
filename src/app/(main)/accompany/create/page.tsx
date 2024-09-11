@@ -12,9 +12,12 @@ import { FormValues } from '@/interfaces'
 export default function CreateAccompanyPage() {
   const router = useRouter()
   const { contextHolder, showSuccess, showError } = useCustomMessage()
+  const [isClick, setIsClick] = React.useState(false)
 
   const handleFinish = async (values: FormValues) => {
     try {
+      if (isClick) return
+      setIsClick(true)
       const formData = formatFormData(values)
       await api.post(`/api/v1/accompany/posts`, formData)
       showSuccess('게시글 작성이 완료되었습니다.')
