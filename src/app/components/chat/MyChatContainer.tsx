@@ -9,7 +9,10 @@ interface MyChatContainerProps {
 }
 
 const MyChatContainer: React.FC<MyChatContainerProps> = ({ message, time }) => {
-  const link = linkify(message) // 메시지에서 링크를 추출
+  const messageParts = linkify(message) // 메시지를 링크와 텍스트로 분리
+  const link = messageParts.find(
+    (part) => typeof part === 'object' && part.type === 'link'
+  ) as { type: 'link'; url: string } | undefined
 
   return (
     <div className='flex w-full items-end justify-end mt-2 h-full gap-1 pl-4'>
@@ -22,30 +25,32 @@ const MyChatContainer: React.FC<MyChatContainerProps> = ({ message, time }) => {
 
       {/* 채팅 메시지와 썸네일을 분리 */}
       <div className='flex flex-col items-end gap-2'>
-        {/* 메시지에 링크가 있는 경우 */}
+        {/* 메시지 출력 부분 */}
         <div className='px-4 py-2 bg-main text-white break-all rounded-3xl text-sm'>
-          {link ? (
-            <a
-              href={link}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='text-white underline'
-            >
-              {link}
-            </a>
-          ) : (
-            <span>{message}</span> // 링크가 없는 경우 일반 메시지 출력
+          {messageParts.map((part, index) =>
+            typeof part === 'string' ? (
+              <span key={index}>{part}</span> // 일반 텍스트
+            ) : (
+              <a
+                key={index}
+                href={part.url}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='text-white underline'
+              >
+                {part.url} {/* 링크 */}
+              </a>
+            )
           )}
         </div>
 
-        {/* 링크 썸네일 표시 */}
+        {/* 링크 썸네일과 시간 표시 */}
         {link && (
           <div className='flex items-end justify-end gap-2'>
             <div className='text-xs text-gray-700 whitespace-nowrap'>
               {time}
             </div>
-            <LinkPreview url={link} />
-            {/* 링크가 있을 때 시간 표시 */}
+            <LinkPreview url={link.url} />
           </div>
         )}
       </div>

@@ -17,7 +17,11 @@ const LeftChatContainer: React.FC<LeftChatContainerProps> = ({
   senderNickname,
   profileSrc,
 }) => {
-  const link = linkify(message) // 메시지에서 링크를 추출
+  const messageParts = linkify(message) // 메시지를 링크와 텍스트로 분리
+  const link = messageParts.find(
+    (part) => typeof part === 'object' && part.type === 'link'
+  ) as { type: 'link'; url: string } | undefined
+
   return (
     <div className='flex w-full items-start justify-start gap-1 mt-2 pr-4'>
       <div className='items-center justify-center w-[33px]'>
@@ -28,26 +32,29 @@ const LeftChatContainer: React.FC<LeftChatContainerProps> = ({
         {/* 닉네임 표시 */}
         <div className='text-xs text-gray-700'>{senderNickname}</div>
 
-        {/* 메시지에 링크가 있는 경우 */}
+        {/* 메시지 출력 부분 */}
         <div className='px-4 py-2 bg-gray-100 text-black break-all rounded-3xl text-sm'>
-          {link ? (
-            <a
-              href={link}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='text-blue-500 underline'
-            >
-              {link}
-            </a>
-          ) : (
-            <span>{message}</span> // 링크가 없는 경우 일반 메시지 출력
+          {messageParts.map((part, index) =>
+            typeof part === 'string' ? (
+              <span key={index}>{part}</span> // 일반 텍스트
+            ) : (
+              <a
+                key={index}
+                href={part.url}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='text-blue-500 underline'
+              >
+                {part.url} {/* 링크 */}
+              </a>
+            )
           )}
         </div>
 
         {/* 링크 썸네일 표시 */}
         {link && (
           <div className='flex items-start justify-start gap-2'>
-            <LinkPreview url={link} />
+            <LinkPreview url={link.url} />
             <div className='text-xs text-gray-500 whitespace-nowrap'>
               {time}
             </div>

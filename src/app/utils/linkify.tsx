@@ -1,10 +1,14 @@
 // utils/linkify.ts
-export const linkify = (text: string): string | null => {
+export const linkify = (
+  text: string
+): (string | { type: 'link'; url: string })[] => {
   const urlPattern = /(https?:\/\/[^\s]+)/g
-  const match = text.match(urlPattern) // 첫 번째 링크만 감지
+  const parts = text.split(urlPattern).map((part) => {
+    if (urlPattern.test(part)) {
+      return { type: 'link', url: part } // 링크인 경우
+    }
+    return part // 일반 텍스트인 경우
+  })
 
-  if (match) {
-    return match[0] // 첫 번째 링크 반환
-  }
-  return null // 링크가 없으면 null 반환
+  return parts as (string | { type: 'link'; url: string })[]
 }
