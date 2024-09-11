@@ -1,6 +1,7 @@
 // components/chat/LeftChatContainer.tsx
 import React from 'react'
 import ProfileIcon from '@/app/components/common/ProfileIcon'
+import { linkify } from '@/app/utils/linkify'
 
 interface LeftChatContainerProps {
   message: string
@@ -26,7 +27,7 @@ const LeftChatContainer: React.FC<LeftChatContainerProps> = ({
             {senderNickname}
           </div>
           <div className='flex items-center justify-between px-4 py-2 bg-gray-100 rounded-3xl text-sm break-all'>
-            {message}
+            {linkify(message)}
           </div>
         </div>
         <div className=' flex items-end '>

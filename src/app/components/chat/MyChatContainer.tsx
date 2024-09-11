@@ -1,4 +1,5 @@
 // components/chat/MyChatContainer.tsx
+import { linkify } from '@/app/utils/linkify'
 import React from 'react'
 
 interface MyChatContainerProps {
@@ -13,7 +14,7 @@ const MyChatContainer: React.FC<MyChatContainerProps> = ({ message, time }) => {
         {time}
       </div>
       <div className='flex items-center justify-between px-4 py-2 bg-main text-white rounded-3xl text-sm'>
-        {message}
+        <span>{linkify(message)}</span>
       </div>
     </div>
   )
