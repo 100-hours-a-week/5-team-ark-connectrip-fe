@@ -1,12 +1,12 @@
-// components/chat/LinkPreview.tsx
+//components/chat/LinkPreview.tsx
+import { truncateText } from '@/app/utils/textUtils'
 import React, { useState, useEffect } from 'react'
 
 interface LinkPreviewProps {
   url: string
-  setImageLoading: React.Dispatch<React.SetStateAction<boolean>> // 로딩 상태 설정 함수
 }
 
-const LinkPreview: React.FC<LinkPreviewProps> = ({ url, setImageLoading }) => {
+const LinkPreview: React.FC<LinkPreviewProps> = ({ url }) => {
   const [metaData, setMetaData] = useState<{
     title?: string
     description?: string
@@ -14,7 +14,6 @@ const LinkPreview: React.FC<LinkPreviewProps> = ({ url, setImageLoading }) => {
   }>({})
 
   useEffect(() => {
-    console.log(true)
     const fetchMetaData = async () => {
       try {
         const response = await fetch(
@@ -22,37 +21,44 @@ const LinkPreview: React.FC<LinkPreviewProps> = ({ url, setImageLoading }) => {
         )
         const data = await response.json()
         setMetaData(data)
-
-        // 이미지가 없을 경우 바로 로딩 종료
-        if (!data.image) {
-          setImageLoading(false)
-        }
       } catch (error) {
         console.error('Error fetching link metadata:', error)
-        setImageLoading(false) // 에러 발생 시 로딩 종료
       }
     }
 
     fetchMetaData()
-  }, [url, setImageLoading])
+  }, [url])
 
   return (
-    <div className='link-preview bg-white border-gray-200 border rounded-md w-4/5'>
+    <div className='link-preview bg-white border-gray-200 border rounded-md w-[270px]'>
       <a href={url} target='_blank' rel='noopener noreferrer'>
-        {metaData.image && (
+        <div
+          className='thumbnail w-full h-[135px] bg-gray-100 flex items-center justify-center rounded-t-md overflow-hidden'
+          style={{ minHeight: '135px' }} // 이미지 로드 전에도 고정 크기
+        >
           <img
             src={metaData.image}
             alt={metaData.title}
-            className='thumbnail w-full h-auto rounded-t-md object-cover'
-            onLoad={() => setImageLoading(false)} // 이미지 로드 완료 후 로딩 종료
-            onError={() => setImageLoading(false)} // 이미지 로드 실패 시에도 로딩 종료
+            className='w-full h-auto object-cover'
           />
-        )}
-        <div className='flex flex-col p-3'>
-          <h4 className='text-black break-all'>{metaData.title || ''}</h4>
-          <p className='text-sm text-gray-500 break-all '>
-            {metaData.description || ''}
-          </p>
+        </div>
+        <div className='flex flex-col p-3 h-[58px]'>
+          {metaData.title ? (
+            <h4 className='text-base text-black break-all'>
+              {truncateText(metaData.title, 25)} {/* 설명 글자수 제한 */}
+            </h4>
+          ) : (
+            // 스켈레톤 로더 (제목 영역)
+            <div className='animate-pulse h-3 bg-gray-200 rounded w-3/4 mb-2'></div>
+          )}
+          {metaData.description ? (
+            <p className='text-s text-gray-500 break-all '>
+              {truncateText(metaData.description, 30)} {/* 설명 글자수 제한 */}
+            </p>
+          ) : (
+            // 스켈레톤 로더 (설명 영역)
+            <div className='animate-pulse h-3 bg-gray-200 rounded w-full'></div>
+          )}
         </div>
       </a>
     </div>
