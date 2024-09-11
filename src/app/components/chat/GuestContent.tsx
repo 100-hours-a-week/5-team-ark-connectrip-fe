@@ -101,7 +101,7 @@ const GuestContent: React.FC<GuestContentProps> = ({
       (position) => {
         const mapNickname = nickname || '사용자'
         const { latitude, longitude } = position.coords
-        const kakaoMapLink = `https://map.kakao.com/link/map/${mapNickname},${latitude},${longitude}`
+        const kakaoMapLink = `https://map.kakao.com/link/map/${mapNickname}_님의_현재위치,${latitude},${longitude}`
 
         setLocationLink(kakaoMapLink)
         setLocation({ latitude, longitude })
@@ -112,7 +112,6 @@ const GuestContent: React.FC<GuestContentProps> = ({
             clientRef,
             chatRoomId,
             userId,
-            nickname,
             locationLink: kakaoMapLink,
           })
           showSuccess('위치 정보가 채팅방에 전송되었습니다.')
