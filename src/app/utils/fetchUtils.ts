@@ -374,3 +374,26 @@ export const deleteCommunityComment = async (commentId: number) => {
     throw new Error('댓글 삭제에 실패했습니다.')
   }
 }
+
+/////////////
+// 채팅방 토글 on/off 위치 정보를 전송하는 유틸리티 함수
+export const fetchLocationSharingStatus = async (
+  chatRoomId: number,
+  trackingEnabled: boolean,
+  lat?: number,
+  lng?: number
+) => {
+  try {
+    const response = trackingEnabled
+      ? await api.patch(`/api/v1/chatRoom/${chatRoomId}/locations/sharing`, {
+          lat,
+          lng,
+        })
+      : await api.patch(`/api/v1/chatRoom/${chatRoomId}/locations/sharing`, {})
+
+    return response
+  } catch (error) {
+    console.error('위치 공유 활성화 중 오류 발생:', error)
+    throw new Error('위치 공유 활성화에 실패했습니다.')
+  }
+}

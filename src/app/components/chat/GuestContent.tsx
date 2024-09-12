@@ -7,13 +7,17 @@ import { useHandleDeleteClick } from '@/app/hooks/useHandleDeleteClick'
 import { useCustomMessage } from '@/app/utils/alertUtils'
 import { usePathname } from 'next/navigation'
 import useKakaoLoader from '@/app/hooks/useKakaoLoader'
-import { leaveChatRoom } from '@/app/utils/fetchUtils'
+import {
+  fetchLocationSharingStatus,
+  leaveChatRoom,
+} from '@/app/utils/fetchUtils'
 import { useWebSocketClient } from '@/app/hooks/useWebSocketClient' // WebSocket 훅 import
 import { sendLeaveMessage } from '@/app/utils/sendLeaveMessage'
 import MapComponent from './MapComponent'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import LoadingSpinner from '../common/LoadingSpinner'
 import { sendLocationMessage } from '@/app/utils/sendLocationMessage'
+import { api } from '@/app/utils/api'
 
 interface GuestContentProps {
   companionUsers: CompanionUsers[] // 동행 참여자 목록
@@ -22,72 +26,47 @@ interface GuestContentProps {
   leaderId: number // 방장 ID
 }
 
-const mockData = [
-  {
-    memberId: 1,
-    nickname: '트룰루',
-    profileImage:
-      'http://k.kakaocdn.net/dn/ZEQvV/btsIzAcVyYL/TkOaaPbnv0jGFEq3idt6Ck/img_640x640.jpg',
-    LastLocation: { latitude: 37.5665, longitude: 126.978 },
-  },
-  {
-    memberId: 2,
-    nickname: '션말고숀',
-    profileImage:
-      'http://k.kakaocdn.net/dn/wAv8y/btsJg9GuEd2/F1WBAuNghQpR8u4dMM5Qn1/img_640x640.jpg',
-    LastLocation: { latitude: 35.1796, longitude: 129.0756 },
-  },
-  {
-    memberId: 3,
-    nickname: '냄뀨뀨',
-    profileImage: ' ',
-    LastLocation: { latitude: 37.4563, longitude: 126.7052 },
-  },
-  {
-    memberId: 4,
-    nickname: '토파즈',
-    profileImage:
-      'http://k.kakaocdn.net/dn/cr7joo/btsI7OuRmrZ/wm49uKvLgMskVh5ZWWdCVk/m1.jpg',
-    LastLocation: { latitude: 35.8722, longitude: 128.6025 },
-  },
-  {
-    memberId: 5,
-    nickname: '노노아',
-    profileImage: '',
-    LastLocation: { latitude: 37.5113, longitude: 127.098 },
-  },
-]
-
 const GuestContent: React.FC<GuestContentProps> = ({
   companionUsers,
   postId,
   isPostExists,
   leaderId,
 }) => {
-  const { nickname, userId, profileImage } = useAuthStore() // zustand 스토어에서 유저 닉네임 가져오기
+  const { nickname, userId, profileImage } = useAuthStore()
   const [trackingEnabled, setTrackingEnabled] = useState(false)
-  // TODO : 위치 정보 전송 시, 링크를 저장할 수 있는 상태 추가  - 관련 로직 추가 후 삭제 필요
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [locationLink, setLocationLink] = useState<string | null>(null)
   const [location, setLocation] = useState<{
-    latitude: number
-    longitude: number
+    lat: number
+    lng: number
   }>()
+  const [companionLocations, setCompanionLocations] = useState<
+    {
+      lat: number
+      lng: number
+      nickname: string
+      profileImagePath: string | null
+    }[]
+  >([])
   const [loading, setLoading] = useState(false) // 로딩 상태 추가
   const router = useRouter()
   const handleDeleteClick = useHandleDeleteClick() // 모달 호출 유틸리티 사용
   const { contextHolder, showSuccess, showError } = useCustomMessage()
   const path = usePathname()
   const chatRoomId = parseInt(path.split('/').pop() || '0', 10)
+
   useKakaoLoader() // 카카오 지도 로더 훅 사용
 
   const handleSwitchChange = (checked: boolean) => {
     setTrackingEnabled(checked)
-    if (checked) {
+    // 상태가 변경된 후에 동작을 처리하기 위해 useEffect 사용
+  }
+
+  useEffect(() => {
+    if (trackingEnabled) {
       setLoading(true)
       fetchLocation() // 위치를 가져오고, 이후에 지도 업데이트
     }
-  }
+  }, [trackingEnabled])
 
   const handleSendLocation = () => {
     if (!navigator.geolocation) {
@@ -104,8 +83,7 @@ const GuestContent: React.FC<GuestContentProps> = ({
         const kakaoMapLink = `https://map.kakao.com/link/map/${mapNickname},${latitude},${longitude}`
 
         setLocationLink(kakaoMapLink)
-        setLocation({ latitude, longitude })
-        console.log('Location:', kakaoMapLink)
+        setLocation({ lat: latitude, lng: longitude })
         // WebSocket으로 위치 정보 전송
         try {
           sendLocationMessage({
@@ -113,7 +91,7 @@ const GuestContent: React.FC<GuestContentProps> = ({
             chatRoomId,
             userId,
             nickname,
-            locationLink: kakaoMapLink,
+            locationLink: kakaoMapLink || '',
           })
           showSuccess('위치 정보가 채팅방에 전송되었습니다.')
         } catch (error) {
@@ -136,10 +114,40 @@ const GuestContent: React.FC<GuestContentProps> = ({
     }
 
     navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords
-        setLocation({ latitude, longitude }) // 위치 저장
-        setLoading(false) // 로딩 종료
+      async (position) => {
+        const { latitude: lat, longitude: lng } = position.coords
+        try {
+          // 분리된 함수 사용
+          const response = await fetchLocationSharingStatus(
+            chatRoomId,
+            trackingEnabled,
+            lat,
+            lng
+          )
+
+          if (response.isLocationSharingEnabled) {
+            // 동행자 위치 정보 상태에 저장
+            const members = response.chatRoomMemberLocations.map(
+              (member: any) => ({
+                lat: member.lastLocation.lat,
+                lng: member.lastLocation.lng,
+                nickname: member.nickname,
+                profileImagePath: member.profileImagePath || '',
+              })
+            )
+            setCompanionLocations(members)
+          } else {
+            setCompanionLocations([]) // 위치 공유 OFF 시 초기화
+          }
+
+          setLocation({ lat, lng }) // 자신의 위치 저장
+          setLoading(false) // 로딩 종료
+          showSuccess('위치 공유가 활성화되었습니다.')
+        } catch (error) {
+          console.error('위치 공유 활성화 중 오류 발생:', error)
+          showError('위치 공유 활성화에 실패했습니다.')
+          setLoading(false) // 로딩 종료
+        }
       },
       (error) => {
         console.error('Error fetching location: ', error)
@@ -150,25 +158,14 @@ const GuestContent: React.FC<GuestContentProps> = ({
   }
 
   const allLocations = useMemo(
-    () => [
-      ...mockData.map((user) => ({
-        latitude: user.LastLocation.latitude,
-        longitude: user.LastLocation.longitude,
-        profileImage: user.profileImage,
-        nickname: user.nickname,
+    () =>
+      companionLocations.map((loc) => ({
+        lat: loc.lat,
+        lng: loc.lng,
+        profileImagePath: loc.profileImagePath,
+        nickname: loc.nickname,
       })),
-      ...(location
-        ? [
-            {
-              latitude: location.latitude,
-              longitude: location.longitude,
-              profileImage,
-              nickname,
-            },
-          ]
-        : []),
-    ],
-    [location, profileImage, nickname]
+    [companionLocations]
   )
 
   // WebSocket client 사용
@@ -194,9 +191,9 @@ const GuestContent: React.FC<GuestContentProps> = ({
           <MapComponent
             trackingEnabled={trackingEnabled}
             allLocations={allLocations.map((loc) => ({
-              latitude: loc.latitude,
-              longitude: loc.longitude,
-              profileImage: loc.profileImage || undefined,
+              lat: loc.lat,
+              lng: loc.lng,
+              profileImagePath: loc.profileImagePath || undefined,
               nickname: loc.nickname || undefined,
             }))}
           />
