@@ -9,8 +9,9 @@ import useAuthStore from '@/app/store/useAuthStore'
 import ChatHeader from '@/app/components/chat/ChatHeader'
 import MessageList from '@/app/components/chat/MessageList'
 import ChatInput from '@/app/components/chat/ChatInput'
-import { ChatRoomEntryData } from '@/interfaces/index'
+import { ChatRoomEntryData, CompanionLocation } from '@/interfaces/index'
 import { useChatWebSocket } from '@/app/hooks/useChatWebSocket' // 새로운 훅 import
+import { fetchLocations } from '@/app/utils/fetchUtils'
 
 export default function ChatDetailPage() {
   const [chatRoomData, setChatRoomData] = useState<ChatRoomEntryData | null>(
@@ -23,6 +24,11 @@ export default function ChatDetailPage() {
   const chatRoomId = parseInt(path.split('/').pop() || '0', 10)
   const [isMember, setIsMember] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  // 동행 위치 정보 상태
+  const [companionLocations, setCompanionLocations] = useState<
+    CompanionLocation[]
+  >([])
+
   // 입력된 메시지 상태
   const [content, setContent] = useState<string>('')
   // 메시지 리스트의 끝을 참조
@@ -107,7 +113,11 @@ export default function ChatDetailPage() {
       {contextHolder}
       {isMember && (
         <div>
-          <ChatHeader chatRoomData={chatRoomData} />
+          <ChatHeader
+            chatRoomData={chatRoomData}
+            setCompanionLocations={setCompanionLocations}
+            companionLocations={companionLocations}
+          />
           <div className='bg-white w-full h-full mb-[110px] mt-[-20px]'>
             <MessageList messages={messages} userId={userId || ''} />
             <div ref={messagesEndRef}></div>

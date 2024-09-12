@@ -168,3 +168,11 @@ export interface Message {
   senderProfileImage: string
   infoFlag: boolean
 }
+
+// CompanionLocations 인터페이스 정의
+export interface CompanionLocation {
+  lat: number
+  lng: number
+  nickname: string | undefined
+  profileImagePath: string | undefined
+}

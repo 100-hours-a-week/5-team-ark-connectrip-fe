@@ -7,12 +7,21 @@ import {
 } from '@ant-design/icons'
 import { HostContent } from './HostContent' // HostContent 컴포넌트 임포트
 import GuestContent from './GuestContent' // GuestContent 컴포넌트 임포트
-import { ApplyUsers, CompanionUsers, ChatRoomEntryData } from '@/interfaces'
+import {
+  ApplyUsers,
+  CompanionUsers,
+  ChatRoomEntryData,
+  CompanionLocation,
+} from '@/interfaces'
 import { fetchPendingUsers, fetchCompanionUsers } from '@/app/utils/fetchUtils'
 import useAuthStore from '@/app/store/useAuthStore'
 import { RecruitmentStatus } from '@/types'
 interface MenuDrawerProps {
   chatRoomData: ChatRoomEntryData
+  companionLocations: CompanionLocation[] // 동행자 위치 배열
+  setCompanionLocations: React.Dispatch<
+    React.SetStateAction<CompanionLocation[]>
+  > // 상태 업데이트 함수
 }
 
 const statusTranslations: { [key in RecruitmentStatus]: string } = {
@@ -21,7 +30,11 @@ const statusTranslations: { [key in RecruitmentStatus]: string } = {
   FINISHED: '동행 종료',
 }
 
-const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
+const MenuDrawer: React.FC<MenuDrawerProps> = ({
+  chatRoomData,
+  companionLocations,
+  setCompanionLocations,
+}) => {
   const [open, setOpen] = useState(false)
   const [applyUsers, setApplyUsers] = useState<ApplyUsers[]>([])
   const [companionUsers, setCompanionUsers] = useState<CompanionUsers[]>([])
@@ -126,6 +139,8 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
                         postId={postId}
                         isPostExists={isPostExists}
                         leaderId={leaderId}
+                        companionLocations={companionLocations}
+                        setCompanionLocations={setCompanionLocations}
                       />
                     ),
                   },
@@ -141,6 +156,8 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
                         postId={postId}
                         isPostExists={isPostExists}
                         leaderId={leaderId}
+                        companionLocations={companionLocations}
+                        setCompanionLocations={setCompanionLocations}
                       />
                     ),
                   },

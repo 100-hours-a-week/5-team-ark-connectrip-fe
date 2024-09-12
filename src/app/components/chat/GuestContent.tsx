@@ -1,7 +1,7 @@
 import ProfileIcon from '../common/ProfileIcon'
 import { Button, Switch, Tag } from 'antd'
 import useAuthStore from '@/app/store/useAuthStore'
-import { CompanionUsers } from '@/interfaces'
+import { CompanionLocation, CompanionUsers } from '@/interfaces'
 import { useRouter } from 'next/navigation'
 import { useHandleDeleteClick } from '@/app/hooks/useHandleDeleteClick'
 import { useCustomMessage } from '@/app/utils/alertUtils'
@@ -17,13 +17,16 @@ import MapComponent from './MapComponent'
 import { useEffect, useMemo, useState } from 'react'
 import LoadingSpinner from '../common/LoadingSpinner'
 import { sendLocationMessage } from '@/app/utils/sendLocationMessage'
-import { api } from '@/app/utils/api'
 
 interface GuestContentProps {
   companionUsers: CompanionUsers[] // 동행 참여자 목록
   postId: number // 게시글 ID
   isPostExists: boolean // 게시글 존재 여부
   leaderId: number // 방장 ID
+  companionLocations: CompanionLocation[] // 동행자 위치 배열
+  setCompanionLocations: React.Dispatch<
+    React.SetStateAction<CompanionLocation[]>
+  > // 상태 업데이트 함수
 }
 
 const GuestContent: React.FC<GuestContentProps> = ({
@@ -31,22 +34,11 @@ const GuestContent: React.FC<GuestContentProps> = ({
   postId,
   isPostExists,
   leaderId,
+  companionLocations,
+  setCompanionLocations,
 }) => {
-  const { nickname, userId, profileImage } = useAuthStore()
+  const { nickname, userId } = useAuthStore()
   const [trackingEnabled, setTrackingEnabled] = useState(false)
-  const [locationLink, setLocationLink] = useState<string | null>(null)
-  const [location, setLocation] = useState<{
-    lat: number
-    lng: number
-  }>()
-  const [companionLocations, setCompanionLocations] = useState<
-    {
-      lat: number
-      lng: number
-      nickname: string
-      profileImagePath: string | null
-    }[]
-  >([])
   const [loading, setLoading] = useState(false) // 로딩 상태 추가
   const router = useRouter()
   const handleDeleteClick = useHandleDeleteClick() // 모달 호출 유틸리티 사용
@@ -82,8 +74,6 @@ const GuestContent: React.FC<GuestContentProps> = ({
         const { latitude, longitude } = position.coords
         const kakaoMapLink = `https://map.kakao.com/link/map/${mapNickname},${latitude},${longitude}`
 
-        setLocationLink(kakaoMapLink)
-        setLocation({ lat: latitude, lng: longitude })
         // WebSocket으로 위치 정보 전송
         try {
           sendLocationMessage({
@@ -140,7 +130,6 @@ const GuestContent: React.FC<GuestContentProps> = ({
             setCompanionLocations([]) // 위치 공유 OFF 시 초기화
           }
 
-          setLocation({ lat, lng }) // 자신의 위치 저장
           setLoading(false) // 로딩 종료
           showSuccess('위치 공유가 활성화되었습니다.')
         } catch (error) {
@@ -159,7 +148,7 @@ const GuestContent: React.FC<GuestContentProps> = ({
 
   const allLocations = useMemo(
     () =>
-      companionLocations.map((loc) => ({
+      companionLocations.map((loc: CompanionLocation) => ({
         lat: loc.lat,
         lng: loc.lng,
         profileImagePath: loc.profileImagePath,
@@ -190,7 +179,7 @@ const GuestContent: React.FC<GuestContentProps> = ({
         ) : trackingEnabled ? (
           <MapComponent
             trackingEnabled={trackingEnabled}
-            allLocations={allLocations.map((loc) => ({
+            allLocations={allLocations.map((loc: CompanionLocation) => ({
               lat: loc.lat,
               lng: loc.lng,
               profileImagePath: loc.profileImagePath || undefined,
