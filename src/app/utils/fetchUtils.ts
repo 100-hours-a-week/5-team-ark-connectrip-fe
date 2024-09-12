@@ -397,3 +397,14 @@ export const fetchLocationSharingStatus = async (
     throw new Error('위치 공유 활성화에 실패했습니다.')
   }
 }
+
+// 채팅방 사용자 위치 조회 유틸리티 함수
+export const fetchLocations = async (chatRoomId: number) => {
+  try {
+    const response = await api.get(`/api/v1/chatRoom/${chatRoomId}/locations`)
+    return response
+  } catch (error) {
+    console.error('Failed to fetch locations:', error)
+    throw new Error('사용자 위치를 불러오는 데 실패했습니다.')
+  }
+}
