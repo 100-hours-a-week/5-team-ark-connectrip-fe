@@ -190,3 +190,42 @@ export interface ChatRoomMemberLocation {
   profileImagePath: string | null
   nickname: string
 }
+
+// GuestContentProps 인터페이스 정의
+export interface GuestContentProps {
+  companionUsers: CompanionUsers[]
+  postId: number
+  isPostExists: boolean
+  leaderId: number
+  companionLocations: CompanionLocation[]
+  setCompanionLocations: React.Dispatch<
+    React.SetStateAction<CompanionLocation[]>
+  >
+  isLocationSharingEnabled?: boolean
+}
+
+// MenuDrawerProps 인터페이스 정의
+export interface LeaveChatButtonProps {
+  handleDeleteClick: (
+    entityName: string,
+    redirectPath: string,
+    deleteFunction: () => Promise<void>
+  ) => Promise<void>
+  chatRoomId: number
+  userId: number
+  nickname: string
+  clientRef: any
+  showSuccess: (msg: string) => void
+}
+
+// LocationActionsProps 인터페이스 정의
+export interface LocationActionsProps {
+  nickname: string
+  chatRoomId: number
+  userId: number
+  trackingEnabled: boolean
+  setTrackingEnabled: React.Dispatch<React.SetStateAction<boolean>>
+  clientRef: any
+  showError: (msg: string) => void
+  showSuccess: (msg: string) => void
+}
