@@ -15,11 +15,20 @@ const LinkPreview: React.FC<LinkPreviewProps> = ({ url }) => {
 
   useEffect(() => {
     const fetchMetaData = async () => {
+      // sessionStorage에 캐시된 메타데이터가 있는지 확인
+      const cachedData = sessionStorage.getItem(url)
+      if (cachedData) {
+        setMetaData(JSON.parse(cachedData))
+        return
+      }
+
       try {
         const response = await fetch(
           `/api/scrape?url=${encodeURIComponent(url)}`
         )
         const data = await response.json()
+        // sessionStorage에 메타데이터 캐시
+        sessionStorage.setItem(url, JSON.stringify(data))
         setMetaData(data)
       } catch (error) {
         console.error('Error fetching link metadata:', error)
