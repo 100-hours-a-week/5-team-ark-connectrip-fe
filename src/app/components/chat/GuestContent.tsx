@@ -27,7 +27,6 @@ const GuestContent: React.FC<GuestContentProps> = ({
     isLocationSharingEnabled
   )
   const [loading, setLoading] = useState(false)
-  const router = useRouter()
   const path = usePathname()
   const chatRoomId = parseInt(path.split('/').pop() || '0', 10)
 

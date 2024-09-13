@@ -72,15 +72,12 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({
     }
   }
 
-  // Drawer가 열릴 때 데이터를 fetch
-  const showDrawer = () => {
-    setOpen(true)
-    fetchData()
-  }
-
-  // Drawer를 닫을 때
-  const onClose = () => {
-    setOpen(false)
+  // Drawer 열기/닫기 토글 함수
+  const toggleDrawer = () => {
+    setOpen((prevOpen) => !prevOpen)
+    if (!open) {
+      fetchData()
+    }
   }
 
   useEffect(() => {
@@ -94,7 +91,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({
     <>
       <div
         className='pl-5 text-secondary hover:text-black cursor-pointer'
-        onClick={showDrawer}
+        onClick={toggleDrawer}
       >
         <MenuOutlined style={{ fontSize: 20 }} />
       </div>
@@ -107,7 +104,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({
         }
         placement='right'
         closable={true}
-        onClose={onClose}
+        onClose={toggleDrawer}
         open={open}
         styles={{ body: { padding: '0 24px' } }}
       >
