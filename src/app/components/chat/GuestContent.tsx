@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { useMemo, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import useAuthStore from '@/app/store/useAuthStore'
 import useKakaoLoader from '@/app/hooks/useKakaoLoader'
 import { GuestContentProps } from '@/interfaces'
