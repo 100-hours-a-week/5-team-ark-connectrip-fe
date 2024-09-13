@@ -143,13 +143,19 @@ export const api = {
 
   patch: async (
     endpoint: string,
-    params: Record<string, unknown> | FormData,
+    params?: Record<string, unknown> | FormData, // params가 optional로 변경됨
     options: RequestOptions = {}
   ) => {
     try {
-      const { body, contentType } = handleRequestBody(params)
+      let body
       const headers = getHeaders()
-      if (contentType) headers['Content-Type'] = contentType
+
+      // params가 존재하는 경우에만 body 처리
+      if (params) {
+        const { body: requestBody, contentType } = handleRequestBody(params)
+        body = requestBody
+        if (contentType) headers['Content-Type'] = contentType
+      }
 
       const response = await fetch(`${baseUrl}${endpoint}`, {
         ...options,
@@ -159,7 +165,7 @@ export const api = {
           ...options.headers,
         },
         credentials: 'include',
-        body,
+        ...(body && { body }), // body가 있을 때만 추가
       })
       return handleResponse(response)
     } catch (error) {
