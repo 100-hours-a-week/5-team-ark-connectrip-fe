@@ -11,7 +11,6 @@ import CompanionList from './CompanionList'
 import LocationActions from './LocationActions'
 import PostNavigationButton from './PostNavigationButton'
 import LeaveChatButton from './LeaveChatButton'
-import { fetchLocation } from '@/app/utils/locationUtils'
 
 const GuestContent: React.FC<GuestContentProps> = ({
   companionUsers,
@@ -19,7 +18,6 @@ const GuestContent: React.FC<GuestContentProps> = ({
   isPostExists,
   leaderId,
   companionLocations,
-  setCompanionLocations,
   isLocationSharingEnabled = false,
 }) => {
   const { nickname, userId } = useAuthStore()
@@ -35,20 +33,6 @@ const GuestContent: React.FC<GuestContentProps> = ({
   useKakaoLoader()
 
   const clientRef = useWebSocketClient(chatRoomId)
-
-  useEffect(() => {
-    if (trackingEnabled) {
-      setLoading(true)
-      fetchLocation({
-        chatRoomId,
-        trackingEnabled,
-        setLoading,
-        setCompanionLocations,
-        showError,
-        showSuccess,
-      })
-    }
-  }, [trackingEnabled])
 
   const allLocations = useMemo(
     () =>
@@ -68,6 +52,7 @@ const GuestContent: React.FC<GuestContentProps> = ({
         loading={loading}
         trackingEnabled={trackingEnabled}
         allLocations={allLocations}
+        setLoading={setLoading}
       />
       <LocationActions
         nickname={nickname!}

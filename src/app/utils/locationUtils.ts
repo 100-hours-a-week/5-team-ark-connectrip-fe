@@ -1,54 +1,7 @@
 import { sendLocationMessage } from '@/app/utils/sendLocationMessage'
 import { leaveChatRoom } from '@/app/utils/fetchUtils'
 import { sendLeaveMessage } from './sendLeaveMessage'
-
-interface FetchLocationParams {
-  chatRoomId: number
-  trackingEnabled: boolean
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>
-  setCompanionLocations: React.Dispatch<React.SetStateAction<any[]>>
-  showError: (msg: string) => void
-  showSuccess: (msg: string) => void
-}
-
-export const fetchLocation = async ({
-  chatRoomId,
-  trackingEnabled,
-  setLoading,
-  setCompanionLocations,
-  showError,
-  showSuccess,
-}: FetchLocationParams) => {
-  if (!navigator.geolocation) {
-    showError('위치 정보를 가져올 수 없습니다.')
-    setLoading(false)
-    return
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    async (position) => {
-      const { latitude: lat, longitude: lng } = position.coords
-      // API call and state updates
-      setLoading(false)
-      showSuccess('위치 공유가 활성화되었습니다.')
-    },
-    (error) => {
-      console.error('Error fetching location:', error)
-      showError('팝업에서 위치 정보를 허용해주세요.')
-      setLoading(false)
-    }
-  )
-}
-
-interface SendLocationParams {
-  nickname: string
-  chatRoomId: number
-  userId: number
-  trackingEnabled: boolean
-  clientRef: any
-  showError: (msg: string) => void
-  showSuccess: (msg: string) => void
-}
+import { LeaveGroupParams, SendLocationParams } from '@/interfaces'
 
 export const handleSendLocation = ({
   nickname,
@@ -89,14 +42,6 @@ export const handleSendLocation = ({
       showError('팝업에서 위치 정보를 허용해주세요.')
     }
   )
-}
-
-interface LeaveGroupParams {
-  clientRef: any
-  chatRoomId: number
-  userId: number
-  nickname: string
-  showSuccess: (msg: string) => void
 }
 
 export const handleLeaveGroup = async ({
