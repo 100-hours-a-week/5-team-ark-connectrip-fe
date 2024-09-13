@@ -9,7 +9,11 @@ import useAuthStore from '@/app/store/useAuthStore'
 import ChatHeader from '@/app/components/chat/ChatHeader'
 import MessageList from '@/app/components/chat/MessageList'
 import ChatInput from '@/app/components/chat/ChatInput'
-import { ChatRoomEntryData, CompanionLocation } from '@/interfaces/index'
+import {
+  ChatRoomEntryData,
+  ChatRoomMemberLocation,
+  CompanionLocation,
+} from '@/interfaces/index'
 import { useChatWebSocket } from '@/app/hooks/useChatWebSocket' // 새로운 훅 import
 import { fetchLocations } from '@/app/utils/fetchUtils'
 
@@ -28,6 +32,8 @@ export default function ChatDetailPage() {
   const [companionLocations, setCompanionLocations] = useState<
     CompanionLocation[]
   >([])
+  const [isLocationSharingEnabled, setIsLocationSharingEnabled] =
+    useState<boolean>(false)
 
   // 입력된 메시지 상태
   const [content, setContent] = useState<string>('')
@@ -63,8 +69,41 @@ export default function ChatDetailPage() {
   }
 
   useEffect(() => {
-    // 이전 메시지 로드
-    fetchMessages()
+    const fetchChatRoomData = async () => {
+      try {
+        // 이전 메시지 로드
+        await fetchMessages()
+
+        // 동행 멤버 위치 정보 로드
+        const locationData = await fetchLocations(chatRoomId)
+
+        // 위치 공유가 활성화되어 있는지 확인
+        if (locationData.isLocationSharingEnabled) {
+          setIsLocationSharingEnabled(true)
+
+          // 동행 멤버 위치 정보 저장
+          const members: CompanionLocation[] =
+            locationData.data.chatRoomMemberLocations.map(
+              (member: ChatRoomMemberLocation) => ({
+                lat: member.lastLocation.lat, // lat은 lastLocation에서 가져옴
+                lng: member.lastLocation.lng, // lng도 lastLocation에서 가져옴
+                nickname: member.nickname, // nickname 직접 가져옴
+                profileImagePath: member.profileImagePath || '', // profileImagePath가 없으면 빈 문자열
+              })
+            )
+          setCompanionLocations(members)
+        } else {
+          setIsLocationSharingEnabled(false)
+          setCompanionLocations([]) // 위치 공유 OFF 시 초기화
+        }
+      } catch (error) {
+        console.error('데이터 로딩 중 오류 발생:', error)
+      }
+    }
+
+    if (chatRoomId) {
+      fetchChatRoomData()
+    }
   }, [chatRoomId])
 
   useEffect(() => {
@@ -117,6 +156,7 @@ export default function ChatDetailPage() {
             chatRoomData={chatRoomData}
             setCompanionLocations={setCompanionLocations}
             companionLocations={companionLocations}
+            isLocationSharingEnabled={isLocationSharingEnabled}
           />
           <div className='bg-white w-full h-full mb-[110px] mt-[-20px]'>
             <MessageList messages={messages} userId={userId || ''} />

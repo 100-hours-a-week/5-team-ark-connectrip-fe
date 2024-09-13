@@ -27,6 +27,7 @@ interface GuestContentProps {
   setCompanionLocations: React.Dispatch<
     React.SetStateAction<CompanionLocation[]>
   > // 상태 업데이트 함수
+  isLocationSharingEnabled?: boolean
 }
 
 const GuestContent: React.FC<GuestContentProps> = ({
@@ -36,9 +37,12 @@ const GuestContent: React.FC<GuestContentProps> = ({
   leaderId,
   companionLocations,
   setCompanionLocations,
+  isLocationSharingEnabled = false,
 }) => {
   const { nickname, userId } = useAuthStore()
-  const [trackingEnabled, setTrackingEnabled] = useState(false)
+  const [trackingEnabled, setTrackingEnabled] = useState(
+    isLocationSharingEnabled
+  )
   const [loading, setLoading] = useState(false) // 로딩 상태 추가
   const router = useRouter()
   const handleDeleteClick = useHandleDeleteClick() // 모달 호출 유틸리티 사용
@@ -200,7 +204,7 @@ const GuestContent: React.FC<GuestContentProps> = ({
         </Button>
         <div className='flex gap-2'>
           <p>내 위치 추적</p>
-          <Switch onChange={handleSwitchChange} />
+          <Switch checked={trackingEnabled} onChange={handleSwitchChange} />
         </div>
       </div>
       <h3>대화 상대</h3>

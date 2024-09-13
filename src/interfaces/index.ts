@@ -176,3 +176,17 @@ export interface CompanionLocation {
   nickname: string | undefined
   profileImagePath: string | undefined
 }
+
+// lastLocation에 대한 인터페이스 정의
+export interface LastLocation {
+  lat: number
+  lng: number
+}
+
+// chatRoomMemberLocations 배열의 각 객체에 대한 인터페이스 정의
+export interface ChatRoomMemberLocation {
+  lastLocation: LastLocation
+  memberId: number
+  profileImagePath: string | null
+  nickname: string
+}

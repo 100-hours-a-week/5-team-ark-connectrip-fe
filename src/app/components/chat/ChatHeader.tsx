@@ -10,12 +10,14 @@ interface ChatHeaderProps {
   setCompanionLocations: React.Dispatch<
     React.SetStateAction<CompanionLocation[]>
   > // 상태 업데이트 함수
+  isLocationSharingEnabled?: boolean
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({
   chatRoomData,
   companionLocations,
   setCompanionLocations,
+  isLocationSharingEnabled = false,
 }) => {
   const router = useRouter()
 
@@ -33,6 +35,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
             chatRoomData={chatRoomData}
             companionLocations={companionLocations}
             setCompanionLocations={setCompanionLocations}
+            isLocationSharingEnabled={isLocationSharingEnabled}
           />
         )}
       </div>

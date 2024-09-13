@@ -22,6 +22,7 @@ interface MenuDrawerProps {
   setCompanionLocations: React.Dispatch<
     React.SetStateAction<CompanionLocation[]>
   > // 상태 업데이트 함수
+  isLocationSharingEnabled?: boolean
 }
 
 const statusTranslations: { [key in RecruitmentStatus]: string } = {
@@ -34,6 +35,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({
   chatRoomData,
   companionLocations,
   setCompanionLocations,
+  isLocationSharingEnabled = false,
 }) => {
   const [open, setOpen] = useState(false)
   const [applyUsers, setApplyUsers] = useState<ApplyUsers[]>([])
@@ -141,6 +143,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({
                         leaderId={leaderId}
                         companionLocations={companionLocations}
                         setCompanionLocations={setCompanionLocations}
+                        isLocationSharingEnabled={isLocationSharingEnabled}
                       />
                     ),
                   },
@@ -158,6 +161,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({
                         leaderId={leaderId}
                         companionLocations={companionLocations}
                         setCompanionLocations={setCompanionLocations}
+                        isLocationSharingEnabled={isLocationSharingEnabled}
                       />
                     ),
                   },
