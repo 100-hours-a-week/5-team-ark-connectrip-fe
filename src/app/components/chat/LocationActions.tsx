@@ -1,6 +1,10 @@
 import { LocationActionsProps } from '@/interfaces'
 import { Button, Switch } from 'antd'
-import { fetchLocationSharingStatus } from '@/app/utils/fetchUtils'
+import {
+  fetchLocationSharingStatus,
+  sendLocationToChatRoom,
+} from '@/app/utils/fetchUtils'
+import { sendLocationMessage } from '@/app/utils/sendLocationMessage'
 
 const LocationActions: React.FC<LocationActionsProps> = ({
   nickname,
@@ -19,23 +23,27 @@ const LocationActions: React.FC<LocationActionsProps> = ({
     }
 
     navigator.geolocation.getCurrentPosition(
-      (position) => {
+      async (position) => {
         const { latitude, longitude } = position.coords
         const kakaoMapLink = `https://map.kakao.com/link/map/${nickname},${latitude},${longitude}`
 
-        clientRef.send(
-          JSON.stringify({
-            action: 'sendLocation',
-            data: {
-              userId,
-              chatRoomId,
-              nickname,
-              locationLink: kakaoMapLink,
-            },
-          })
-        )
+        try {
+          // 서버로 위치 전송
+          await sendLocationToChatRoom(chatRoomId, latitude, longitude)
+          showSuccess('위치 정보가 채팅방에 전송되었습니다.')
 
-        showSuccess('위치 정보가 채팅방에 전송되었습니다.')
+          // WebSocket을 통해 위치 정보 전송
+          sendLocationMessage({
+            clientRef,
+            chatRoomId,
+            userId: userId?.toString() || '',
+            nickname: nickname || '',
+            locationLink: kakaoMapLink,
+          })
+        } catch (error) {
+          console.error('위치 정보를 전송하는 중 오류 발생:', error)
+          showError('위치 정보를 전송하는 중 문제가 발생했습니다.')
+        }
       },
       (error) => {
         console.error('위치 정보를 가져오는 중 오류 발생:', error)
@@ -53,7 +61,7 @@ const LocationActions: React.FC<LocationActionsProps> = ({
           const { latitude, longitude } = position.coords
 
           try {
-            console.log('클릭' + checked)
+            console.log('위치 공유 상태 변경:', checked)
             await fetchLocationSharingStatus(
               chatRoomId,
               checked,

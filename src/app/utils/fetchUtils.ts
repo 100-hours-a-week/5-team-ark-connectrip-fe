@@ -411,3 +411,24 @@ export const fetchLocations = async (chatRoomId: number) => {
     throw new Error('사용자 위치를 불러오는 데 실패했습니다.')
   }
 }
+
+// 채팅방에서 사용자 위치를 전송하는 유틸리티 함수
+export const sendLocationToChatRoom = async (
+  chatRoomId: number,
+  lat: number,
+  lng: number
+) => {
+  try {
+    const response = await api.patch(
+      `/api/v1/chatRoom/${chatRoomId}/locations/me`,
+      {
+        lat,
+        lng,
+      }
+    )
+    return response
+  } catch (error) {
+    console.error('위치 전송 중 오류 발생:', error)
+    throw new Error('위치 전송에 실패했습니다.')
+  }
+}

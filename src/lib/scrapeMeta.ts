@@ -1,7 +1,21 @@
 // lib/scrapeMeta.ts
 import { load } from 'cheerio'
+
+// 스크래핑된 메타데이터의 타입 정의
+interface MetaData {
+  title?: string
+  description?: string
+  image?: string
+}
+
+// 메모리 캐시 객체의 타입 정의
+interface CacheEntry {
+  data: MetaData
+  expires: number
+}
+
 // 메모리 캐시 객체
-const cache = new Map<string, { data: any; expires: number }>()
+const cache = new Map<string, CacheEntry>()
 
 export const scrapeMeta = async (url: string) => {
   // 카카오맵 URL인지 확인 (카카오맵 URL은 썸네일 동일)

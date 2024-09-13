@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { RecruitmentStatus } from '@/types'
 import { Stringifier } from 'postcss'
+import { Client } from '@stomp/stompjs'
 
 export interface Chat {
   chatRoomId: number
@@ -214,7 +215,7 @@ export interface LeaveChatButtonProps {
   chatRoomId: number
   userId: number
   nickname: string
-  clientRef: any
+  clientRef: React.MutableRefObject<Client | null>
   showSuccess: (msg: string) => void
 }
 
@@ -225,7 +226,27 @@ export interface LocationActionsProps {
   userId: number
   trackingEnabled: boolean
   setTrackingEnabled: React.Dispatch<React.SetStateAction<boolean>>
-  clientRef: any
+  clientRef: React.MutableRefObject<Client | null>
   showError: (msg: string) => void
+  showSuccess: (msg: string) => void
+}
+
+// MapContainerProps 인터페이스 정의
+export interface SendLocationParams {
+  nickname: string
+  chatRoomId: number
+  userId: number
+  trackingEnabled: boolean
+  clientRef: React.MutableRefObject<Client | null>
+  showError: (msg: string) => void
+  showSuccess: (msg: string) => void
+}
+
+// LeaveGroupParams 인터페이스 정의
+export interface LeaveGroupParams {
+  clientRef: React.MutableRefObject<Client | null>
+  chatRoomId: number
+  userId: number
+  nickname: string
   showSuccess: (msg: string) => void
 }
