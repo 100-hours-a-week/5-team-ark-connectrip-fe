@@ -1,4 +1,4 @@
-import { LocationActionsProps } from '@/interfaces'
+import { CompanionLocation, LocationActionsProps } from '@/interfaces'
 import { Button, Switch } from 'antd'
 import {
   fetchLocationSharingStatus,
@@ -15,6 +15,7 @@ const LocationActions: React.FC<LocationActionsProps> = ({
   clientRef,
   showError,
   showSuccess,
+  setCompanionLocations,
 }) => {
   const handleSendLocation = () => {
     if (!navigator.geolocation) {
@@ -54,20 +55,37 @@ const LocationActions: React.FC<LocationActionsProps> = ({
 
   const handleSwitchChange = (checked: boolean) => {
     setTrackingEnabled(checked)
-
-    if (navigator.geolocation && checked) {
+    if (checked) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords
 
           try {
-            console.log('위치 공유 상태 변경:', checked)
-            await fetchLocationSharingStatus(
+            const response = await fetchLocationSharingStatus(
               chatRoomId,
               checked,
               latitude,
               longitude
             )
+
+            if (checked) {
+              // response가 유효한지 확인하고, chatRoomMemberLocations 배열을 처리
+              if (response && response.chatRoomMemberLocations) {
+                const updatedLocations = response.chatRoomMemberLocations.map(
+                  (member: any) => ({
+                    lat: member.lastLocation.lat,
+                    lng: member.lastLocation.lng,
+                    nickname: member.nickname || '', // 닉네임이 없을 경우 기본 값
+                    profileImagePath: member.profileImagePath || '', // 프로필 이미지 경로가 없을 경우 기본 값
+                  })
+                )
+
+                setCompanionLocations(updatedLocations)
+              } else {
+                console.error('응답 데이터가 올바르지 않습니다:', response)
+              }
+            }
+
             showSuccess(
               checked
                 ? '위치 공유가 활성화되었습니다.'

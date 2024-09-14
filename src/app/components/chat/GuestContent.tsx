@@ -18,6 +18,7 @@ const GuestContent: React.FC<GuestContentProps> = ({
   isPostExists,
   leaderId,
   companionLocations,
+  setCompanionLocations,
   isLocationSharingEnabled = false,
 }) => {
   const { nickname, userId } = useAuthStore()
@@ -63,6 +64,7 @@ const GuestContent: React.FC<GuestContentProps> = ({
         clientRef={clientRef}
         showError={showError}
         showSuccess={showSuccess}
+        setCompanionLocations={setCompanionLocations}
       />
       <h3>대화 상대</h3>
       <CompanionList companionUsers={companionUsers} leaderId={leaderId} />

@@ -229,6 +229,9 @@ export interface LocationActionsProps {
   clientRef: React.MutableRefObject<Client | null>
   showError: (msg: string) => void
   showSuccess: (msg: string) => void
+  setCompanionLocations: React.Dispatch<
+    React.SetStateAction<CompanionLocation[]>
+  >
 }
 
 // MapContainerProps 인터페이스 정의
