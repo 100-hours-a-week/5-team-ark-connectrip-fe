@@ -1,4 +1,4 @@
-import { CompanionLocation, LocationActionsProps } from '@/interfaces'
+import { ChatRoomMemberLocation, LocationActionsProps } from '@/interfaces'
 import { Button, Switch } from 'antd'
 import {
   fetchLocationSharingStatus,
@@ -72,7 +72,7 @@ const LocationActions: React.FC<LocationActionsProps> = ({
               // response가 유효한지 확인하고, chatRoomMemberLocations 배열을 처리
               if (response && response.chatRoomMemberLocations) {
                 const updatedLocations = response.chatRoomMemberLocations.map(
-                  (member: any) => ({
+                  (member: ChatRoomMemberLocation) => ({
                     lat: member.lastLocation.lat,
                     lng: member.lastLocation.lng,
                     nickname: member.nickname || '', // 닉네임이 없을 경우 기본 값
