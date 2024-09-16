@@ -49,9 +49,8 @@ export default function ProfilePage() {
   const router = useRouter()
 
   const handleNavigateToReviews = () => {
-    router.push('/profile/reviews')
+    // router.push('/profile/reviews/${id}')
   }
-
   return (
     <div className='w-full h-full p-4'>
       <div className='pr-1 text-right text-base mb-2'>
