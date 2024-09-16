@@ -81,5 +81,5 @@ main {
 .custom-carousel .slick-prev,
 .custom-carousel .slick-next {
   font-size: 24px; /* 화살표 크기 조정 */
-  color: #74cccc !important; /* 화살표 색상 설정 */
+  color: #ccc !important; /* 화살표 색상 설정 */
 }
