@@ -432,3 +432,24 @@ export const sendLocationToChatRoom = async (
     throw new Error('위치 전송에 실패했습니다.')
   }
 }
+
+// 채팅방 사용자 위치 갱신 및 동행자 마지막 위치 조회
+export const refreshLocations = async (
+  chatRoomId: number,
+  lat: number,
+  lng: number
+) => {
+  try {
+    const response = await api.patch(
+      `/api/v1/chatRoom/${chatRoomId}/locations`,
+      {
+        lat,
+        lng,
+      }
+    )
+    return response // 응답 데이터 반환
+  } catch (error) {
+    console.error('사용자 위치 갱신 및 동행자 위치 조회 중 오류 발생:', error)
+    throw new Error('위치 갱신 및 동행자 조회에 실패했습니다.')
+  }
+}

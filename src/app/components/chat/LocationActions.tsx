@@ -41,6 +41,16 @@ const LocationActions: React.FC<LocationActionsProps> = ({
             nickname: nickname || '',
             locationLink: kakaoMapLink,
           })
+
+          // 기존 동료 위치는 그대로 유지하면서 내 위치만 업데이트
+          setCompanionLocations((prevLocations) =>
+            prevLocations.map(
+              (member) =>
+                member.nickname === nickname // 내 위치인 경우
+                  ? { ...member, lat: latitude, lng: longitude } // 내 위치 업데이트
+                  : member // 다른 유저들의 위치는 그대로 유지
+            )
+          )
         } catch (error) {
           console.error('위치 정보를 전송하는 중 오류 발생:', error)
           showError('위치 정보를 전송하는 중 문제가 발생했습니다.')

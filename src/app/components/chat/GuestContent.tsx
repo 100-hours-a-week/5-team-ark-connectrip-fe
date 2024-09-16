@@ -51,9 +51,11 @@ const GuestContent: React.FC<GuestContentProps> = ({
       {contextHolder}
       <MapContainer
         loading={loading}
+        chatRoomId={chatRoomId}
         trackingEnabled={trackingEnabled}
         allLocations={allLocations}
         setLoading={setLoading}
+        setCompanionLocations={setCompanionLocations}
       />
       <LocationActions
         nickname={nickname!}
