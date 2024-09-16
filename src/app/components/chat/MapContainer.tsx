@@ -83,7 +83,6 @@ const MapContainer: React.FC<MapContainerProps> = ({
           className='absolute top-4 right-4 text-xl cursor-pointer z-10'
           style={{ fontSize: '24px', color: '#1890ff' }}
           onClick={handleRefreshLocations} // 클릭 시 위치 갱신 로직 호출
-          spin={loading} // 로딩 중일 때 spin 애니메이션 추가
         />
       )}
 

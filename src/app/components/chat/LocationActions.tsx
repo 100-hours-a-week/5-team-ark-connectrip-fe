@@ -5,7 +5,7 @@ import {
   sendLocationToChatRoom,
 } from '@/app/utils/fetchUtils'
 import { sendLocationMessage } from '@/app/utils/sendLocationMessage'
-
+import PopoverContent from './PopoverContent'
 const LocationActions: React.FC<LocationActionsProps> = ({
   nickname,
   chatRoomId,
@@ -131,7 +131,9 @@ const LocationActions: React.FC<LocationActionsProps> = ({
       </Button>
       <div className='flex gap-2'>
         <p>내 위치 추적</p>
-        <Switch checked={trackingEnabled} onChange={handleSwitchChange} />
+        <PopoverContent title='커넥트립 위치공유 기능'>
+          <Switch checked={trackingEnabled} onChange={handleSwitchChange} />
+        </PopoverContent>
       </div>
     </div>
   )
