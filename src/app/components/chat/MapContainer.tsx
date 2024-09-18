@@ -4,7 +4,6 @@ import LoadingSpinner from '../common/LoadingSpinner'
 import { ChatRoomMemberLocation, CompanionLocation } from '@/interfaces'
 import { SyncOutlined } from '@ant-design/icons'
 import { refreshLocations } from '@/app/utils/fetchUtils'
-import { set } from 'date-fns'
 
 interface MapContainerProps {
   loading: boolean
