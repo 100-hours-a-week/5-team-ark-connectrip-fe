@@ -484,3 +484,17 @@ export const fetchUserProfile = async (
     throw new Error('유저 프로필 데이터를 가져오는 데 실패했습니다.')
   }
 }
+
+// 유저 프로필을 업데이트하는 함수
+export const updateProfile = async (
+  userId: string,
+  payload: { nickname: string; description: string }
+) => {
+  try {
+    await api.post(`/api/v1/members/${userId}/profile`, payload)
+    return
+  } catch (error) {
+    console.error('프로필 업데이트 중 오류 발생:', error)
+    throw new Error('프로필 업데이트에 실패했습니다.')
+  }
+}
