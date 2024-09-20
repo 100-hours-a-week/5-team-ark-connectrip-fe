@@ -1,7 +1,7 @@
 // utils/fetchUtils.ts
 import { api } from '@/app/utils/api'
 import { formatToUtcDate, formatShortDateFromUtc } from '@/app/utils/dateUtils'
-import { Comment, ChatRoomEntryData } from '@/interfaces/index'
+import { Comment, ChatRoomEntryData, ProfileData } from '@/interfaces/index'
 
 // 게시글 데이터를 가져오는 유틸리티 함수
 export const fetchPost = async (postId: number) => {
@@ -451,5 +451,36 @@ export const refreshLocations = async (
   } catch (error) {
     console.error('사용자 위치 갱신 및 동행자 위치 조회 중 오류 발생:', error)
     throw new Error('위치 갱신 및 동행자 조회에 실패했습니다.')
+  }
+}
+
+// 후기 작성 유틸리티 함수
+export const postReview = async (
+  chatRoomId: number,
+  payload: { targetId: number; content: string }
+) => {
+  try {
+    const response = await api.post(
+      `/api/v1/chatRooms/${chatRoomId}/reviews`,
+      payload
+    )
+    return response
+  } catch (error) {
+    console.error('후기 제출 중 오류 발생:', error)
+    throw new Error('후기 작성에 실패했습니다.')
+  }
+}
+
+///////////////////////////////////////////
+// 유저 프로필 정보를 가져오는 유틸리티 함수
+export const fetchUserProfile = async (
+  memberId: number
+): Promise<ProfileData> => {
+  try {
+    const response = await api.get(`/api/v1/members/profile/${memberId}`)
+    return response
+  } catch (error) {
+    console.error('유저 프로필 데이터 페칭 중 오류 발생:', error)
+    throw new Error('유저 프로필 데이터를 가져오는 데 실패했습니다.')
   }
 }
