@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { RecruitmentStatus } from '@/types'
 import { Stringifier } from 'postcss'
+import { Client } from '@stomp/stompjs'
 
 export interface Chat {
   chatRoomId: number
@@ -167,4 +168,88 @@ export interface Message {
   senderNickname: string
   senderProfileImage: string
   infoFlag: boolean
+}
+
+// CompanionLocations 인터페이스 정의
+export interface CompanionLocation {
+  lat: number
+  lng: number
+  nickname: string | undefined
+  profileImagePath: string | undefined
+}
+
+// lastLocation에 대한 인터페이스 정의
+export interface LastLocation {
+  lat: number
+  lng: number
+}
+
+// chatRoomMemberLocations 배열의 각 객체에 대한 인터페이스 정의
+export interface ChatRoomMemberLocation {
+  lastLocation: LastLocation
+  memberId: number
+  profileImagePath: string | null
+  nickname: string
+}
+
+// GuestContentProps 인터페이스 정의
+export interface GuestContentProps {
+  companionUsers: CompanionUsers[]
+  postId: number
+  isPostExists: boolean
+  leaderId: number
+  companionLocations: CompanionLocation[]
+  setCompanionLocations: React.Dispatch<
+    React.SetStateAction<CompanionLocation[]>
+  >
+  isLocationSharingEnabled?: boolean
+}
+
+// MenuDrawerProps 인터페이스 정의
+export interface LeaveChatButtonProps {
+  handleDeleteClick: (
+    entityName: string,
+    redirectPath: string,
+    deleteFunction: () => Promise<void>
+  ) => Promise<void>
+  chatRoomId: number
+  userId: number
+  nickname: string
+  clientRef: React.MutableRefObject<Client | null>
+  showSuccess: (msg: string) => void
+}
+
+// LocationActionsProps 인터페이스 정의
+export interface LocationActionsProps {
+  nickname: string
+  chatRoomId: number
+  userId: number
+  trackingEnabled: boolean
+  setTrackingEnabled: React.Dispatch<React.SetStateAction<boolean>>
+  clientRef: React.MutableRefObject<Client | null>
+  showError: (msg: string) => void
+  showSuccess: (msg: string) => void
+  setCompanionLocations: React.Dispatch<
+    React.SetStateAction<CompanionLocation[]>
+  >
+}
+
+// MapContainerProps 인터페이스 정의
+export interface SendLocationParams {
+  nickname: string
+  chatRoomId: number
+  userId: number
+  trackingEnabled: boolean
+  clientRef: React.MutableRefObject<Client | null>
+  showError: (msg: string) => void
+  showSuccess: (msg: string) => void
+}
+
+// LeaveGroupParams 인터페이스 정의
+export interface LeaveGroupParams {
+  clientRef: React.MutableRefObject<Client | null>
+  chatRoomId: number
+  userId: number
+  nickname: string
+  showSuccess: (msg: string) => void
 }

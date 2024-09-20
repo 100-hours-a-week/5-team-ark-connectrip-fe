@@ -3,7 +3,7 @@ import ProfileCard from '@/app/components/profile/ProfileCard'
 import Introduction from '@/app/components/profile/Introduction'
 import Reviews from '@/app/components/profile/Reviews'
 import { Button } from 'antd'
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
 
 const mockData = {
   memberId: 2,
@@ -46,12 +46,11 @@ const mockData = {
 }
 
 export default function ProfilePage() {
-  const router = useRouter()
+  // const router = useRouter()
 
   const handleNavigateToReviews = () => {
-    router.push('/profile/reviews')
+    // router.push('/profile/reviews/${id}')
   }
-
   return (
     <div className='w-full h-full p-4'>
       <div className='pr-1 text-right text-base mb-2'>

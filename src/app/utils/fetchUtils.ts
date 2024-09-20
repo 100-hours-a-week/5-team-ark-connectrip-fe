@@ -374,3 +374,82 @@ export const deleteCommunityComment = async (commentId: number) => {
     throw new Error('댓글 삭제에 실패했습니다.')
   }
 }
+
+/////////////
+// 채팅방 토글 on/off 위치 정보를 전송하는 유틸리티 함수
+export const fetchLocationSharingStatus = async (
+  chatRoomId: number,
+  trackingEnabled: boolean,
+  lat?: number,
+  lng?: number
+) => {
+  try {
+    console.log('위치 공유 활성화:', trackingEnabled)
+
+    // trackingEnabled가 true일 경우에만 body를 포함, false일 경우 body 없이 요청 전송
+    const response = trackingEnabled
+      ? await api.patch(`/api/v1/chatRoom/${chatRoomId}/locations/sharing`, {
+          lat,
+          lng,
+        })
+      : await api.patch(`/api/v1/chatRoom/${chatRoomId}/locations/sharing`)
+
+    return response
+  } catch (error) {
+    console.error('위치 공유 활성화 중 오류 발생:', error)
+    throw new Error('위치 공유 활성화에 실패했습니다.')
+  }
+}
+
+// 채팅방 사용자 위치 조회 유틸리티 함수
+export const fetchLocations = async (chatRoomId: number) => {
+  try {
+    const response = await api.get(`/api/v1/chatRoom/${chatRoomId}/locations`)
+    return response
+  } catch (error) {
+    console.error('Failed to fetch locations:', error)
+    throw new Error('사용자 위치를 불러오는 데 실패했습니다.')
+  }
+}
+
+// 채팅방에서 사용자 위치를 전송하는 유틸리티 함수
+export const sendLocationToChatRoom = async (
+  chatRoomId: number,
+  lat: number,
+  lng: number
+) => {
+  try {
+    const response = await api.patch(
+      `/api/v1/chatRoom/${chatRoomId}/locations/me`,
+      {
+        lat,
+        lng,
+      }
+    )
+    return response
+  } catch (error) {
+    console.error('위치 전송 중 오류 발생:', error)
+    throw new Error('위치 전송에 실패했습니다.')
+  }
+}
+
+// 채팅방 사용자 위치 갱신 및 동행자 마지막 위치 조회
+export const refreshLocations = async (
+  chatRoomId: number,
+  lat: number,
+  lng: number
+) => {
+  try {
+    const response = await api.patch(
+      `/api/v1/chatRoom/${chatRoomId}/locations`,
+      {
+        lat,
+        lng,
+      }
+    )
+    return response // 응답 데이터 반환
+  } catch (error) {
+    console.error('사용자 위치 갱신 및 동행자 위치 조회 중 오류 발생:', error)
+    throw new Error('위치 갱신 및 동행자 조회에 실패했습니다.')
+  }
+}

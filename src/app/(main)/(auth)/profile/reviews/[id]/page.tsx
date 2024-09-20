@@ -1,9 +1,6 @@
 'use client'
-import ProfileCard from '@/app/components/profile/ProfileCard'
-import Introduction from '@/app/components/profile/Introduction'
 import Reviews from '@/app/components/profile/Reviews'
-import { Button } from 'antd'
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
 
 const mockData = {
   memberId: 2,
@@ -46,41 +43,18 @@ const mockData = {
 }
 
 export default function ProfilePage() {
-  const router = useRouter()
+  // const router = useRouter()
 
-  const handleNavigateToReviews = () => {
-    router.push('/profile/reviews')
-  }
+  // const handleNavigateToReviews = () => {
+  //   router.push('/profile/reviews')
+  // }
 
   return (
     <div className='w-full h-full p-4'>
-      <div className='pr-1 text-right text-base mb-2'>
-        <p className='underline underline-offset-2 hover:text-gray-600 cursor-pointer'>
-          수정하기
-        </p>
-      </div>
-      <ProfileCard
-        profileImage={mockData.profileImagePath}
-        nickname={mockData.nickname}
-        accompanyCount={mockData.accompanyCount}
-        reviewCount={mockData.reviewCount}
-      />
-      <Introduction
-        ageGroup={mockData.ageGroup}
-        gender={mockData.gender}
-        description={mockData.description}
-      />
       <div className='flex flex-col gap-3 mt-5'>
         <h3 className='p-1 text-lg font-bold'>{mockData.nickname} 님의 후기</h3>
         <Reviews reviews={mockData.recentReviews} />
       </div>
-      <Button
-        type='primary'
-        className='w-full mt-4'
-        onClick={handleNavigateToReviews}
-      >
-        후기 더 표시하기
-      </Button>
     </div>
   )
 }

@@ -5,6 +5,7 @@ import { AntdRegistry } from '@ant-design/nextjs-registry'
 import { ConfigProvider, ThemeConfig } from 'antd'
 import ClientContent from './components/common/ClientContent' // 클라이언트 전용 컴포넌트 가져오기
 import Head from 'next/head'
+import React from 'react'
 
 // 메타데이터 설정
 export const metadata: Metadata = {
