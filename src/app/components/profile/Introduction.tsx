@@ -13,7 +13,7 @@ export default function Introduction({
   description,
 }: IntroductionProps) {
   return (
-    <div className='flex flex-col justify-center items-start gap-3 p-2 mt-5 pb-7 border-b border-gray-300'>
+    <div className='flex flex-col justify-center items-start gap-3 p-2 mt-5  border-b border-gray-300'>
       <div className='flex items-center gap-3'>
         <CloudOutlined />
         <span>나이 : {ageGroup}</span>
@@ -32,9 +32,11 @@ export default function Introduction({
           </>
         )}
       </div>
-      <div className='flex items-center mt-1'>
-        <span>{description}</span>
-      </div>
+      {description && (
+        <div className='flex items-center mt-1 pb-7'>
+          <span>{description}</span>
+        </div>
+      )}
     </div>
   )
 }

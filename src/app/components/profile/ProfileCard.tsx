@@ -28,7 +28,7 @@ export default function ProfileCard({
           size={100}
           nickname={nickname || ''}
         />
-        <div className='text-xl font-bold'>{nickname}</div>
+        <div className='text-l font-bold'>{nickname}</div>
       </div>
       <div className='flex flex-col flex-1 justify-center items-center gap-3'>
         <div className='flex flex-col w-[80%] justify-center items-start'>
