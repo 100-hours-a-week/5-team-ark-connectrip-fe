@@ -44,11 +44,19 @@ export default function ProfilePage() {
 
   return (
     <div className='w-full h-full p-4 overflow-auto mb-12'>
-      <div
-        onClick={() => router.back()}
-        className='text-sm cursor-pointer text-secondary hover:text-black pl-1 text-left mb-2'
-      >
-        <LeftOutlined style={{ fontSize: 16 }} />
+      <div className='flex justify-between'>
+        <div
+          onClick={() => router.back()}
+          className='text-sm cursor-pointer text-secondary hover:text-black pl-1 text-left mb-2'
+        >
+          <LeftOutlined style={{ fontSize: 16 }} />
+        </div>
+        <p
+          className='underline underline-offset-2 hover:text-gray-600 cursor-pointer'
+          onClick={handleEditToProfile}
+        >
+          수정하기
+        </p>
       </div>
       <ProfileCard
         profileImage={profileData.profileImagePath}
