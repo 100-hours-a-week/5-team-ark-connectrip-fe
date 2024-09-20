@@ -33,8 +33,8 @@ export default function Introduction({
         )}
       </div>
       {description && (
-        <div className='flex items-center mt-1 pb-7'>
-          <span>{description}</span>
+        <div className='flex items-center mt-1 pb-7 white'>
+          <div style={{ whiteSpace: 'pre-wrap' }}>{description}</div>
         </div>
       )}
     </div>

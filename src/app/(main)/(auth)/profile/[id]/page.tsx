@@ -16,8 +16,6 @@ export default function ProfilePage() {
   const path = usePathname()
   const userId = path.split('/').pop()
 
-  console.log(userId)
-
   useEffect(() => {
     const loadProfileData = async () => {
       try {

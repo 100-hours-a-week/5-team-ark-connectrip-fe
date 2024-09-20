@@ -141,7 +141,7 @@ export interface ApplyUsers {
 
 // CompanionUsers 인터페이스 정의
 export interface CompanionUsers {
-  chatRoomId?: number
+  chatRoomId: number
   memberId: number
   memberEmail?: string
   memberNickname: string
@@ -253,4 +253,38 @@ export interface LeaveGroupParams {
   userId: number
   nickname: string
   showSuccess: (msg: string) => void
+}
+
+// ReviewModalProps 인터페이스 정의
+export interface ReviewModalProps {
+  open: boolean
+  targetNickname: string
+  content: string
+  onOk: () => void
+  onCancel: () => void
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
+}
+
+// ReviewModalProps 인터페이스 정의
+export interface Review {
+  reviewId: number
+  content: string
+  reviewerNickname: string
+  reviewerProfile: string | null
+  reviewerId: number
+  createdAt: string
+}
+
+// ReviewModalProps 인터페이스 정의
+export interface ProfileData {
+  memberId: number
+  profileImagePath: string | null
+  nickname: string
+  gender: string | null
+  recentReviews: Review[]
+  description: string
+  ageGroup: string
+  // 필요 없는 필드들은 제거하지 않고 타입에 포함해 둡니다.
+  accompanyCount?: number // 불필요하지만, 혹시나 포함되는 경우 옵션으로 설정
+  reviewCount?: number // 불필요하지만, 포함되는 경우 옵션으로 설정
 }
