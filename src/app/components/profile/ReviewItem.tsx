@@ -15,7 +15,7 @@ export function ReviewItem({ review }: { review: Review }) {
   return (
     <div
       key={review.reviewId}
-      className='flex gap-2 p-4 px-6 justify-center border border-gray-200 h-[170px] p-2 rounded-xl'
+      className='flex flex-col gap-2 p-4 px-6 justify-center border border-gray-200 h-[170px] p-2 rounded-xl'
     >
       <div className='flex flex-col h-[90px]'>
         <div className='text-sm'>{review.content}</div>

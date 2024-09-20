@@ -1,14 +1,12 @@
 'use client'
+import { ReviewItem } from '@/app/components/profile/ReviewItem'
 import Reviews from '@/app/components/profile/Reviews'
-// import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
+import { LeftOutlined } from '@ant-design/icons'
 
 const mockData = {
   memberId: 2,
-  profileImagePath:
-    'http://k.kakaocdn.net/dn/rzia4/btsEYPys3Ja/IIpIg8cU6mzrZm2DuNq5SK/img_640x640.jpg',
   nickname: '센세니',
-  gender: 'W',
-  accompanyCount: 0,
   reviewCount: 5,
   recentReviews: [
     {
@@ -22,7 +20,7 @@ const mockData = {
     {
       reviewId: 8,
       content:
-        '즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다.',
+        '즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. ',
       reviewerNickname: '뿡박사님을 아세요',
       reviewerProfile: null,
       reviewerId: 6,
@@ -36,24 +34,50 @@ const mockData = {
       reviewerId: 5,
       createdAt: '2024-09-11T04:02:21Z',
     },
+    {
+      reviewId: 6,
+      content: '다음에 또 같이 가요~',
+      reviewerNickname: '노아노아노아',
+      reviewerProfile: null,
+      reviewerId: 4,
+      createdAt: '2024-09-11T04:02:21Z',
+    },
+    {
+      reviewId: 5,
+      content: '다음에 또 같이 가요~',
+      reviewerNickname: '파즈',
+      reviewerProfile: null,
+      reviewerId: 3,
+      createdAt: '2024-09-11T04:02:21Z',
+    },
   ],
-  description:
-    '트룰루입니다.트룰루입니다트룰루입니다트룰루입니다트룰루입니다트룰루입니다트룰루입니다트룰루입니다트룰루입니다트룰루입니다트룰루입니다트룰루입니다.',
-  ageGroup: '20대',
 }
 
 export default function ProfilePage() {
-  // const router = useRouter()
+  const router = useRouter()
 
   // const handleNavigateToReviews = () => {
   //   router.push('/profile/reviews')
   // }
 
   return (
-    <div className='w-full h-full p-4'>
-      <div className='flex flex-col gap-3 mt-5'>
-        <h3 className='p-1 text-lg font-bold'>{mockData.nickname} 님의 후기</h3>
-        <Reviews reviews={mockData.recentReviews} />
+    <div className='w-full h-full p-4 mb-20'>
+      <div className='flex items-center justify-start gap-2 w-full mb-2'>
+        <div
+          onClick={() => router.back()}
+          className='text-sm cursor-pointer text-secondary hover:text-black'
+        >
+          <LeftOutlined style={{ fontSize: 16 }} />
+        </div>
+        <h3 className='p-1 text-lg font-semibold'>
+          {mockData.nickname} 님의 후기 {mockData.reviewCount}개
+        </h3>
+      </div>
+
+      <div className='flex flex-col gap-4 '>
+        {mockData.recentReviews.map((review) => (
+          <ReviewItem key={review.reviewId} review={review} />
+        ))}
       </div>
     </div>
   )

@@ -3,7 +3,8 @@ import ProfileCard from '@/app/components/profile/ProfileCard'
 import Introduction from '@/app/components/profile/Introduction'
 import Reviews from '@/app/components/profile/Reviews'
 import { Button } from 'antd'
-// import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
+import { LeftOutlined } from '@ant-design/icons'
 
 const mockData = {
   memberId: 2,
@@ -46,14 +47,20 @@ const mockData = {
 }
 
 export default function ProfilePage() {
-  // const router = useRouter()
+  const router = useRouter()
 
   const handleNavigateToReviews = () => {
     // router.push('/profile/reviews/${id}')
   }
   return (
     <div className='w-full h-full p-4'>
-      <div className='pr-1 text-right text-base mb-2'>
+      <div className='flex justify-between pr-1 text-right text-base mb-2'>
+        <div
+          onClick={() => router.back()}
+          className='text-sm cursor-pointer text-secondary hover:text-black'
+        >
+          <LeftOutlined style={{ fontSize: 16 }} />
+        </div>
         <p className='underline underline-offset-2 hover:text-gray-600 cursor-pointer'>
           수정하기
         </p>

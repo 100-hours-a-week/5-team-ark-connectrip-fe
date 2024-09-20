@@ -25,7 +25,7 @@ const mockData = {
     {
       reviewId: 8,
       content:
-        '즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다.',
+        '즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. 즐거운여행이었습니다. ',
       reviewerNickname: '뿡박사님을 아세요',
       reviewerProfile: null,
       reviewerId: 6,
@@ -52,10 +52,17 @@ export default function ProfilePage() {
     router.push('/profile/reviews')
   }
 
+  const handleEditToProfile = () => {
+    router.push('/profile/edit')
+  }
+
   return (
-    <div className='w-full h-full p-4'>
+    <div className='w-full h-full p-4 overflow-auto mb-12'>
       <div className='pr-1 text-right text-base mb-2'>
-        <p className='underline underline-offset-2 hover:text-gray-600 cursor-pointer'>
+        <p
+          className='underline underline-offset-2 hover:text-gray-600 cursor-pointer'
+          onClick={handleEditToProfile}
+        >
           수정하기
         </p>
       </div>
@@ -76,7 +83,7 @@ export default function ProfilePage() {
       </div>
       <Button
         type='primary'
-        className='w-full mt-4'
+        className='w-full mt-4 mb-4'
         onClick={handleNavigateToReviews}
       >
         후기 더 표시하기
