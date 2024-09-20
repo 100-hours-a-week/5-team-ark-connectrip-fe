@@ -203,6 +203,7 @@ export interface GuestContentProps {
     React.SetStateAction<CompanionLocation[]>
   >
   isLocationSharingEnabled?: boolean
+  accompanyStatus: RecruitmentStatus
 }
 
 // MenuDrawerProps 인터페이스 정의
