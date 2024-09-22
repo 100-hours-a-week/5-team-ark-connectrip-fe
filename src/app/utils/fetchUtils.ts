@@ -461,7 +461,7 @@ export const postReview = async (
 ) => {
   try {
     const response = await api.post(
-      `/api/v1/chatRooms/${chatRoomId}/reviews`,
+      `/api/v1/chatrooms/${chatRoomId}/reviews`,
       payload
     )
     return response

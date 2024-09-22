@@ -147,6 +147,7 @@ export interface CompanionUsers {
   memberNickname: string
   memberProfileImage: string | null
   memberChatRoomStatus?: string
+  canWriteReview?: boolean
 }
 
 // ChatRoomEntryData 인터페이스 정의
@@ -284,7 +285,6 @@ export interface ProfileData {
   recentReviews: Review[]
   description: string
   ageGroup: string
-  // 필요 없는 필드들은 제거하지 않고 타입에 포함해 둡니다.
-  accompanyCount?: number // 불필요하지만, 혹시나 포함되는 경우 옵션으로 설정
+  createdAt: string
   reviewCount?: number // 불필요하지만, 포함되는 경우 옵션으로 설정
 }

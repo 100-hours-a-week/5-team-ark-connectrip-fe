@@ -2,17 +2,9 @@
 
 import React from 'react'
 import { Modal, Button, Input } from 'antd'
+import { ReviewModalProps } from '@/interfaces'
 
 const { TextArea } = Input
-
-interface ReviewModalProps {
-  open: boolean
-  targetNickname: string
-  content: string
-  onOk: () => void
-  onCancel: () => void
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
-}
 
 const ReviewModal: React.FC<ReviewModalProps> = ({
   open,
@@ -33,7 +25,6 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
         <>
           <Button onClick={onCancel}>취소</Button>
           <Button type='primary' onClick={onOk}>
-            {' '}
             {/* 작성 버튼 클릭 시 onOk 호출 */}
             작성
           </Button>
