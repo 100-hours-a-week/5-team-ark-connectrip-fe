@@ -86,5 +86,5 @@ main {
 
 #sentry-feedback {
   --inset: auto 2vh 15vh auto;
-  z-index: 5; /* 다른 요소 뒤로 배치 */
+  z-index: 20; /* 다른 요소 뒤로 배치 */
 }
