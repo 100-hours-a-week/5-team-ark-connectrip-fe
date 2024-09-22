@@ -52,7 +52,7 @@ export default function ProfilePage() {
           <LeftOutlined style={{ fontSize: 16 }} />
         </div>
         <p
-          className='underline underline-offset-2 hover:text-gray-600 cursor-pointer'
+          className='text-sm underline underline-offset-2 hover:text-gray-600 cursor-pointer'
           onClick={handleEditToProfile}
         >
           수정하기
@@ -61,7 +61,7 @@ export default function ProfilePage() {
       <ProfileCard
         profileImage={profileData.profileImagePath}
         nickname={profileData.nickname}
-        accompanyCount={profileData.accompanyCount || 0} // Provide a default value of 0
+        createdAt={profileData.createdAt}
         reviewCount={profileData.reviewCount || 0} // Provide a default value of 0
       />
 
