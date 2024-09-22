@@ -83,3 +83,8 @@ main {
   font-size: 24px; /* 화살표 크기 조정 */
   color: #ccc !important; /* 화살표 색상 설정 */
 }
+
+#sentry-feedback {
+  --inset: auto 2vh 15vh auto;
+  z-index: 5; /* 다른 요소 뒤로 배치 */
+}
