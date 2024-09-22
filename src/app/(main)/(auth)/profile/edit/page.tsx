@@ -8,22 +8,15 @@ import useAuthStore from '@/app/store/useAuthStore'
 import { fetchUserProfile, updateProfile } from '@/app/utils/fetchUtils'
 import LoadingSpinner from '@/app/components/common/LoadingSpinner'
 import NicknameInput from '@/app/components/profile/NicknameInput'
-import { ProfileData } from '@/interfaces'
+import { ProfileData, ProfileFormValues } from '@/interfaces'
 import { useCustomMessage } from '@/app/utils/alertUtils'
-
-interface User {
-  userId: string
-  nickname: string
-  profileImage: string
-}
 
 export default function ProfileEditPage() {
   const router = useRouter()
   const { userId, fetchUser } = useAuthStore()
   const [profileData, setProfileData] = useState<ProfileData | null>(null)
   const [nickname, setNickname] = useState<string>('')
-  const { contextHolder, showSuccess, showError, showWarning } =
-    useCustomMessage() // 커스텀 메시지 훅 사용
+  const { contextHolder, showSuccess, showError } = useCustomMessage() // 커스텀 메시지 훅 사용
 
   useEffect(() => {
     const loadProfileData = async () => {
@@ -40,7 +33,7 @@ export default function ProfileEditPage() {
     loadProfileData()
   }, [userId])
 
-  const handleFinish = async (values: any) => {
+  const handleFinish = async (values: ProfileFormValues) => {
     try {
       if (!userId) return
       await updateProfile(userId, {
@@ -75,10 +68,7 @@ export default function ProfileEditPage() {
         }}
         layout='vertical'
       >
-        <NicknameInput
-          // defaultValue={nickname} 제거
-          onNicknameChange={setNickname}
-        />
+        <NicknameInput onNicknameChange={setNickname} defaultValue={nickname} />
         <Form.Item
           name='description'
           label='자기소개'

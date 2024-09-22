@@ -2,6 +2,7 @@ import dayjs from 'dayjs'
 import { RecruitmentStatus } from '@/types'
 import { Stringifier } from 'postcss'
 import { Client } from '@stomp/stompjs'
+import { StaticImageData } from 'next/image'
 
 export interface Chat {
   chatRoomId: number
@@ -290,4 +291,60 @@ export interface ProfileData {
   ageGroup: string
   createdAt: string
   reviewCount?: number // 불필요하지만, 포함되는 경우 옵션으로 설정
+}
+
+// ReviewModalProps 인터페이스 정의
+export interface SendLeaveMessageParams {
+  clientRef: React.MutableRefObject<Client | null>
+  chatRoomId: number
+  userId: string | null
+  nickname: string | null
+  locationLink: string
+}
+
+// ProfileCardProps 인터페이스 정의
+export interface ProfileCardProps {
+  profileImage: string | null
+  nickname: string
+  createdAt: string
+  reviewCount: number
+}
+
+// IntroductionProps 인터페이스 정의
+export interface IntroductionProps {
+  ageGroup: string
+  gender: string
+  description: string
+}
+
+// Review 인터페이스 정의
+export interface Review {
+  reviewId: number
+  content: string
+  reviewerNickname: string
+  reviewerProfile: string | null
+  reviewerId: number
+  createdAt: string
+}
+
+// ShareModalProps 인터페이스 정의
+export interface ShareModalProps {
+  isOpen: boolean
+  onClose: () => void
+  customUrl?: string
+  customUrlQrPath: string
+}
+
+// ProfileIconProps 인터페이스 정의
+export interface ProfileIconProps {
+  src: string | StaticImageData
+  size: number
+  nickname: string
+  onClick?: () => void // 선택적으로 onClick 핸들러 추가
+}
+
+// ProfileFormValues 인터페이스 정의
+export interface ProfileFormValues {
+  nickname: string
+  description: string
 }

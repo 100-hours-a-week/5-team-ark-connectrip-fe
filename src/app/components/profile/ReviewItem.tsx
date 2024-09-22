@@ -3,15 +3,8 @@ import ProfileIcon from '../common/ProfileIcon'
 import { navigateToProfile } from '@/app/utils/naviateToProfile'
 import { useRouter } from 'next/navigation'
 import useAuthStore from '@/app/store/useAuthStore'
+import { Review } from '@/interfaces'
 
-interface Review {
-  reviewId: number
-  content: string
-  reviewerNickname: string
-  reviewerProfile: string | null
-  reviewerId: number
-  createdAt: string
-}
 // 리뷰 아이템 컴포넌트
 export function ReviewItem({ review }: { review: Review }) {
   const timeAgo = useTimeStamp(review.createdAt) // 각 리뷰의 createdAt에 대해 useTimeStamp 호출

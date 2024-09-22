@@ -1,11 +1,6 @@
 'use client'
+import { IntroductionProps } from '@/interfaces'
 import { CloudOutlined, ManOutlined, WomanOutlined } from '@ant-design/icons'
-
-interface IntroductionProps {
-  ageGroup: string
-  gender: string
-  description: string
-}
 
 export default function Introduction({
   ageGroup,

@@ -1,12 +1,6 @@
-import Image, { StaticImageData } from 'next/image'
+import { ProfileIconProps } from '@/interfaces'
+import Image from 'next/image'
 import React from 'react'
-
-interface ProfileIconProps {
-  src: string | StaticImageData
-  size: number
-  nickname: string
-  onClick?: () => void // 선택적으로 onClick 핸들러 추가
-}
 
 const ProfileIcon: React.FC<ProfileIconProps> = ({
   src,

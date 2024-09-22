@@ -1,12 +1,6 @@
 'use client'
 import ProfileIcon from '@/app/components/common/ProfileIcon'
-
-interface ProfileCardProps {
-  profileImage: string | null
-  nickname: string
-  createdAt: string
-  reviewCount: number
-}
+import { ProfileCardProps } from '@/interfaces'
 
 export default function ProfileCard({
   profileImage,
