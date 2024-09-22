@@ -498,3 +498,16 @@ export const updateProfile = async (
     throw new Error('프로필 업데이트에 실패했습니다.')
   }
 }
+
+// 유저 전체 후기 데이터를 가져오는 함수
+export const fetchUserReviews = async (memberId: number) => {
+  try {
+    const response = await api.get(
+      `/api/v1/members/profile/${memberId}/reviews`
+    )
+    return response
+  } catch (error) {
+    console.error('유저 후기 데이터 페칭 중 오류 발생:', error)
+    throw new Error('유저 후기 데이터를 가져오는 데 실패했습니다.')
+  }
+}

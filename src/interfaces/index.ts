@@ -274,6 +274,9 @@ export interface Review {
   reviewerProfile: string | null
   reviewerId: number
   createdAt: string
+  targetId?: number
+  targetNickname?: string
+  reviewCount?: number
 }
 
 // ReviewModalProps 인터페이스 정의

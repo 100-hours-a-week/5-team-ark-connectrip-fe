@@ -31,11 +31,7 @@ export default function ProfilePage() {
   }, [userId])
 
   const handleNavigateToReviews = () => {
-    router.push('/profile/reviews')
-  }
-
-  const handleEditToProfile = () => {
-    router.push('/profile/edit')
+    router.push(`/profile/reviews/${userId}`)
   }
 
   if (!profileData) {
@@ -54,7 +50,7 @@ export default function ProfilePage() {
       <ProfileCard
         profileImage={profileData.profileImagePath}
         nickname={profileData.nickname}
-        accompanyCount={profileData.accompanyCount || 0} // Provide a default value of 0
+        createdAt={profileData.createdAt || ''}
         reviewCount={profileData.reviewCount || 0} // Provide a default value of 0
       />
 
