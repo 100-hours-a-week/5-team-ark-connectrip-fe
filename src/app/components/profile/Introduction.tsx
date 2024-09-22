@@ -25,7 +25,7 @@ export default function Introduction({
             <span>성별 : 남자</span>
           </>
         )}
-        {gender === 'W' && (
+        {gender === 'F' && (
           <>
             <WomanOutlined />
             <span>성별 : 여자</span>
