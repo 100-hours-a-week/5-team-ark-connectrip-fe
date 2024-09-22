@@ -12,7 +12,6 @@ import { CheckboxChangeEvent } from 'antd/es/checkbox'
 import LoadingSpinner from '@/app/components/common/LoadingSpinner'
 import { NicknameStatus } from '@/types'
 import { SignupFormValues } from '@/interfaces'
-import NicknameInput from '@/app/components/profile/NicknameInput'
 
 const termsOptions = [
   {
@@ -54,10 +53,68 @@ const SignupPage: React.FC = () => {
     }
   }, [nickname, router])
 
+  // 닉네임 유효성 확인 (3~20자, 한글/영문/띄어쓰기 허용)
+  const checkNicknameValidity = (nickname: string) => {
+    if (!nickname) {
+      setNicknameStatus('invalid') // 비어 있을 때도 invalid 상태로 설정
+      setNicknameHelperText('닉네임을 입력해 주세요.') // 헬퍼 텍스트에 필수 입력 메시지 표시
+      return false
+    }
+    if (
+      nickname.length < 3 ||
+      nickname.length > 10 ||
+      /[^가-힣a-zA-Z0-9\s]/.test(nickname) // 특수 문자 방지, 숫자 허용
+    ) {
+      setNicknameStatus('invalid')
+      setNicknameHelperText(
+        '닉네임은 3자 이상, 10자 이하이며, 특수 문자 없이 작성해 주세요.'
+      )
+      return false
+    }
+    return true
+  }
+
+  // 닉네임 중복 확인 API 호출
+  const checkNicknameDuplication = async (nickname: string) => {
+    try {
+      const response = await api.get(
+        `/api/v1/members/check-nickname?nickname=${encodeURIComponent(nickname)}`
+      )
+      const isDuplicated = response.data.isDuplicatedNickname
+      if (isDuplicated) {
+        setNicknameStatus('duplicated')
+        setNicknameHelperText('이미 존재하는 닉네임입니다.')
+      } else {
+        setNicknameStatus('valid')
+        setNicknameHelperText('')
+      }
+    } catch (error) {
+      showError('닉네임 중복 확인 중 오류가 발생했습니다.')
+      console.error('Error:', error)
+    }
+  }
+
+  // 닉네임 입력 시 실시간으로 유효성 및 중복 검사 수행
+  // 디바운스를 적용한 닉네임 변경 핸들러
+  const handleNicknameChange = useDebouncedCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const nickname = e.target.value
+      form.setFieldsValue({ nickname })
+
+      if (checkNicknameValidity(nickname)) {
+        await checkNicknameDuplication(nickname)
+      }
+    },
+    300 // 300ms 디바운스
+  )
+
   const handleFinish = async (values: SignupFormValues) => {
     try {
+      // 닉네임 유효성 확인 (입력값이 없을 경우 처리)
       const nicknameValue = form.getFieldValue('nickname') || ''
-      if (!nicknameValue) return // 닉네임 유효성 검사
+      if (!checkNicknameValidity(nicknameValue)) {
+        return // 닉네임이 유효하지 않으면 회원가입을 막음
+      }
 
       // 약관 동의 여부 확인
       if (
@@ -147,19 +204,47 @@ const SignupPage: React.FC = () => {
         <Form
           form={form}
           onFinish={handleFinish}
+          onFinishFailed={(errorInfo) => {
+            const nicknameError = errorInfo.errorFields.find(
+              (field) => field.name[0] === 'nickname'
+            )
+            if (nicknameError) {
+              setNicknameHelperText('닉네임을 입력해 주세요.') // 헬퍼 텍스트 설정
+              setNicknameStatus('invalid') // 상태 설정
+            }
+          }}
           layout='vertical'
           initialValues={{
-            nickname: '',
+            nickname: '', // 기본값을 빈 문자열로 설정하여 undefined 방지
             birthDate: '',
             gender: 'male',
-            privacyPolicy: false,
-            termsOfService: false,
+            privacyPolicy: false, // 개인정보 처리방침 기본값
+            termsOfService: false, // 이용약관 기본값
           }}
         >
-          <NicknameInput
-            onNicknameChange={(nickname) => form.setFieldsValue({ nickname })}
-          />
-
+          <Form.Item
+            name='nickname'
+            label='닉네임'
+            validateStatus={
+              nicknameStatus === 'invalid' || nicknameStatus === 'duplicated'
+                ? 'error'
+                : ''
+            }
+            help={nicknameHelperText} // 헬퍼 텍스트로 오류 메시지 표시
+            rules={[
+              {
+                required: true,
+                message: '닉네임을 작성해 주세요.',
+              },
+            ]}
+          >
+            <Input
+              showCount
+              maxLength={10}
+              placeholder='닉네임을 작성해 주세요.'
+              onChange={handleNicknameChange} // 닉네임이 변경될 때 상태 초기화 및 유효성 검사 수행
+            />
+          </Form.Item>
           <Form.Item
             name='birthDate'
             label='생년월일'
