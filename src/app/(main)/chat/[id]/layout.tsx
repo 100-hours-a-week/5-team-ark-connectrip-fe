@@ -12,7 +12,7 @@ export default function AccompanyLayout({
   const API = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAOJSKEY}&libraries=services,clusterer&autoload=false`
 
   return (
-    <div className='w-full h-full flex justify-center items-center z-10 relative'>
+    <div className='w-full h-full flex justify-center items-center z-30 relative'>
       <div className='w-full max-w-[500px] h-full bg-white'>
         <Suspense fallback={<LoadingSpinner />}>
           <Script src={API} strategy='beforeInteractive' />

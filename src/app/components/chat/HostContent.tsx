@@ -182,10 +182,12 @@ export const HostContent: React.FC<HostContentProps> = ({
           )}
         </>
       )}
-      <p
-        className='p-3 text-center text-sm'
-        dangerouslySetInnerHTML={{ __html: statusMessages[accompanyStatus] }}
-      />
+      <div className='h-40 flex justify-center items-center'>
+        <p
+          className='p-3 text-center text-sm'
+          dangerouslySetInnerHTML={{ __html: statusMessages[accompanyStatus] }}
+        />
+      </div>
 
       {accompanyStatus === 'PROGRESSING' && (
         <Button
