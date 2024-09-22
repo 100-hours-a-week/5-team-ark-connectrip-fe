@@ -1,6 +1,5 @@
 'use client'
 import { ReviewItem } from '@/app/components/profile/ReviewItem'
-import Reviews from '@/app/components/profile/Reviews'
 import { useRouter } from 'next/navigation'
 import { LeftOutlined } from '@ant-design/icons'
 

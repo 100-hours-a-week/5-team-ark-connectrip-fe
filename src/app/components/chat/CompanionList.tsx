@@ -74,11 +74,11 @@ const CompanionList: React.FC<CompanionListProps> = ({
           ...prev,
           [targetId]: false,
         }))
-
         setOpen(false)
         setContent('') // TextArea 초기화
       } catch (error) {
         showError('후기 제출 중 오류가 발생했습니다.')
+        console.error('Error:', error)
       }
     } else {
       console.error('Target ID 또는 내용이 누락되었습니다!')

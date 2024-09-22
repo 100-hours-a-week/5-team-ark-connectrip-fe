@@ -1,6 +1,5 @@
 'use client'
 import { ReviewItem } from '@/app/components/profile/ReviewItem'
-import Reviews from '@/app/components/profile/Reviews'
 import { useRouter } from 'next/navigation'
 import { LeftOutlined } from '@ant-design/icons'
 import useAuthStore from '@/app/store/useAuthStore'
@@ -28,7 +27,10 @@ export default function ProfilePage() {
   }
 
   useEffect(() => {
-    userId && loadUserReviews(parseInt(userId))
+    if (userId) {
+      // userId가 정의되어 있을 때만 호출
+      loadUserReviews(parseInt(userId))
+    }
   }, [userId])
 
   if (loading) {
