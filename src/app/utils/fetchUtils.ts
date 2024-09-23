@@ -511,3 +511,19 @@ export const fetchUserReviews = async (memberId: number) => {
     throw new Error('유저 후기 데이터를 가져오는 데 실패했습니다.')
   }
 }
+
+// 동행 그룹 내 내가 작성한 후기 조회 유틸리티 함수
+export const fetchReviewsByReviewee = async (
+  chatRoomId: number,
+  revieweeId: number
+) => {
+  try {
+    const response = await api.get(
+      `/api/v1/chatrooms/${chatRoomId}/reviews?revieweeId=${revieweeId}`
+    )
+    return response
+  } catch (error) {
+    console.error('채팅방 내 내가 쓴 후기 조회 중 오류 발생:', error)
+    throw new Error('채팅방 내 내가 쓴 후기 조회에 실패했습니다.')
+  }
+}

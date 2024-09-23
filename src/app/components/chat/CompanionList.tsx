@@ -6,9 +6,11 @@ import { RecruitmentStatus } from '@/types'
 import useAuthStore from '@/app/store/useAuthStore'
 import ReviewModal from '@/app/components/common/ReviewModal'
 import { useCustomMessage } from '@/app/utils/alertUtils'
-import { postReview } from '@/app/utils/fetchUtils'
+import { fetchReviewsByReviewee, postReview } from '@/app/utils/fetchUtils'
 import { navigateToProfile } from '@/app/utils/naviateToProfile'
 import { useRouter } from 'next/navigation'
+
+// 응답 데이터 인터페이스 정의
 
 interface CompanionListProps {
   companionUsers: CompanionUsers[]
@@ -27,15 +29,13 @@ const CompanionList: React.FC<CompanionListProps> = ({
   const [targetId, setTargetId] = useState<number | null>(null)
   const [targetNickname, setTargetNickname] = useState<string>('')
   const [content, setContent] = useState<string>('')
-  // canWriteReview 상태 관리
+  const [createdAt, setCreatedAt] = useState<string>('')
   const [reviewPermissions, setReviewPermissions] = useState<{
     [key: number]: boolean
   }>({})
-
-  const { contextHolder, showSuccess, showError } = useCustomMessage() // 커스텀 메시지 훅 사용
+  const { contextHolder, showSuccess, showError } = useCustomMessage()
   const router = useRouter()
 
-  // 초기 reviewPermissions 설정
   useEffect(() => {
     const initialPermissions = companionUsers.reduce(
       (acc, user) => {
@@ -44,14 +44,19 @@ const CompanionList: React.FC<CompanionListProps> = ({
       },
       {} as { [key: number]: boolean }
     )
-
     setReviewPermissions(initialPermissions)
   }, [companionUsers])
 
-  // 모달 열기 함수, targetId를 받아서 설정
-  const showModal = (id: number, nickname: string) => {
+  const showModal = (
+    id: number,
+    nickname: string,
+    content: string = '',
+    createdAt: string = ''
+  ) => {
     setTargetId(id)
     setTargetNickname(nickname)
+    setContent(content)
+    setCreatedAt(createdAt)
     setOpen(true)
   }
 
@@ -60,39 +65,60 @@ const CompanionList: React.FC<CompanionListProps> = ({
       showError('후기란에 내용을 입력해주세요.')
       return
     }
-    if (targetId !== null && content) {
+    if (targetId !== null) {
       try {
-        // 서버로 POST 요청을 보내기
         await postReview(companionUsers[0].chatRoomId, {
           targetId: targetId,
           content: content,
         })
         showSuccess('후기가 성공적으로 제출되었습니다.')
-
-        // 후기 작성 후 canWriteReview 업데이트
-        setReviewPermissions((prev) => ({
-          ...prev,
-          [targetId]: false,
-        }))
+        setReviewPermissions((prev) => ({ ...prev, [targetId]: false }))
         setOpen(false)
-        setContent('') // TextArea 초기화
+        setContent('')
       } catch (error) {
         showError('후기 제출 중 오류가 발생했습니다.')
         console.error('Error:', error)
       }
     } else {
-      console.error('Target ID 또는 내용이 누락되었습니다!')
+      console.error('Target ID가 누락되었습니다!')
     }
   }
 
   const handleCancel = () => {
     setOpen(false)
-    setContent('') // TextArea 초기화
+    setContent('')
+    setCreatedAt('')
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target.value.length <= 100) {
       setContent(e.target.value)
+    }
+  }
+
+  const handleReviewButtonClick = async (user: CompanionUsers) => {
+    if (reviewPermissions[user.memberId]) {
+      showModal(user.memberId, user.memberNickname)
+    } else {
+      try {
+        const response = await fetchReviewsByReviewee(
+          user.chatRoomId,
+          user.memberId
+        )
+        if (response) {
+          showModal(
+            response.revieweeNickname,
+            response.revieweeNickname,
+            response.content,
+            response.createdAt
+          )
+        } else {
+          showError('후기를 찾을 수 없습니다.')
+        }
+      } catch (error) {
+        showError('후기 조회 중 오류가 발생했습니다.')
+        console.error('Error:', error)
+      }
     }
   }
 
@@ -111,17 +137,15 @@ const CompanionList: React.FC<CompanionListProps> = ({
                   navigateToProfile(router, user.memberId, userId ? userId : '')
                 }
               />
-
               <div className='text-m font-semibold'>{user.memberNickname}</div>
               {user.memberId === leaderId && <Tag color='#b3bbee'>방장</Tag>}
             </div>
             {accompanyStatus === 'FINISHED' &&
-              reviewPermissions[user.memberId] &&
               userId &&
               user.memberId !== parseInt(userId) && (
                 <Button
                   type='text'
-                  onClick={() => showModal(user.memberId, user.memberNickname)}
+                  onClick={() => handleReviewButtonClick(user)}
                 >
                   후기
                 </Button>
@@ -129,14 +153,16 @@ const CompanionList: React.FC<CompanionListProps> = ({
           </div>
         </div>
       ))}
-      {/* 모달 컴포넌트 */}
+      {/* 후기 작성 모달 */}
       <ReviewModal
         open={open}
         targetNickname={targetNickname}
         content={content}
+        createdAt={createdAt} // createdAt도 넘겨줌
         onOk={handleOk}
         onCancel={handleCancel}
         onChange={handleChange}
+        mode={reviewPermissions[targetId!] ? 'write' : 'view'}
       />
     </div>
   )
