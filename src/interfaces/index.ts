@@ -267,17 +267,22 @@ export interface ReviewModalProps {
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
 }
 
-// ReviewModalProps 인터페이스 정의
-export interface Review {
+// Review 인터페이스 정의
+export interface Reviews {
   reviewId: number
   content: string
   reviewerNickname: string
   reviewerProfile: string | null
   reviewerId: number
   createdAt: string
-  targetId?: number
-  targetNickname?: string
-  reviewCount?: number
+}
+
+// ReviewModalProps 인터페이스 정의
+export interface ReviewDetail {
+  targetId: number
+  targetNickname: string
+  reviewCount: number
+  reviews: Reviews[]
 }
 
 // ReviewModalProps 인터페이스 정의

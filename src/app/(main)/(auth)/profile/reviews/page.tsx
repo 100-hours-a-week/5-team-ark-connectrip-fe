@@ -4,21 +4,21 @@ import { useRouter } from 'next/navigation'
 import { LeftOutlined } from '@ant-design/icons'
 import useAuthStore from '@/app/store/useAuthStore'
 import { useEffect, useState } from 'react'
-import { Review } from '@/interfaces'
+import { ReviewDetail } from '@/interfaces'
 import { fetchUserReviews } from '@/app/utils/fetchUtils'
 import LoadingSpinner from '@/app/components/common/LoadingSpinner'
 
 export default function ProfilePage() {
   const router = useRouter()
   const { userId, nickname } = useAuthStore()
-  const [reviews, setReviews] = useState<Review[]>([])
+  const [reviewDetail, setReviewDetail] = useState<ReviewDetail | null>(null)
   const [loading, setLoading] = useState(true)
 
   // 유저 리뷰 데이터 가져오기
   const loadUserReviews = async (memberId: number) => {
     try {
       const response = await fetchUserReviews(memberId)
-      setReviews(response.data.reviews) // 서버 응답 형식에 따라 수정 필요
+      setReviewDetail(response) // 전체 데이터 객체를 설정
     } catch (error) {
       console.log('유저 리뷰 데이터를 불러오는 중 오류가 발생했습니다:', error)
     } finally {
@@ -28,13 +28,19 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (userId) {
-      // userId가 정의되어 있을 때만 호출
       loadUserReviews(parseInt(userId))
     }
   }, [userId])
 
   if (loading) {
     return <LoadingSpinner />
+  }
+
+  // reviewDetail이 null이거나 reviews가 비어있을 때 처리
+  if (!reviewDetail || reviewDetail.reviewCount === 0) {
+    return (
+      <div className='w-full mt-20 text-center'>작성된 리뷰가 없습니다.</div>
+    )
   }
 
   return (
@@ -47,12 +53,12 @@ export default function ProfilePage() {
           <LeftOutlined style={{ fontSize: 16 }} />
         </div>
         <h3 className='p-1 text-lg font-semibold'>
-          {nickname} 님의 후기 {reviews.length}개
+          {nickname} 님의 후기 {reviewDetail.reviewCount}개
         </h3>
       </div>
 
-      <div className='flex flex-col gap-4 '>
-        {reviews.map((review) => (
+      <div className='flex flex-col gap-4'>
+        {reviewDetail.reviews.map((review) => (
           <ReviewItem key={review.reviewId} review={review} />
         ))}
       </div>
