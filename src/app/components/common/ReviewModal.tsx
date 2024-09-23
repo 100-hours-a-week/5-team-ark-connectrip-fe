@@ -1,7 +1,10 @@
+// ReviewModal.tsx
 import React from 'react'
-import { Modal, Button } from 'antd'
+import { Modal, Button, Input } from 'antd'
 import { ReviewModalProps } from '@/interfaces'
 import { useTimeStamp } from '@/app/hooks/useTimeStamp'
+
+const { TextArea } = Input
 
 interface ShowReviewModalProps extends ReviewModalProps {
   mode: 'write' | 'view'
@@ -15,6 +18,7 @@ const ShowReviewModal: React.FC<ShowReviewModalProps> = ({
   createdAt,
   onOk,
   onCancel,
+  onChange, // 추가
   mode,
 }) => {
   const title =
@@ -22,7 +26,6 @@ const ShowReviewModal: React.FC<ShowReviewModalProps> = ({
       ? `${targetNickname} 님에게 후기 작성하기`
       : `${targetNickname} 님에게 작성한 후기`
 
-  // 작성일을 포맷하기 위해 useTimeStamp 훅 사용
   const timeAgo = useTimeStamp(createdAt || '')
 
   return (
@@ -32,27 +35,37 @@ const ShowReviewModal: React.FC<ShowReviewModalProps> = ({
       centered
       onCancel={onCancel}
       footer={
-        mode === 'write' && (
+        mode === 'write' ? (
           <>
             <Button onClick={onCancel}>닫기</Button>
             <Button type='primary' onClick={onOk}>
               작성
             </Button>
           </>
-        )
+        ) : null
       }
     >
       <div>
-        <div className='border rounded-md p-3 py-4'>
-          {/* 이미 작성한 후기를 표시하는 영역 */}
+        {createdAt && mode === 'view' ? (
+          <div>
+            <div className='border rounded-md p-3 py-4'>
+              {/* 이미 작성한 후기를 표시하는 영역 */}
 
-          <p>{content || '작성한 후기가 없습니다.'}</p>
-        </div>
-
-        {createdAt && (
-          <div className='flex justify-end'>
-            <div className='mt-2 text-s text-gray-600'>{timeAgo}</div>
+              <p>{content || '작성한 후기가 없습니다.'}</p>
+            </div>
+            <div className='flex justify-end'>
+              <div className='mt-2 text-s text-gray-600'>{timeAgo}</div>
+            </div>
           </div>
+        ) : (
+          <TextArea
+            showCount
+            maxLength={100}
+            onChange={onChange}
+            value={content}
+            placeholder='다음 동행자들을 위해 후기를 남겨주세요!'
+            style={{ height: 150, resize: 'none', marginBottom: 15 }}
+          />
         )}
       </div>
     </Modal>

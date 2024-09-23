@@ -158,11 +158,11 @@ const CompanionList: React.FC<CompanionListProps> = ({
         open={open}
         targetNickname={targetNickname}
         content={content}
-        createdAt={createdAt} // createdAt도 넘겨줌
+        createdAt={createdAt}
         onOk={handleOk}
         onCancel={handleCancel}
         onChange={handleChange}
-        mode={reviewPermissions[targetId!] ? 'write' : 'view'}
+        mode={reviewPermissions[targetId!] ? 'write' : 'view'} // mode를 이렇게 설정합니다.
       />
     </div>
   )
