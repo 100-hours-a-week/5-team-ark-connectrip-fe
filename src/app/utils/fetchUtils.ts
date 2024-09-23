@@ -1,7 +1,7 @@
 // utils/fetchUtils.ts
 import { api } from '@/app/utils/api'
 import { formatToUtcDate, formatShortDateFromUtc } from '@/app/utils/dateUtils'
-import { Comment, ChatRoomEntryData } from '@/interfaces/index'
+import { Comment, ChatRoomEntryData, ProfileData } from '@/interfaces/index'
 
 // 게시글 데이터를 가져오는 유틸리티 함수
 export const fetchPost = async (postId: number) => {
@@ -451,5 +451,79 @@ export const refreshLocations = async (
   } catch (error) {
     console.error('사용자 위치 갱신 및 동행자 위치 조회 중 오류 발생:', error)
     throw new Error('위치 갱신 및 동행자 조회에 실패했습니다.')
+  }
+}
+
+// 후기 작성 유틸리티 함수
+export const postReview = async (
+  chatRoomId: number,
+  payload: { targetId: number; content: string }
+) => {
+  try {
+    const response = await api.post(
+      `/api/v1/chatrooms/${chatRoomId}/reviews`,
+      payload
+    )
+    return response
+  } catch (error) {
+    console.error('후기 제출 중 오류 발생:', error)
+    throw new Error('후기 작성에 실패했습니다.')
+  }
+}
+
+///////////////////////////////////////////
+// 유저 프로필 정보를 가져오는 유틸리티 함수
+export const fetchUserProfile = async (
+  memberId: number
+): Promise<ProfileData> => {
+  try {
+    const response = await api.get(`/api/v1/members/profile/${memberId}`)
+    return response
+  } catch (error) {
+    console.error('유저 프로필 데이터 페칭 중 오류 발생:', error)
+    throw new Error('유저 프로필 데이터를 가져오는 데 실패했습니다.')
+  }
+}
+
+// 유저 프로필을 업데이트하는 함수
+export const updateProfile = async (
+  userId: string,
+  payload: { nickname: string; description: string }
+) => {
+  try {
+    await api.post(`/api/v1/members/${userId}/profile`, payload)
+    return
+  } catch (error) {
+    console.error('프로필 업데이트 중 오류 발생:', error)
+    throw new Error('프로필 업데이트에 실패했습니다.')
+  }
+}
+
+// 유저 전체 후기 데이터를 가져오는 함수
+export const fetchUserReviews = async (memberId: number) => {
+  try {
+    const response = await api.get(
+      `/api/v1/members/profile/${memberId}/reviews`
+    )
+    return response
+  } catch (error) {
+    console.error('유저 후기 데이터 페칭 중 오류 발생:', error)
+    throw new Error('유저 후기 데이터를 가져오는 데 실패했습니다.')
+  }
+}
+
+// 동행 그룹 내 내가 작성한 후기 조회 유틸리티 함수
+export const fetchReviewsByReviewee = async (
+  chatRoomId: number,
+  revieweeId: number
+) => {
+  try {
+    const response = await api.get(
+      `/api/v1/chatrooms/${chatRoomId}/reviews?revieweeId=${revieweeId}`
+    )
+    return response
+  } catch (error) {
+    console.error('채팅방 내 내가 쓴 후기 조회 중 오류 발생:', error)
+    throw new Error('채팅방 내 내가 쓴 후기 조회에 실패했습니다.')
   }
 }

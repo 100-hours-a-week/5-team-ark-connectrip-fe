@@ -67,7 +67,7 @@ const SignupPage: React.FC = () => {
     ) {
       setNicknameStatus('invalid')
       setNicknameHelperText(
-        '닉네임은 3자 이상, 20자 이하이며, 특수 문자 없이 작성해 주세요.'
+        '닉네임은 3자 이상, 10자 이하이며, 특수 문자 없이 작성해 주세요.'
       )
       return false
     }

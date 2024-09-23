@@ -141,6 +141,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({
                         companionLocations={companionLocations}
                         setCompanionLocations={setCompanionLocations}
                         isLocationSharingEnabled={isLocationSharingEnabled}
+                        accompanyStatus={accompanyStatus}
                       />
                     ),
                   },
@@ -159,6 +160,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({
                         companionLocations={companionLocations}
                         setCompanionLocations={setCompanionLocations}
                         isLocationSharingEnabled={isLocationSharingEnabled}
+                        accompanyStatus={accompanyStatus}
                       />
                     ),
                   },

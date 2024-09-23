@@ -5,13 +5,7 @@ import { useCustomMessage } from '@/app/utils/alertUtils'
 import { usePathname } from 'next/navigation'
 import { QRCode } from 'antd'
 import html2canvas from 'html2canvas'
-
-interface ShareModalProps {
-  isOpen: boolean
-  onClose: () => void
-  customUrl?: string
-  customUrlQrPath: string
-}
+import { ShareModalProps } from '@/interfaces'
 
 const ShareModal: React.FC<ShareModalProps> = ({
   isOpen,

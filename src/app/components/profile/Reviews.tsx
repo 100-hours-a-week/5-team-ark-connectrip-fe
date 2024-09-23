@@ -1,14 +1,7 @@
 'use client'
 import { Carousel } from 'antd'
 import { ReviewItem } from './ReviewItem'
-
-interface Review {
-  reviewId: number
-  content: string
-  reviewerNickname: string
-  reviewerProfile: string | null
-  createdAt: string
-}
+import { Review } from '@/interfaces'
 
 interface ReviewsProps {
   reviews: Review[]

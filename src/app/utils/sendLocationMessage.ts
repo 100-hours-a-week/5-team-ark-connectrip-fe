@@ -1,12 +1,4 @@
-import { Client } from '@stomp/stompjs'
-
-interface SendLeaveMessageParams {
-  clientRef: React.MutableRefObject<Client | null>
-  chatRoomId: number
-  userId: string | null
-  nickname: string | null
-  locationLink: string
-}
+import { SendLeaveMessageParams } from '@/interfaces'
 
 export const sendLocationMessage = ({
   clientRef,

@@ -3,11 +3,15 @@ import React from 'react'
 import ProfileIcon from '@/app/components/common/ProfileIcon'
 import { linkify } from '@/app/utils/linkify'
 import LinkPreview from '@/app/components/chat/LinkPrieview'
+import { navigateToProfile } from '@/app/utils/naviateToProfile'
+import { useRouter } from 'next/navigation'
+import useAuthStore from '@/app/store/useAuthStore'
 
 interface LeftChatContainerProps {
   message: string
   time: string
   senderNickname: string
+  senderId: string
   profileSrc: string
 }
 
@@ -15,8 +19,11 @@ const LeftChatContainer: React.FC<LeftChatContainerProps> = ({
   message,
   time,
   senderNickname,
+  senderId,
   profileSrc,
 }) => {
+  const router = useRouter()
+  const { userId } = useAuthStore()
   const messageParts = linkify(message) // 메시지를 링크와 텍스트로 분리
   const link = messageParts.find(
     (part) => typeof part === 'object' && part.type === 'link'
@@ -26,7 +33,14 @@ const LeftChatContainer: React.FC<LeftChatContainerProps> = ({
     <div className='flex w-full items-start justify-start gap-1 mt-2 pr-4'>
       {/* 링크가 없을 때는 기존 시간 위치 */}
       <div className='items-center justify-center w-[33px]'>
-        <ProfileIcon src={profileSrc} size={33} nickname={senderNickname} />
+        <ProfileIcon
+          src={profileSrc}
+          size={33}
+          nickname={senderNickname}
+          onClick={() =>
+            navigateToProfile(router, parseInt(senderId), userId ? userId : '')
+          }
+        />
       </div>
 
       {/* 채팅 메시지와 썸네일을 분리 */}

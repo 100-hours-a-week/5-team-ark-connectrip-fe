@@ -50,6 +50,7 @@ const MessageList: React.FC<MessageListProps> = React.memo(
                   message={msg.content}
                   time={formatWithMeridiem(new Date(msg.createdAt))}
                   senderNickname={msg.senderNickname}
+                  senderId={msg.senderId}
                   profileSrc={msg.senderProfileImage}
                 />
               )}

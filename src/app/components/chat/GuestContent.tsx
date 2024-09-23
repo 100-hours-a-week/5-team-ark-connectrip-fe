@@ -20,6 +20,7 @@ const GuestContent: React.FC<GuestContentProps> = ({
   companionLocations,
   setCompanionLocations,
   isLocationSharingEnabled = false,
+  accompanyStatus,
 }) => {
   const { nickname, userId } = useAuthStore()
   const [trackingEnabled, setTrackingEnabled] = useState(
@@ -69,7 +70,11 @@ const GuestContent: React.FC<GuestContentProps> = ({
         setCompanionLocations={setCompanionLocations}
       />
       <h3>대화 상대</h3>
-      <CompanionList companionUsers={companionUsers} leaderId={leaderId} />
+      <CompanionList
+        companionUsers={companionUsers}
+        leaderId={leaderId}
+        accompanyStatus={accompanyStatus}
+      />
       {isPostExists && <PostNavigationButton postId={postId} />}
       <LeaveChatButton
         handleDeleteClick={
