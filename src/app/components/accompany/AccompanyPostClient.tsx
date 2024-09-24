@@ -48,8 +48,9 @@ export default function AccompanyPostClient() {
   }
 
   const onChange: PaginationProps['onChange'] = (page) => {
-    console.log(page)
     setCurrent(page)
+    // 페이지네이션 변경 시 화면 상단으로 스크롤
+    window.scrollTo({ top: 0, behavior: 'auto' })
   }
 
   return (
