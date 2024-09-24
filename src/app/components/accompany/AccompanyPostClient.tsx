@@ -29,9 +29,9 @@ export default function AccompanyPostClient() {
         const { totalAccompanyPosts, accompanyPosts } = data
         setPosts(accompanyPosts)
         setTotalLength(totalAccompanyPosts) // 총 게시글 수 저장
-        setLoading(false)
       } catch (error) {
         console.error('게시글을 가져오는 중 오류 발생:', error)
+      } finally {
         setLoading(false)
       }
     }
