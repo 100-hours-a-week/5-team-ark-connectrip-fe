@@ -38,24 +38,19 @@ export default function ChatDetailPage() {
   const [isLocationSharingEnabled, setIsLocationSharingEnabled] =
     useState(false)
   const [content, setContent] = useState('')
-
+  // 메시지 하단 스크롤 제어를 위한 Ref
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const observerRef = useRef<HTMLDivElement>(null) // 상단 메시지 감지를 위한 Ref
-
+  // 무한 스크롤 상단 메시지 감지를 위한 Ref
+  const observerRef = useRef<HTMLDivElement>(null)
   const { userId } = useAuthStore()
-
+  // 채팅방 WebSocket 커스텀 훅 사용
   const { messages, setMessages, sendMessage } = useChatWebSocket(
     chatRoomId,
     userId || ''
   )
-
+  // 무한 스크롤 위한 첫 메시지 ID 상태
   const [firstMessageId, setFirstMessageId] = useState<string>('first')
-
-  // 메시지 스크롤 제어
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'auto' })
-  }
-
+  // 메시지 로딩 시 스크롤 제어
   useEffect(() => {
     if (isScroll) {
       setIsScroll(false)
@@ -73,9 +68,7 @@ export default function ChatDetailPage() {
       if (previousMessages.length > 0) {
         setIsScroll(true)
         setMessages((prev) => [...previousMessages, ...prev]) // 이전 메시지 추가
-        setFirstMessageId(
-          previousMessages[previousMessages.length - 1].messageId
-        )
+        setFirstMessageId(previousMessages[0].messageId)
       }
     } catch (error) {
       console.error('이전 메시지를 불러오는 중 오류 발생:', error)
@@ -170,6 +163,11 @@ export default function ChatDetailPage() {
       router.push('/chat')
     }
   }, [errorMessage, showWarning, router])
+
+  // 메시지 스크롤 제어
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'auto' })
+  }
 
   if (loading) {
     return (
