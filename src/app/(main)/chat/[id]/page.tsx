@@ -68,7 +68,8 @@ export default function ChatDetailPage() {
       if (previousMessages.length > 0) {
         setIsScroll(true)
         setMessages((prev) => [...previousMessages, ...prev]) // 이전 메시지 추가
-        setFirstMessageId(previousMessages[0].messageId)
+        console.log('이전 메시지 로드 완료:', previousMessages[0])
+        setFirstMessageId(previousMessages[0].id)
       }
     } catch (error) {
       console.error('이전 메시지를 불러오는 중 오류 발생:', error)
