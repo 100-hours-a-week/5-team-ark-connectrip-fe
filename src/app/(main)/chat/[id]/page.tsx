@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {
   checkChatRoomEntry,
   getPreviousMessages,
@@ -25,6 +25,7 @@ export default function ChatDetailPage() {
     null
   )
   const [loading, setLoading] = useState(true)
+  const [isScroll, setIsScroll] = useState(false)
   const { contextHolder, showWarning } = useCustomMessage()
   const router = useRouter()
   const path = usePathname()
@@ -39,6 +40,8 @@ export default function ChatDetailPage() {
   const [content, setContent] = useState('')
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const observerRef = useRef<HTMLDivElement>(null) // 상단 메시지 감지를 위한 Ref
+
   const { userId } = useAuthStore()
 
   const { messages, setMessages, sendMessage } = useChatWebSocket(
@@ -46,24 +49,72 @@ export default function ChatDetailPage() {
     userId || ''
   )
 
+  const [firstMessageId, setFirstMessageId] = useState<string>('first')
+
   // 메시지 스크롤 제어
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'auto' })
   }
 
   useEffect(() => {
-    if (!loading) scrollToBottom()
+    if (isScroll) {
+      setIsScroll(false)
+    } else if (!loading) scrollToBottom()
   }, [messages, loading])
 
+  // 이전 메시지 로드
+  const loadPreviousMessages = useCallback(async () => {
+    try {
+      if (!firstMessageId) return
+      const previousMessages = await getPreviousMessages(
+        chatRoomId,
+        firstMessageId
+      )
+      if (previousMessages.length > 0) {
+        setIsScroll(true)
+        setMessages((prev) => [...previousMessages, ...prev]) // 이전 메시지 추가
+        setFirstMessageId(
+          previousMessages[previousMessages.length - 1].messageId
+        )
+      }
+    } catch (error) {
+      console.error('이전 메시지를 불러오는 중 오류 발생:', error)
+    }
+  }, [chatRoomId, firstMessageId, setMessages])
+
+  // IntersectionObserver로 상단 메시지 감지
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          console.log('상단에 도달하여 이전 메시지를 로드합니다.')
+          loadPreviousMessages()
+        }
+      },
+      { root: null, rootMargin: '0px', threshold: 1.0 }
+    )
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current)
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current)
+      }
+    }
+  }, [loadPreviousMessages])
+
   // 이전 메시지 및 동행 위치 정보 로드
-  const fetchChatRoomDataAll = async () => {
+  const fetchChatRoomDataAll = async (firstMessageId: string) => {
     try {
       const [previousMessages, locationData] = await Promise.all([
-        getPreviousMessages(chatRoomId),
+        getPreviousMessages(chatRoomId, firstMessageId),
         fetchLocations(chatRoomId),
       ])
 
       setMessages(previousMessages)
+      setFirstMessageId(previousMessages[0].id)
 
       if (locationData && locationData.isLocationSharingEnabled) {
         setIsLocationSharingEnabled(true)
@@ -98,7 +149,7 @@ export default function ChatDetailPage() {
         if (response.message === 'SUCCESS') {
           setChatRoomData(response.data)
           setIsMember(true)
-          await fetchChatRoomDataAll()
+          await fetchChatRoomDataAll(firstMessageId)
         } else {
           setErrorMessage('입장 권한이 없습니다.')
         }
@@ -139,7 +190,8 @@ export default function ChatDetailPage() {
             companionLocations={companionLocations}
             isLocationSharingEnabled={isLocationSharingEnabled}
           />
-          <div className='bg-white w-full h-full mb-[110px] mt-[-20px]'>
+          <div className='bg-white w-full h-full mb-[110px] mt-[-20px] overflow-y-auto'>
+            <div ref={observerRef} /> {/* 상단 메시지 감지를 위한 Ref */}
             <MessageList messages={messages} userId={userId || ''} />
             <div ref={messagesEndRef}></div>
             <ChatInput

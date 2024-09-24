@@ -254,9 +254,14 @@ export const updatePostStatus = async (postId: number) => {
 }
 
 // 채팅방의 이전 메시지를 가져오는 유틸리티 함수
-export const getPreviousMessages = async (chatRoomId: number) => {
+export const getPreviousMessages = async (
+  chatRoomId: number,
+  lastMessageId: string
+) => {
   try {
-    const response = await api.get(`/api/v1/chatRoom/${chatRoomId}/messages`)
+    const response = await api.get(
+      `/api/v1/chatRoom/${chatRoomId}/messages?lastMessageId=${lastMessageId}`
+    )
     return response // 이전 메시지를 반환
   } catch (error) {
     console.error('Failed to fetch previous messages:', error)
