@@ -465,10 +465,7 @@ export const postReview = async (
   payload: { targetId: number; content: string }
 ) => {
   try {
-    const response = await api.post(
-      `/api/v1/chatrooms/${chatRoomId}/reviews`,
-      payload
-    )
+    const response = await api.post(`/api/v1/reviews/${chatRoomId}`, payload)
     return response
   } catch (error) {
     console.error('후기 제출 중 오류 발생:', error)
@@ -524,7 +521,7 @@ export const fetchReviewsByReviewee = async (
 ) => {
   try {
     const response = await api.get(
-      `/api/v1/chatrooms/${chatRoomId}/reviews?revieweeId=${revieweeId}`
+      `/api/v1/reviews/${chatRoomId}/review?revieweeId=${revieweeId}`
     )
     return response
   } catch (error) {
