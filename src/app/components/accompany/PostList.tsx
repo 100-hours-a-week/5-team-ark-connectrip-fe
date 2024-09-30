@@ -13,7 +13,7 @@ const PostList = <T extends { id: number }>({
 }: PostListProps<T>) => {
   return (
     <div className='container mx-auto mt-4 mb-10'>
-      {posts.length > 0 ? (
+      {posts && posts.length > 0 ? (
         posts.map((post) => (
           <div key={post.id} onClick={() => onPostClick(post.id)}>
             <PostComponent {...post} />

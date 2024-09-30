@@ -8,11 +8,14 @@ import CommunityCard from '@/app/components/community/CommunityCard'
 import { api } from '@/app/utils/api'
 import { PrevPost } from '@/interfaces'
 import { useRouter } from 'next/navigation'
+import { Pagination } from 'antd'
 
 export default function CommunityHome() {
   const [searchQuery, setSearchQuery] = useState('')
   const [loading, setLoading] = useState(true)
   const [posts, setPosts] = useState<PrevPost[]>([])
+  const [current, setCurrent] = useState(1)
+  const [totalLength, setTotalLength] = useState(0)
   const router = useRouter()
 
   useEffect(() => {
@@ -22,20 +25,27 @@ export default function CommunityHome() {
           ? await api.get(
               `/api/v1/community/posts/search?query=${encodeURIComponent(searchQuery)}`
             )
-          : await api.get('/api/v1/community/posts')
-        setPosts(data)
-        setLoading(false)
+          : await api.get(`/api/v1/community/posts?page=${current}`)
+        const { totalCommunityPosts, communityPosts } = data
+        setPosts(communityPosts)
+        setTotalLength(totalCommunityPosts) // 총 게시글 수 저장
       } catch (error) {
         console.error('게시글을 가져오는 중 오류 발생:', error)
+      } finally {
         setLoading(false)
       }
     }
 
     fetchPosts()
-  }, [searchQuery])
+  }, [searchQuery, current])
 
   const handleCardClick = (id: number) => {
     router.push(`/community/${id}`)
+  }
+
+  const onChange = (page: number) => {
+    setCurrent(page)
+    window.scrollTo({ top: 0, behavior: 'auto' }) // 페이지네이션 변경 시 상단으로 스크롤
   }
 
   if (loading) {
@@ -53,6 +63,15 @@ export default function CommunityHome() {
         onPostClick={handleCardClick}
         PostComponent={CommunityCard}
       />
+      <div className='flex justify-center items-center mb-6'>
+        <Pagination
+          current={current}
+          onChange={onChange}
+          pageSize={10}
+          total={totalLength}
+          showSizeChanger={false}
+        />
+      </div>
       <ScrollToTopButton />
     </div>
   )

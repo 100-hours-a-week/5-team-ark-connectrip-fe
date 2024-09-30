@@ -254,9 +254,14 @@ export const updatePostStatus = async (postId: number) => {
 }
 
 // 채팅방의 이전 메시지를 가져오는 유틸리티 함수
-export const getPreviousMessages = async (chatRoomId: number) => {
+export const getPreviousMessages = async (
+  chatRoomId: number,
+  lastMessageId: string
+) => {
   try {
-    const response = await api.get(`/api/v1/chatRoom/${chatRoomId}/messages`)
+    const response = await api.get(
+      `/api/v1/chatRoom/${chatRoomId}/messages?lastMessageId=${lastMessageId}`
+    )
     return response // 이전 메시지를 반환
   } catch (error) {
     console.error('Failed to fetch previous messages:', error)
@@ -384,8 +389,6 @@ export const fetchLocationSharingStatus = async (
   lng?: number
 ) => {
   try {
-    console.log('위치 공유 활성화:', trackingEnabled)
-
     // trackingEnabled가 true일 경우에만 body를 포함, false일 경우 body 없이 요청 전송
     const response = trackingEnabled
       ? await api.patch(`/api/v1/chatRoom/${chatRoomId}/locations/sharing`, {
@@ -460,10 +463,7 @@ export const postReview = async (
   payload: { targetId: number; content: string }
 ) => {
   try {
-    const response = await api.post(
-      `/api/v1/chatrooms/${chatRoomId}/reviews`,
-      payload
-    )
+    const response = await api.post(`/api/v1/reviews/${chatRoomId}`, payload)
     return response
   } catch (error) {
     console.error('후기 제출 중 오류 발생:', error)
@@ -502,9 +502,7 @@ export const updateProfile = async (
 // 유저 전체 후기 데이터를 가져오는 함수
 export const fetchUserReviews = async (memberId: number) => {
   try {
-    const response = await api.get(
-      `/api/v1/members/profile/${memberId}/reviews`
-    )
+    const response = await api.get(`/api/v1/reviews/profile/${memberId}`)
     return response
   } catch (error) {
     console.error('유저 후기 데이터 페칭 중 오류 발생:', error)
@@ -519,7 +517,7 @@ export const fetchReviewsByReviewee = async (
 ) => {
   try {
     const response = await api.get(
-      `/api/v1/chatrooms/${chatRoomId}/reviews?revieweeId=${revieweeId}`
+      `/api/v1/reviews/${chatRoomId}ß?revieweeId=${revieweeId}`
     )
     return response
   } catch (error) {
