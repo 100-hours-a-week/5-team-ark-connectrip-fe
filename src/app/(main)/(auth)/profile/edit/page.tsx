@@ -41,7 +41,6 @@ export default function ProfileEditPage() {
         description: values.description,
       })
       fetchUser()
-      console.log('프로필이 수정되었습니다.')
       showSuccess('프로필이 수정되었습니다.')
       setTimeout(() => {
         router.push('/profile')

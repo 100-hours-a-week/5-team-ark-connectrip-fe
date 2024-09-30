@@ -389,8 +389,6 @@ export const fetchLocationSharingStatus = async (
   lng?: number
 ) => {
   try {
-    console.log('위치 공유 활성화:', trackingEnabled)
-
     // trackingEnabled가 true일 경우에만 body를 포함, false일 경우 body 없이 요청 전송
     const response = trackingEnabled
       ? await api.patch(`/api/v1/chatRoom/${chatRoomId}/locations/sharing`, {
