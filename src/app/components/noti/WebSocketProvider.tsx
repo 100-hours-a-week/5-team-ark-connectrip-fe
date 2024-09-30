@@ -1,10 +1,9 @@
 'use client'
 import React, { useEffect, useRef } from 'react'
 import SockJS from 'sockjs-client'
-import { Client, IMessage, StompSubscription } from '@stomp/stompjs'
+import { Client, IMessage } from '@stomp/stompjs'
 import useAuthStore from '@/app/store/useAuthStore'
 import useNotificationStore from '@/app/store/useNotificationStore'
-import { Notification } from '@/interfaces'
 
 const WebSocketProvider: React.FC = () => {
   const userId = useAuthStore((state) => state.userId)
