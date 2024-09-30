@@ -6,6 +6,8 @@ import { ConfigProvider, ThemeConfig } from 'antd'
 import ClientContent from './components/common/ClientContent' // 클라이언트 전용 컴포넌트 가져오기
 import React from 'react'
 import Script from 'next/script'
+import WebSocketProvider from './components/noti/WebSocketProvider'
+import NotificationListener from './components/noti/NotificationListener'
 
 // 메타데이터 설정
 export const metadata: Metadata = {
@@ -112,6 +114,8 @@ export default function RootLayout({
         </noscript>
         <AntdRegistry>
           <ConfigProvider theme={config}>
+            <WebSocketProvider />
+            <NotificationListener />
             <ClientContent>{children}</ClientContent>
           </ConfigProvider>
         </AntdRegistry>
