@@ -27,12 +27,16 @@ export default function GroupCard({
   lastChatMessage,
   lastChatMessageTime,
   memberNumber,
+  hasUnreadMessages,
 }: Chat) {
   const [formattedStartDate, setFormattedStartDate] = useState('')
   const [formattedEndDate, setFormattedEndDate] = useState('')
   const { contextHolder, showSuccess } = useCustomMessage()
   const handleDeleteClick = useHandleDeleteClick() // 모달 호출 유틸리티 사용
   const { nickname, userId } = useAuthStore() // zustand 스토어에서 유저 닉네임 가져오기
+  // TODO: 웹소켓이랑 연결해서, 새로운 메시지가 왔을 때 newMessageFlag를 true로 바꿔주기
+  const [newMessageFlag, setNewMessageFlag] = useState(hasUnreadMessages)
+  console.log(newMessageFlag)
 
   // useTimeStamp 커스텀 훅 사용
   const timeAgo = useTimeStamp(lastChatMessageTime)
@@ -91,6 +95,11 @@ export default function GroupCard({
         />
         <InfoRow icon={<PinIcon />} text={accompanyArea} />
         <div className='text-sm text-secondary'>{memberNumber}</div>
+        {newMessageFlag && (
+          <div className='text-sm bg-[#ffb1be] px-2 rounded-xl'>
+            <span className='text-white text-s'>New</span>
+          </div>
+        )}
       </div>
       <div className='flex justify-between items-end gap-2 text-sm text-gray-500 mt-1'>
         {lastChatMessage ? (

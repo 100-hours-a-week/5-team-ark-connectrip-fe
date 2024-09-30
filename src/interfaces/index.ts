@@ -14,6 +14,7 @@ export interface Chat {
   lastChatMessage: string
   lastChatMessageTime: string
   memberNumber: number
+  hasUnreadMessages: boolean
 }
 
 export interface GroupCardProps {
