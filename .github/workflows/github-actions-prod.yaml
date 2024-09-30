@@ -46,6 +46,7 @@ jobs:
       run: |
         docker build \
         --build-arg KAKAO_API_KEY=${{ secrets.KAKAO_API_KEY_PROD }} \
+        --build-arg NEXT_PUBLIC_KAKAOJSKEY=${{ secrets.NEXT_PUBLIC_KAKAOJSKEY_PROD }} \
         --build-arg KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI_PROD }} \
         --build-arg NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL_PROD }} \
         --build-arg NEXT_PUBLIC_SELF_URL=${{ secrets.NEXT_PUBLIC_SELF_URL_PROD }} \
