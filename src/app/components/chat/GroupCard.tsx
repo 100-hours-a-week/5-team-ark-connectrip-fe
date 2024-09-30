@@ -35,6 +35,8 @@ export default function GroupCard({
   const handleDeleteClick = useHandleDeleteClick() // 모달 호출 유틸리티 사용
   const { nickname, userId } = useAuthStore() // zustand 스토어에서 유저 닉네임 가져오기
   // TODO: 웹소켓이랑 연결해서, 새로운 메시지가 왔을 때 newMessageFlag를 true로 바꿔주기
+  // useNotificationStore 에서 메시지가 새로 추가되면 setNewMessageFlag(true)로 바꿔주기
+  // eslint-disable-next-line
   const [newMessageFlag, setNewMessageFlag] = useState(hasUnreadMessages)
   console.log(newMessageFlag)
 
