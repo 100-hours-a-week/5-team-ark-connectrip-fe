@@ -1,18 +1,6 @@
 // stores/useNotificationStore.ts
 import create from 'zustand'
-
-interface Notification {
-  id: number | null
-  type: string
-  chatRoomId: number
-  senderId: number
-  chatRoomTitle: string
-  senderNickname: string
-  senderProfileImage: string | null
-  content: string
-  infoFlag: boolean
-  createdAt: string
-}
+import { Notification } from '@/interfaces/index'
 
 interface NotificationState {
   notifications: Notification[]
