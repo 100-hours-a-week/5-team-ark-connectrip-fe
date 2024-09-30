@@ -504,9 +504,7 @@ export const updateProfile = async (
 // 유저 전체 후기 데이터를 가져오는 함수
 export const fetchUserReviews = async (memberId: number) => {
   try {
-    const response = await api.get(
-      `/api/v1/members/profile/${memberId}/reviews`
-    )
+    const response = await api.get(`/api/v1/reviews/profile/${memberId}`)
     return response
   } catch (error) {
     console.error('유저 후기 데이터 페칭 중 오류 발생:', error)
@@ -521,7 +519,7 @@ export const fetchReviewsByReviewee = async (
 ) => {
   try {
     const response = await api.get(
-      `/api/v1/reviews/${chatRoomId}/review?revieweeId=${revieweeId}`
+      `/api/v1/reviews/${chatRoomId}?revieweeId=${revieweeId}`
     )
     return response
   } catch (error) {
