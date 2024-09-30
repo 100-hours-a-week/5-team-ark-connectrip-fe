@@ -48,20 +48,104 @@ export default function Home() {
   return (
     <div className='relative w-full h-screen flex justify-center items-center px-2.5'>
       {contextHolder}
-      <Image
+      {/* <Image
         src={`/intro/${currentImage === 6 ? 1 : currentImage}.png`}
         alt={`Intro ${currentImage}`}
         fill // Next.js 13 이상에서는 fill 속성 사용
         style={{ objectFit: 'cover', zIndex: 31 }} // 이미지 비율 유지하며 컨테이너에 맞춤
         priority={true} // 이미지 로딩 우선순위 설정
+      /> */}
+      <Image
+        src={`/intro/background.png`}
+        alt={`Intro`}
+        fill // Next.js 13 이상에서는 fill 속성 사용
+        style={{ objectFit: 'cover', zIndex: 31 }} // 이미지 비율 유지하며 컨테이너에 맞춤
+        priority={true} // 이미지 로딩 우선순위 설정
       />
+      {currentImage === 1 && (
+        <div>
+          <img
+            src='/intro/1.svg'
+            alt='Intro 1'
+            className='absolute top-[5%] left-[10%] w-4/5 h-4/5 z-[32]'
+          />
+        </div>
+      )}
+      {currentImage === 2 && (
+        <div>
+          <img
+            src='/intro/2-3.svg'
+            alt='Intro 2'
+            className='absolute top-[-10%] left-[10%] w-4/5 h-4/5 z-[32]'
+          />
+          <img
+            src='/intro/2-2.svg'
+            alt='Intro 2-1'
+            className='absolute top-[15%] right-[10%] w-4/5 h-4/5 z-[32]'
+          />
+        </div>
+      )}
 
+      {currentImage === 3 && (
+        <div>
+          <img
+            src='/intro/3-1.svg'
+            alt='Intro 3'
+            className='absolute top-[-10%] left-[10%] w-4/5 h-4/5 z-[32]'
+          />
+          <img
+            src='/intro/3-2.svg'
+            alt='Intro 3-1'
+            className='absolute top-[17%] right-[8%] w-4/5 h-4/5 z-[32]'
+          />
+        </div>
+      )}
+
+      {currentImage === 4 && (
+        <div>
+          <img
+            src='/intro/4-1.svg'
+            alt='Intro 4'
+            className='absolute top-[-12%] left-[19%] w-2/5 h-4/5 z-[32]'
+          />
+          <img
+            src='/intro/4-2.svg'
+            alt='Intro 4-1'
+            className='absolute top-[-9%] right-[0%] w-full h-4/5 z-[32]'
+          />
+          <img
+            src='/intro/4-3.svg'
+            alt='Intro 4-2'
+            className='absolute top-[19%] right-[-4%] w-[92%] h-4/5 z-[32]'
+          />
+        </div>
+      )}
+
+      {currentImage === 5 && (
+        <div>
+          <img
+            src='/intro/4-1.svg'
+            alt='Intro 4'
+            className='absolute top-[-12%] left-[19%] w-2/5 h-4/5 z-[32]'
+          />
+          <img
+            src='/intro/5-1.svg'
+            alt='Intro 5-1'
+            className='absolute top-[-9%] right-[0%] w-full h-4/5 z-[32]'
+          />
+          <img
+            src='/intro/5-2.svg'
+            alt='Intro 5-2'
+            className='absolute top-[19%] right-[9%] w-4/5 h-4/5 z-[32]'
+          />
+        </div>
+      )}
       {/* 카카오 로그인 버튼 (currentImage가 1 또는 6일 때 표시) */}
       {(currentImage === 1 || currentImage === 6) && (
         <button
           type='button'
           onClick={kakaoLoginHandler}
-          className='w-4/5 flex items-center gap-1.5 h-11 bg-yellow-400 text-[14.5px] font-medium justify-center z-40 rounded-xl absolute bottom-[30%]'
+          className='absolute w-4/5 flex items-center gap-1.5 h-11 bg-yellow-400 text-[14.5px] font-medium justify-center z-40 rounded-xl absolute top-[60%]'
         >
           <Image
             src='/kakao.svg'
@@ -77,7 +161,7 @@ export default function Home() {
       {/* 스킵하기 버튼 (currentImage가 2~5일 때 표시) */}
 
       {/* 이전 및 다음 버튼 추가 */}
-      <div className='absolute bottom-[19%] flex justify-center space-x-4 z-40'>
+      <div className='absolute bottom-[14%] flex justify-center space-x-4 z-40'>
         {currentImage > 1 && (
           <Button type='primary' onClick={previousImage}>
             &lt;
