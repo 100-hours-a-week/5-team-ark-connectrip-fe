@@ -60,7 +60,7 @@ export default function Home() {
         <button
           type='button'
           onClick={kakaoLoginHandler}
-          className='w-4/5 flex items-center gap-1.5 h-11 bg-yellow-400 text-[14.5px] font-medium justify-center z-40 rounded-xl absolute bottom-[240px]'
+          className='w-4/5 flex items-center gap-1.5 h-11 bg-yellow-400 text-[14.5px] font-medium justify-center z-40 rounded-xl absolute bottom-[30%]'
         >
           <Image src='/kakao.svg' alt='카카오 로그인' width={20} height={20} />
           <div>카카오 로그인</div>
@@ -70,7 +70,7 @@ export default function Home() {
       {/* 스킵하기 버튼 (currentImage가 2~5일 때 표시) */}
 
       {/* 이전 및 다음 버튼 추가 */}
-      <div className='absolute bottom-[150px] flex justify-center space-x-4 z-40'>
+      <div className='absolute bottom-[19%] flex justify-center space-x-4 z-40'>
         {currentImage > 1 && (
           <Button type='primary' onClick={previousImage}>
             &lt;
