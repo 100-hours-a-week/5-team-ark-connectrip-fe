@@ -53,6 +53,7 @@ export default function Home() {
         alt={`Intro ${currentImage}`}
         fill // Next.js 13 이상에서는 fill 속성 사용
         style={{ objectFit: 'cover', zIndex: 31 }} // 이미지 비율 유지하며 컨테이너에 맞춤
+        priority={true} // 이미지 로딩 우선순위 설정
       />
 
       {/* 카카오 로그인 버튼 (currentImage가 1 또는 6일 때 표시) */}
@@ -62,7 +63,13 @@ export default function Home() {
           onClick={kakaoLoginHandler}
           className='w-4/5 flex items-center gap-1.5 h-11 bg-yellow-400 text-[14.5px] font-medium justify-center z-40 rounded-xl absolute bottom-[30%]'
         >
-          <Image src='/kakao.svg' alt='카카오 로그인' width={20} height={20} />
+          <Image
+            src='/kakao.svg'
+            alt='카카오 로그인'
+            width={20}
+            height={20}
+            priority={true}
+          />
           <div>카카오 로그인</div>
         </button>
       )}
