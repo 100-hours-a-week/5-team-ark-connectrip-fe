@@ -31,7 +31,7 @@ const MessageList: React.FC<MessageListProps> = React.memo(
           return (
             <div
               key={msg.id}
-              className='flex flex-col w-full px-4 py-1 items-center justify-center'
+              className='flex flex-col w-full px-4 py-1 items-center justify-center '
             >
               {/* 날짜 구분선을 표시 */}
               {showDateSeparator && <DateSeparator date={msg.createdAt} />}
