@@ -40,6 +40,7 @@ jobs:
         --build-arg SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN_DEV }} \
         --build-arg NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN_DEV }} \
         --build-arg NEXT_PUBLIC_KAKAOJSKEY=${{ secrets.NEXT_PUBLIC_KAKAOJSKEY_DEV }} \
+        --build-arg NEXT_PUBLIC_GTM_ID=${{ secrets.NEXT_PUBLIC_GTM_ID }} \
         -t ghcr.io/topazkang/fe-dev:latest .
 
     - name: Push Docker image to GHCR
