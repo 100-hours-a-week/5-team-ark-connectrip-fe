@@ -45,7 +45,7 @@ export default function GroupCard({
     // 새로운 메시지가 있을 때 목록 중 변경사항 Update
     notifications.forEach((notif) => {
       if (notif.chatRoomId === chatRoomId) {
-        setNewMessageFlag(true)
+        if (!newMessageFlag) setNewMessageFlag(true)
         setNewMessage(notif.content)
         setNewMessageTime(notif.createdAt)
       }
