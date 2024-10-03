@@ -54,6 +54,7 @@ export default function Home() {
         fill
         style={{ objectFit: 'cover', zIndex: 31 }} // 이미지 비율 유지하며 컨테이너에 맞춤
         priority={true} // 이미지 로딩 우선순위 설정
+        loading='eager' // 이미지 로딩 방식 설정
       />
 
       {/* 카카오 로그인 버튼 (currentImage가 1 또는 6일 때 표시) */}
