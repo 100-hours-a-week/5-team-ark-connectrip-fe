@@ -40,7 +40,7 @@ export default function Home() {
 
   // 다음 이미지로 넘어가는 함수
   const nextImage = () => {
-    setCurrentImage((prev) => (prev < 5 ? prev + 1 : prev)) // 이미지 인덱스 증가 (1~5)
+    setCurrentImage((prev) => (prev < 6 ? prev + 1 : prev)) // 이미지 인덱스 증가 (1~5)
   }
 
   // 이전 이미지로 돌아가는 함수
@@ -50,7 +50,7 @@ export default function Home() {
 
   // 스킵하기 버튼 클릭 시 호출되는 함수
   const skipToLastPage = () => {
-    setCurrentImage(5) // currentImage를 5으로 설정하여 마지막 페이지로 이동
+    setCurrentImage(6) // currentImage를 5으로 설정하여 마지막 페이지로 이동
   }
 
   // 현재 이미지 URL 결정
@@ -68,7 +68,7 @@ export default function Home() {
       {contextHolder}
 
       {/* 카카오 로그인 버튼 (currentImage가 1 또는 5일 때 표시) */}
-      {(currentImage === 1 || currentImage === 5) && (
+      {(currentImage === 1 || currentImage === 6) && (
         <button
           type='button'
           onClick={kakaoLoginHandler}
@@ -92,12 +92,12 @@ export default function Home() {
             &lt;
           </Button>
         )}
-        {currentImage >= 2 && currentImage <= 4 && (
+        {currentImage >= 2 && currentImage <= 5 && (
           <Button type='primary' onClick={skipToLastPage}>
             <div>SKIP</div>
           </Button>
         )}
-        {currentImage < 5 && (
+        {currentImage < 6 && (
           <Button type='primary' onClick={nextImage}>
             &gt;
           </Button>
