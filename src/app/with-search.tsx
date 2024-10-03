@@ -12,6 +12,14 @@ export default function Home() {
   const [currentImage, setCurrentImage] = useState(1) // 현재 이미지 상태
   const [messageFlag, setMessageFlag] = useState(false)
 
+  const cdnUrls = [
+    'https://d3ref1a6falwsg.cloudfront.net/1.webp',
+    'https://d3ref1a6falwsg.cloudfront.net/2.webp',
+    'https://d3ref1a6falwsg.cloudfront.net/3.webp',
+    'https://d3ref1a6falwsg.cloudfront.net/4.webp',
+    'https://d3ref1a6falwsg.cloudfront.net/5.webp',
+  ]
+
   useEffect(() => {
     const message = searchParams.get('message')
     if (!messageFlag && message) {
@@ -32,24 +40,24 @@ export default function Home() {
 
   // 다음 이미지로 넘어가는 함수
   const nextImage = () => {
-    setCurrentImage((prev) => (prev < 6 ? prev + 1 : prev)) // 이미지 인덱스 증가 (1~6)
+    setCurrentImage((prev) => (prev < 6 ? prev + 1 : prev)) // 이미지 인덱스 증가 (1~5)
   }
 
   // 이전 이미지로 돌아가는 함수
   const previousImage = () => {
-    setCurrentImage((prev) => (prev > 1 ? prev - 1 : prev)) // 이미지 인덱스 감소 (1~6)
+    setCurrentImage((prev) => (prev > 1 ? prev - 1 : prev)) // 이미지 인덱스 감소 (1~5)
   }
 
   // 스킵하기 버튼 클릭 시 호출되는 함수
   const skipToLastPage = () => {
-    setCurrentImage(6) // currentImage를 6으로 설정하여 마지막 페이지로 이동
+    setCurrentImage(6) // currentImage를 5으로 설정하여 마지막 페이지로 이동
   }
 
   return (
     <div className='relative w-full h-screen flex justify-center items-center px-2.5'>
       {contextHolder}
       <Image
-        src={`/intro/${currentImage === 6 ? 1 : currentImage}.png`}
+        src={currentImage === 6 ? cdnUrls[0] : cdnUrls[currentImage - 1]}
         alt={`Intro ${currentImage}`}
         fill
         style={{ objectFit: 'cover', zIndex: 31 }} // 이미지 비율 유지하며 컨테이너에 맞춤
