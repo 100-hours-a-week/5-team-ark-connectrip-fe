@@ -14,6 +14,7 @@ export interface Chat {
   lastChatMessage: string
   lastChatMessageTime: string
   memberNumber: number
+  hasUnreadMessages: boolean
 }
 
 export interface GroupCardProps {
@@ -352,4 +353,17 @@ export interface ProfileIconProps {
 export interface ProfileFormValues {
   nickname: string
   description: string
+}
+// ProfileFormProps 인터페이스 정의
+export interface Notification {
+  id: number | null
+  type: string
+  chatRoomId: number
+  senderId: number
+  chatRoomTitle: string
+  senderNickname: string
+  senderProfileImage: string | null
+  content: string
+  infoFlag: boolean
+  createdAt: string
 }
