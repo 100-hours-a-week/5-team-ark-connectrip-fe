@@ -7,12 +7,22 @@ import {
 } from '@ant-design/icons'
 import { HostContent } from './HostContent' // HostContent 컴포넌트 임포트
 import GuestContent from './GuestContent' // GuestContent 컴포넌트 임포트
-import { ApplyUsers, CompanionUsers, ChatRoomEntryData } from '@/interfaces'
+import {
+  ApplyUsers,
+  CompanionUsers,
+  ChatRoomEntryData,
+  CompanionLocation,
+} from '@/interfaces'
 import { fetchPendingUsers, fetchCompanionUsers } from '@/app/utils/fetchUtils'
 import useAuthStore from '@/app/store/useAuthStore'
 import { RecruitmentStatus } from '@/types'
 interface MenuDrawerProps {
   chatRoomData: ChatRoomEntryData
+  companionLocations: CompanionLocation[] // 동행자 위치 배열
+  setCompanionLocations: React.Dispatch<
+    React.SetStateAction<CompanionLocation[]>
+  > // 상태 업데이트 함수
+  isLocationSharingEnabled?: boolean
 }
 
 const statusTranslations: { [key in RecruitmentStatus]: string } = {
@@ -21,7 +31,12 @@ const statusTranslations: { [key in RecruitmentStatus]: string } = {
   FINISHED: '동행 종료',
 }
 
-const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
+const MenuDrawer: React.FC<MenuDrawerProps> = ({
+  chatRoomData,
+  companionLocations,
+  setCompanionLocations,
+  isLocationSharingEnabled = false,
+}) => {
   const [open, setOpen] = useState(false)
   const [applyUsers, setApplyUsers] = useState<ApplyUsers[]>([])
   const [companionUsers, setCompanionUsers] = useState<CompanionUsers[]>([])
@@ -57,15 +72,12 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
     }
   }
 
-  // Drawer가 열릴 때 데이터를 fetch
-  const showDrawer = () => {
-    setOpen(true)
-    fetchData()
-  }
-
-  // Drawer를 닫을 때
-  const onClose = () => {
-    setOpen(false)
+  // Drawer 열기/닫기 토글 함수
+  const toggleDrawer = () => {
+    setOpen((prevOpen) => !prevOpen)
+    if (!open) {
+      fetchData()
+    }
   }
 
   useEffect(() => {
@@ -79,7 +91,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
     <>
       <div
         className='pl-5 text-secondary hover:text-black cursor-pointer'
-        onClick={showDrawer}
+        onClick={toggleDrawer}
       >
         <MenuOutlined style={{ fontSize: 20 }} />
       </div>
@@ -92,7 +104,7 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
         }
         placement='right'
         closable={true}
-        onClose={onClose}
+        onClose={toggleDrawer}
         open={open}
         styles={{ body: { padding: '0 24px' } }}
       >
@@ -126,6 +138,10 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
                         postId={postId}
                         isPostExists={isPostExists}
                         leaderId={leaderId}
+                        companionLocations={companionLocations}
+                        setCompanionLocations={setCompanionLocations}
+                        isLocationSharingEnabled={isLocationSharingEnabled}
+                        accompanyStatus={accompanyStatus}
                       />
                     ),
                   },
@@ -141,6 +157,10 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ chatRoomData }) => {
                         postId={postId}
                         isPostExists={isPostExists}
                         leaderId={leaderId}
+                        companionLocations={companionLocations}
+                        setCompanionLocations={setCompanionLocations}
+                        isLocationSharingEnabled={isLocationSharingEnabled}
+                        accompanyStatus={accompanyStatus}
                       />
                     ),
                   },

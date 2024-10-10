@@ -27,6 +27,7 @@ import {
 } from '@/app/utils/fetchUtils' // 유틸리티 함수 import
 import { formatToUtcDate } from '@/app/utils/dateUtils'
 import { AccompanyStatus, RecruitmentStatus } from '@/types'
+import { navigateToProfile } from '@/app/utils/naviateToProfile'
 
 export default function AccompanyDetailPage() {
   const { id } = useParams()
@@ -200,6 +201,9 @@ export default function AccompanyDetailPage() {
             src={post.profileImagePath}
             size={40}
             nickname={post.nickname}
+            onClick={() =>
+              navigateToProfile(router, post.memberId, userId ? userId : '')
+            }
           />
           <div className='ml-3 flex-1'>
             <p className='font-semibold'>{post.nickname}</p>
@@ -320,7 +324,15 @@ export default function AccompanyDetailPage() {
                 src={comment.memberProfileImage}
                 size={35}
                 nickname={comment.memberNickname}
+                onClick={() =>
+                  navigateToProfile(
+                    router,
+                    comment.memberId,
+                    userId ? userId : ''
+                  )
+                }
               />
+
               <div className='ml-3 flex-1 w-full'>
                 <p className='font-semibold'>{comment.memberNickname}</p>
                 <div className='flex justify-between items-center '>

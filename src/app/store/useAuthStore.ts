@@ -38,7 +38,6 @@ const useAuthStore = create<AuthState>((set, get) => ({
     }),
 
   // 서버에서 유저 정보를 가져와 설정
-
   fetchUser: async () => {
     try {
       const response = await api.get('/api/v1/members/me')

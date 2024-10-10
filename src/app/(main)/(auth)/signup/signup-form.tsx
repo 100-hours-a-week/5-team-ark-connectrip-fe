@@ -62,12 +62,12 @@ const SignupPage: React.FC = () => {
     }
     if (
       nickname.length < 3 ||
-      nickname.length > 20 ||
+      nickname.length > 10 ||
       /[^가-힣a-zA-Z0-9\s]/.test(nickname) // 특수 문자 방지, 숫자 허용
     ) {
       setNicknameStatus('invalid')
       setNicknameHelperText(
-        '닉네임은 3자 이상, 20자 이하이며, 특수 문자 없이 작성해 주세요.'
+        '닉네임은 3자 이상, 10자 이하이며, 특수 문자 없이 작성해 주세요.'
       )
       return false
     }
@@ -240,7 +240,7 @@ const SignupPage: React.FC = () => {
           >
             <Input
               showCount
-              maxLength={20}
+              maxLength={10}
               placeholder='닉네임을 작성해 주세요.'
               onChange={handleNicknameChange} // 닉네임이 변경될 때 상태 초기화 및 유효성 검사 수행
             />

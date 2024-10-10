@@ -5,9 +5,9 @@ import ProfileIcon from '../common/ProfileIcon'
 interface MapComponentProps {
   trackingEnabled: boolean
   allLocations: {
-    latitude: number
-    longitude: number
-    profileImage?: string
+    lat: number
+    lng: number
+    profileImagePath?: string
     nickname?: string
   }[]
 }
@@ -17,11 +17,10 @@ const MapComponent: React.FC<MapComponentProps> = ({
   allLocations,
 }) => {
   const mapRef = useRef<kakao.maps.Map | null>(null)
-
   const ReSetttingMapBounds = ({
     points,
   }: {
-    points: { latitude: number; longitude: number }[]
+    points: { lat: number; lng: number }[]
   }) => {
     const map = useMap()
 
@@ -29,7 +28,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
       if (map && points.length > 0) {
         const bounds = new kakao.maps.LatLngBounds()
         points.forEach((point) => {
-          bounds.extend(new kakao.maps.LatLng(point.latitude, point.longitude))
+          bounds.extend(new kakao.maps.LatLng(point.lat, point.lng))
         })
         map.setBounds(bounds)
       }
@@ -42,7 +41,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
     if (trackingEnabled && mapRef.current && allLocations.length > 0) {
       const bounds = new kakao.maps.LatLngBounds()
       allLocations.forEach((loc) => {
-        bounds.extend(new kakao.maps.LatLng(loc.latitude, loc.longitude))
+        bounds.extend(new kakao.maps.LatLng(loc.lat, loc.lng))
       })
       mapRef.current.setBounds(bounds)
     }
@@ -63,13 +62,10 @@ const MapComponent: React.FC<MapComponentProps> = ({
       onCreate={(map) => (mapRef.current = map)}
     >
       {allLocations.map((loc, index) => (
-        <CustomOverlayMap
-          position={{ lat: loc.latitude, lng: loc.longitude }}
-          key={index}
-        >
+        <CustomOverlayMap position={{ lat: loc.lat, lng: loc.lng }} key={index}>
           <div className='-top-10 -left-5 w-[40px] h-[40px] rounded-full overflow-hidden bg-main border-main border-2 z-10'>
             <ProfileIcon
-              src={loc.profileImage || ''}
+              src={loc.profileImagePath || ''}
               size={35}
               nickname={loc.nickname || ''}
             />
