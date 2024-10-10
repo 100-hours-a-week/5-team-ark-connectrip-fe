@@ -517,7 +517,7 @@ export const fetchReviewsByReviewee = async (
 ) => {
   try {
     const response = await api.get(
-      `/api/v1/reviews/${chatRoomId}ß?revieweeId=${revieweeId}`
+      `/api/v1/reviews/${chatRoomId}?revieweeId=${revieweeId}`
     )
     return response
   } catch (error) {
