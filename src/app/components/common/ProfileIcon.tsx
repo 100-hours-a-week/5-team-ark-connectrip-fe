@@ -1,13 +1,13 @@
-import Image, { StaticImageData } from 'next/image'
+import { ProfileIconProps } from '@/interfaces'
+import Image from 'next/image'
 import React from 'react'
 
-interface ProfileIconProps {
-  src: string | StaticImageData
-  size: number
-  nickname: string
-}
-
-const ProfileIcon: React.FC<ProfileIconProps> = ({ src, size, nickname }) => {
+const ProfileIcon: React.FC<ProfileIconProps> = ({
+  src,
+  size,
+  nickname,
+  onClick,
+}) => {
   const isValidSrc = typeof src === 'string' && src.trim() !== ''
 
   if (!isValidSrc) {
@@ -25,7 +25,9 @@ const ProfileIcon: React.FC<ProfileIconProps> = ({ src, size, nickname }) => {
             fontSize: size * 0.4, // 아이콘 크기에 비례하여 글자 크기를 조정
             fontWeight: 'bold',
             zIndex: 10,
+            cursor: onClick ? 'pointer' : 'default', // 클릭 가능한 경우 커서 변경
           }}
+          onClick={onClick} // 클릭 이벤트 처리
         >
           {nickname.charAt(0).toUpperCase()} {/* 닉네임의 첫 글자 */}
         </div>
@@ -39,7 +41,9 @@ const ProfileIcon: React.FC<ProfileIconProps> = ({ src, size, nickname }) => {
       style={{
         width: size,
         height: size,
+        cursor: onClick ? 'pointer' : 'default', // 클릭 가능한 경우 커서 변경
       }}
+      onClick={onClick} // 클릭 이벤트 처리
     >
       <Image
         src={src}

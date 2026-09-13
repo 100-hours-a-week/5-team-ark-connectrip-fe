@@ -29,7 +29,7 @@ export default function CommunityCard({
       <h2 className='text-lg font-semibold'>{truncateText(title, 20)}</h2>
       <div className='flex justify-between items-end '>
         <div className='text-sm text-gray-600 '>
-          {truncateText(content, 35)}
+          {truncateText(content, 20)}
         </div>
 
         <div className='flex justify-between gap-2 text-s text-gray-50 mt-1 text-s text-gray-500 whitespace-nowrap'>

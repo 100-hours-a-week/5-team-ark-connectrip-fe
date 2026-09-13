@@ -49,7 +49,7 @@ export default function PostCard({
       </div>
       <h2 className='text-lg font-semibold'>{truncateText(title, 20)}</h2>
       <div className='text-sm text-gray-600 mb-1'>
-        {truncateText(content, 35)}
+        {truncateText(content, 20)}
       </div>
 
       <div className='flex justify-between gap-2 text-sm text-gray-50 mt-1'>

@@ -45,14 +45,15 @@ const BottomNav: React.FC = () => {
 
   const handleTabClick = (path: string) => {
     // 현재 경로가 '/' 또는 '/signup'인 경우 페이지 이동을 막음
-    if (pathname === '/' || pathname === '/signup') {
-      return
-    }
     router.push(path)
   }
 
+  if (pathname === '/' || pathname === '/signup') {
+    return
+  }
+
   return (
-    <div className='fixed bottom-0 w-full max-w-[500px] bg-white shadow-md flex justify-around items-center p-2 z-10'>
+    <div className='fixed bottom-0 w-full max-w-[500px] bg-white shadow-md flex justify-around items-center p-2 z-40'>
       {tabs.map((tab) => (
         <div className='w-[55px]' key={tab.name}>
           <div

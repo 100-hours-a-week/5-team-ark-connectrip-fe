@@ -5,18 +5,12 @@ import { useCustomMessage } from '@/app/utils/alertUtils'
 import { usePathname } from 'next/navigation'
 import { QRCode } from 'antd'
 import html2canvas from 'html2canvas'
-
-interface ShareModalProps {
-  isOpen: boolean
-  onClose: () => void
-  customUrl?: string
-  customUrlQrPath: string
-}
+import { ShareModalProps } from '@/interfaces'
 
 const ShareModal: React.FC<ShareModalProps> = ({
   isOpen,
   onClose,
-  // customUrl,
+  customUrl,
 }) => {
   const { contextHolder, showSuccess, showWarning } = useCustomMessage()
   const pathname = usePathname()
@@ -90,8 +84,12 @@ const ShareModal: React.FC<ShareModalProps> = ({
 
         <UrlInput label='URL' url={defaultUrl} />
 
-        {/* TODO : 단축url 개발 완료 후 주석 제거 */}
-        {/* {customUrl && <UrlInput label='커스텀 URL' url={customUrl} />} */}
+        {customUrl && (
+          <UrlInput
+            label='단축 URL'
+            url={`${process.env.NEXT_PUBLIC_BASE_URL}${customUrl}`}
+          />
+        )}
       </Modal>
     </>
   )

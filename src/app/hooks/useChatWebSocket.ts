@@ -46,6 +46,7 @@ export const useChatWebSocket = (chatRoomId: number, userId: string) => {
 
     return () => {
       if (clientRef.current) {
+        // 컴포넌트가 언마운트되면 클라이언트 연결 해제
         clientRef.current.deactivate()
       }
     }

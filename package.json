@@ -13,6 +13,7 @@
     "@sentry/nextjs": "^8.26.0",
     "@stomp/stompjs": "^7.0.0",
     "antd": "^5.20.1",
+    "cheerio": "^1.0.0",
     "cookies-next": "^4.2.1",
     "date-fns": "^3.6.0",
     "html2canvas": "^1.4.1",
@@ -21,6 +22,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-kakao-maps-sdk": "^1.1.27",
+    "sharp": "^0.33.5",
     "sockjs-client": "^1.6.1",
     "use-debounce": "^10.0.2",
     "zustand": "^4.5.5"

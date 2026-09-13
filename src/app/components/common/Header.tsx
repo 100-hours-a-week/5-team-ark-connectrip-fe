@@ -74,6 +74,9 @@ export default function Header() {
     return null
   }
 
+  if (pathname === '/' || pathname === '/signup') {
+    return
+  }
   return (
     <header className='fixed top-0 w-full max-w-[500px] bg-white shadow-lg p-4 flex justify-between items-center border-b border-gray-100 z-10'>
       {contextHolder}

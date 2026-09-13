@@ -1,7 +1,7 @@
 // utils/fetchUtils.ts
 import { api } from '@/app/utils/api'
 import { formatToUtcDate, formatShortDateFromUtc } from '@/app/utils/dateUtils'
-import { Comment, ChatRoomEntryData } from '@/interfaces/index'
+import { Comment, ChatRoomEntryData, ProfileData } from '@/interfaces/index'
 
 // 게시글 데이터를 가져오는 유틸리티 함수
 export const fetchPost = async (postId: number) => {
@@ -254,9 +254,14 @@ export const updatePostStatus = async (postId: number) => {
 }
 
 // 채팅방의 이전 메시지를 가져오는 유틸리티 함수
-export const getPreviousMessages = async (chatRoomId: number) => {
+export const getPreviousMessages = async (
+  chatRoomId: number,
+  lastMessageId: string
+) => {
   try {
-    const response = await api.get(`/api/v1/chatRoom/${chatRoomId}/messages`)
+    const response = await api.get(
+      `/api/v1/chatRoom/${chatRoomId}/messages?lastMessageId=${lastMessageId}`
+    )
     return response // 이전 메시지를 반환
   } catch (error) {
     console.error('Failed to fetch previous messages:', error)
@@ -372,5 +377,151 @@ export const deleteCommunityComment = async (commentId: number) => {
   } catch (error) {
     console.error('댓글 삭제 중 오류 발생:', error)
     throw new Error('댓글 삭제에 실패했습니다.')
+  }
+}
+
+/////////////
+// 채팅방 토글 on/off 위치 정보를 전송하는 유틸리티 함수
+export const fetchLocationSharingStatus = async (
+  chatRoomId: number,
+  trackingEnabled: boolean,
+  lat?: number,
+  lng?: number
+) => {
+  try {
+    // trackingEnabled가 true일 경우에만 body를 포함, false일 경우 body 없이 요청 전송
+    const response = trackingEnabled
+      ? await api.patch(`/api/v1/chatRoom/${chatRoomId}/locations/sharing`, {
+          lat,
+          lng,
+        })
+      : await api.patch(`/api/v1/chatRoom/${chatRoomId}/locations/sharing`)
+
+    return response
+  } catch (error) {
+    console.error('위치 공유 활성화 중 오류 발생:', error)
+    throw new Error('위치 공유 활성화에 실패했습니다.')
+  }
+}
+
+// 채팅방 사용자 위치 조회 유틸리티 함수
+export const fetchLocations = async (chatRoomId: number) => {
+  try {
+    const response = await api.get(`/api/v1/chatRoom/${chatRoomId}/locations`)
+    return response
+  } catch (error) {
+    console.error('Failed to fetch locations:', error)
+    throw new Error('사용자 위치를 불러오는 데 실패했습니다.')
+  }
+}
+
+// 채팅방에서 사용자 위치를 전송하는 유틸리티 함수
+export const sendLocationToChatRoom = async (
+  chatRoomId: number,
+  lat: number,
+  lng: number
+) => {
+  try {
+    const response = await api.patch(
+      `/api/v1/chatRoom/${chatRoomId}/locations/me`,
+      {
+        lat,
+        lng,
+      }
+    )
+    return response
+  } catch (error) {
+    console.error('위치 전송 중 오류 발생:', error)
+    throw new Error('위치 전송에 실패했습니다.')
+  }
+}
+
+// 채팅방 사용자 위치 갱신 및 동행자 마지막 위치 조회
+export const refreshLocations = async (
+  chatRoomId: number,
+  lat: number,
+  lng: number
+) => {
+  try {
+    const response = await api.patch(
+      `/api/v1/chatRoom/${chatRoomId}/locations`,
+      {
+        lat,
+        lng,
+      }
+    )
+    return response // 응답 데이터 반환
+  } catch (error) {
+    console.error('사용자 위치 갱신 및 동행자 위치 조회 중 오류 발생:', error)
+    throw new Error('위치 갱신 및 동행자 조회에 실패했습니다.')
+  }
+}
+
+// 후기 작성 유틸리티 함수
+export const postReview = async (
+  chatRoomId: number,
+  payload: { targetId: number; content: string }
+) => {
+  try {
+    const response = await api.post(`/api/v1/reviews/${chatRoomId}`, payload)
+    return response
+  } catch (error) {
+    console.error('후기 제출 중 오류 발생:', error)
+    throw new Error('후기 작성에 실패했습니다.')
+  }
+}
+
+///////////////////////////////////////////
+// 유저 프로필 정보를 가져오는 유틸리티 함수
+export const fetchUserProfile = async (
+  memberId: number
+): Promise<ProfileData> => {
+  try {
+    const response = await api.get(`/api/v1/members/profile/${memberId}`)
+    return response
+  } catch (error) {
+    console.error('유저 프로필 데이터 페칭 중 오류 발생:', error)
+    throw new Error('유저 프로필 데이터를 가져오는 데 실패했습니다.')
+  }
+}
+
+// 유저 프로필을 업데이트하는 함수
+export const updateProfile = async (
+  userId: string,
+  payload: { nickname: string; description: string }
+) => {
+  try {
+    await api.post(`/api/v1/members/${userId}/profile`, payload)
+    return
+  } catch (error) {
+    console.error('프로필 업데이트 중 오류 발생:', error)
+    throw new Error('프로필 업데이트에 실패했습니다.')
+  }
+}
+
+// 유저 전체 후기 데이터를 가져오는 함수
+export const fetchUserReviews = async (memberId: number) => {
+  try {
+    const response = await api.get(`/api/v1/reviews/profile/${memberId}`)
+    return response
+  } catch (error) {
+    console.error('유저 후기 데이터 페칭 중 오류 발생:', error)
+    throw new Error('유저 후기 데이터를 가져오는 데 실패했습니다.')
+  }
+}
+
+// 동행 그룹 내 내가 작성한 후기 조회 유틸리티 함수
+export const fetchReviewsByReviewee = async (
+  chatRoomId: number,
+  revieweeId: number
+) => {
+  try {
+    const response = await api.get(
+      `/api/v1/reviews/${chatRoomId}?revieweeId=${revieweeId}`
+    )
+    return response
+  } catch (error) {
+    console.error('채팅방 내 내가 쓴 후기 조회 중 오류 발생:', error)
+    throw new Error('채팅방 내 내가 쓴 후기 조회에 실패했습니다.')
   }
 }

@@ -2,13 +2,23 @@ import React from 'react'
 import { LeftOutlined } from '@ant-design/icons'
 import MenuDrawer from '@/app/components/chat/MenuDrawer'
 import { useRouter } from 'next/navigation'
-import { ChatRoomEntryData } from '@/interfaces/index'
+import { ChatRoomEntryData, CompanionLocation } from '@/interfaces/index'
 
 interface ChatHeaderProps {
   chatRoomData: ChatRoomEntryData | null
+  companionLocations: CompanionLocation[] // 동행자 위치 배열
+  setCompanionLocations: React.Dispatch<
+    React.SetStateAction<CompanionLocation[]>
+  > // 상태 업데이트 함수
+  isLocationSharingEnabled?: boolean
 }
 
-const ChatHeader: React.FC<ChatHeaderProps> = ({ chatRoomData }) => {
+const ChatHeader: React.FC<ChatHeaderProps> = ({
+  chatRoomData,
+  companionLocations,
+  setCompanionLocations,
+  isLocationSharingEnabled = false,
+}) => {
   const router = useRouter()
 
   return (
@@ -20,7 +30,14 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ chatRoomData }) => {
         >
           <LeftOutlined style={{ fontSize: 20 }} />
         </div>
-        {chatRoomData && <MenuDrawer chatRoomData={chatRoomData} />}
+        {chatRoomData && (
+          <MenuDrawer
+            chatRoomData={chatRoomData}
+            companionLocations={companionLocations}
+            setCompanionLocations={setCompanionLocations}
+            isLocationSharingEnabled={isLocationSharingEnabled}
+          />
+        )}
       </div>
     </div>
   )
